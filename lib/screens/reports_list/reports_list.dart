@@ -1,22 +1,41 @@
 import 'package:capstone_mobile/screens/main_menu.dart';
-import 'package:capstone_mobile/screens/mosquitopedia/diseases_page2.dart';
+import 'package:capstone_mobile/screens/mosquitopedia/repellents.dart';
+import 'package:capstone_mobile/screens/reports_list/report_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../reports_list/reports_list.dart';
-import 'community_projects_page2.dart';
 
-class CommunityProjects extends StatelessWidget {
-  List<String> captions = [
-    'Project Name 1',
-    'Project Name 2',
-    'Project Name 3',
-    'Project Name 4',
-    'Project Name 5',
-    'Project Name 6'
+class ReportList extends StatelessWidget {
+
+  List<String> reportId = [
+    '2023-07-07-00001',
+    '2023-07-07-00002',
+    '2023-07-07-00003',
+    '2023-07-07-00004',
+    '2023-07-07-00005',
+    '2023-07-07-00006'
   ];
 
-  List<String> date = [
+  List<String> reportSubject = [
+    'Subject of Report 1 Subject of Report 1 Subject of Report 1 Subject of Report 1 Subject of Report 1 Subject of Report 1 Subject of Report 1 Subject of Report 1',
+    'Subject of Report 2',
+    'Subject of Report 3',
+    'Subject of Report 4',
+    'Subject of Report 5',
+    'Subject of Report 6'
+  ];
+
+  List<String> reportNumber = [
+    'Report 1',
+    'Report 2',
+    'Report 3',
+    'Report 4',
+    'Report 5',
+    'Report 6'
+  ];
+
+  List<String> reportDate = [
     '2023-07-15',
     '2023-07-16',
     '2023-07-17',
@@ -24,25 +43,6 @@ class CommunityProjects extends StatelessWidget {
     '2023-07-19',
     '2023-07-20'
   ];
-
-  List<String> images = [
-    'assets/community_projects_images/community_project.png',
-    'assets/community_projects_images/community_project.png',
-    'assets/community_projects_images/community_project.png',
-    'assets/community_projects_images/community_project.png',
-    'assets/community_projects_images/community_project.png',
-    'assets/community_projects_images/community_project.png'
-  ];
-
-  final PageController _topPageController = PageController(initialPage: 5000, viewportFraction: 0.65);
-  final PageController _bottomPageController = PageController();
-
-  @override
-  void dispose() {
-    _topPageController.dispose();
-    _bottomPageController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +59,7 @@ class CommunityProjects extends StatelessWidget {
             );
           },
         ),
-        title: Text('Community Projects', style: TextStyle(fontFamily: 'SquadaOne'),),
+        title: Text('Mosquitopedia', style: TextStyle(fontFamily: 'SquadaOne'),),
       ),
 
       //sidenav
@@ -243,15 +243,18 @@ class CommunityProjects extends StatelessWidget {
             ),
           ),
 
-          // Header
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 50, top: 5),
-            child: Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
-                    child: Row(
+          // Top Row
+          Positioned.fill(
+            top: 20,
+            left: 20,
+            right: 20,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Padding(
@@ -260,12 +263,12 @@ class CommunityProjects extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 20.0, 0.0),
+                                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
                                     child: Container(
-                                      height: 60,
+                                      height: 80,
                                       child: Center(
                                         child: Text(
-                                          'Community Projects',
+                                          'List of Sent Reports',
                                           style: TextStyle(
                                             fontFamily: 'Outfit',
                                             fontSize: 20,
@@ -284,177 +287,177 @@ class CommunityProjects extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-
-                  // Scrollable Cards - Top
-                  // Scrollable Cards - Top
-                  SizedBox(
-                    child: IntrinsicHeight(
-                      child: Container(
-                        height: 225.0,
-                        child: PageView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10000,
-                          controller: _topPageController,
-                          onPageChanged: (int index) {
-                            _bottomPageController.jumpToPage(index);
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final int cardIndex = index % captions.length;
-
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: SizedBox(
-                                width: 250.0,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      top: 5, left: 20, right: 20, bottom: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 7.0,
-                                          ),
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20.0),
-                                            bottom: Radius.circular(20.0),
-                                          ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: reportId.length,
+                      itemBuilder: (context, index) {
+                        return IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 4),
                                         ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(10.0),
-                                            bottom: Radius.circular(10.0),
-                                          ),
-                                          child: Container(
-                                            height: 190,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    images[cardIndex]),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Scrollable Cards - Bottom
-                  SizedBox(
-                    child: IntrinsicHeight(
-                      child: Container(
-                        height: 260,
-                        padding: EdgeInsets.only(bottom: 0),
-                        child: PageView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10000,
-                          controller: _bottomPageController,
-                          onPageChanged: (int index) {
-                            _topPageController.jumpToPage(index);
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final int cardIndex = index % captions.length;
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: SizedBox(
-                                width: 250.0,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      top: 5, left: 10, right: 10, bottom: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-                                        child: Text(
-                                          captions[cardIndex],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Outfit',
-                                            fontSize: 17.5,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff338B93),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(5.0),
-                                        child: Text(
-                                          date[cardIndex],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: 'Outfit',
-                                              fontSize: 14,
-                                              color: Color(0xff338B93),
-                                              fontStyle: FontStyle.normal
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 65.0),
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => CommunityProjects2(
-                                                  PassCaption: captions[cardIndex],
-                                                  PassDate: date[cardIndex],
-                                                  PassImage: images[cardIndex],
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center, 
+                                              children: [
+                                                Text(reportNumber[index], style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),
+                                                Image.asset(
+                                                  'assets/report_list_images/report_icon.png',
+                                                  width: 60,
+                                                  scale: 0.7,
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 8,
-                                            primary: Color(0xff6969DF),
-                                            padding: EdgeInsets.symmetric(vertical: 20.0),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30.0),
+                                                Text('Report ID#', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),
+                                                Text(reportId[index], style: TextStyle(fontSize: 9, fontWeight: FontWeight.normal),),
+                                              ],
                                             ),
                                           ),
-                                          child: Text(
-                                            'Read Information',
-                                            style: TextStyle(fontSize: 16.0),
+                                          SizedBox(width: 8), //  spacng between the image and text
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  'Subject of Report',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 4), // spacing between the two texts
+                                                Text(
+                                                  reportSubject[index],
+                                                  style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontSize: 11,
+                                                  ),
+                                                  textAlign: TextAlign.justify,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                SizedBox(height: 10), // spacing between the two texts
+                                                Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child: Text(
+                                                    "Date: "+reportDate[index],
+                                                    style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 11,
+                                                    ),
+                                                    textAlign: TextAlign.justify,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
+                                          SizedBox(width: 10),
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => ReportContent(
+                                                          PassReportSubject: reportSubject[index],
+                                                          PassReportId: reportId[index],
+                                                          PassReportNumber: reportNumber[index],
+                                                          PassReportDate: reportDate[index],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    primary: Colors.blue,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                    ),
+                                                  ),
+                                                  icon: Icon(
+                                                    Icons.email_rounded,
+                                                    color: Colors.white,
+                                                  ),
+                                                  label: Text(
+                                                    ' Open ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                                ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    // Handle delete button press
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    primary: Colors.redAccent,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                    ),
+                                                  ),
+                                                  icon: Icon(
+                                                    Icons.delete_outline_rounded,
+                                                    color: Colors.white,
+                                                  ),
+                                                  label: Text(
+                                                    'Delete',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                  SizedBox(height: 20),
-                ],
+                    SizedBox(height: 125),
+                  ],
+                ),
               ),
             ),
           ),
 
-          // Scrollable Cards
+
 
           // Bottom Navigation Bar
-          Align(
-            alignment: Alignment.bottomCenter,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: Container(
-              margin: EdgeInsets.only(bottom: 15.0, right: 15, left: 15),
+              margin: EdgeInsets.only(bottom: 15.0, right: 15, left: 15), //margin of the botnav
               height: 65,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -487,24 +490,20 @@ class CommunityProjects extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/list.png'),
+
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ReportList(),
-                        ),
-                      );
+                      //already in report list
                     },
                   ),
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
                       //Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => UserProfile(),
+                      //context,
+                      //MaterialPageRoute(
+                      //builder: (context) => UserProfile(),
                       //),
-                      // );
+                      //);
                     },
                   ),
                 ],
@@ -513,6 +512,7 @@ class CommunityProjects extends StatelessWidget {
           ),
         ],
       ),
+
     );
   }
 }

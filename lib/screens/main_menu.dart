@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/dengue_task_force/dengue_task_force.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
+import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:capstone_mobile/screens/send_report/send_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,8 +38,7 @@ class MainMenu extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background_images/123.jpg'),
-                colorFilter: ColorFilter.mode(Colors.blue.withOpacity(0.6), BlendMode.srcATop),
+                image: AssetImage('assets/sidenav_images/sidenav_background.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -47,27 +47,24 @@ class MainMenu extends StatelessWidget {
                 UserAccountsDrawerHeader(
                   accountName: Text(
                     'Lebron James',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.white),
                   ),
                   accountEmail: Text(
                     'kingjames@gmail.com',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.white),
                   ),
                   currentAccountPicture: CircleAvatar(
-                    backgroundImage: AssetImage('assets/avatar_images/batman.png'),
+                    backgroundImage: AssetImage('assets/sidenav_images/lebron1.png'),
                   ),
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/background_images/sidenav_back.jpg'),
-                      fit: BoxFit.cover,
-                    ),
+                    color: Colors.transparent,
                   ),
                 ),
                 Column(
                   children: [
                     ListTile(
                       leading: Icon(Icons.language, color: Colors.white,),
-                      title: Text('Language'),
+                      title: Text('Language', style: TextStyle(color: Colors.white),),
                       onTap: () {
                        // Navigator.pop(context); // Hide the navigation before going to the nexxt screen
                         //Navigator.push(
@@ -79,8 +76,9 @@ class MainMenu extends StatelessWidget {
                       },
                     ),
                     ListTile(
+
                       leading: Icon(Icons.settings, color: Colors.white,),
-                      title: Text('Theme Settings'),
+                      title: Text('Theme Settings', style: TextStyle(color: Colors.white),),
                       onTap: () {
                         //Navigator.pop(context);
                        // Navigator.push(
@@ -93,7 +91,7 @@ class MainMenu extends StatelessWidget {
                     ),
                     ListTile(
                       leading: Icon(Icons.info, color: Colors.white,),
-                      title: Text('About'),
+                      title: Text('About', style: TextStyle(color: Colors.white),),
                       onTap: () {
                        // Navigator.pop(context);
                        // Navigator.push(
@@ -106,7 +104,7 @@ class MainMenu extends StatelessWidget {
                     ),
                     ListTile(
                       leading: Icon(Icons.people, color: Colors.white,),
-                      title: Text('Developers'),
+                      title: Text('Developers', style: TextStyle(color: Colors.white),),
                       onTap: () {
                         //Navigator.pop(context);
                        // Navigator.push(
@@ -124,7 +122,7 @@ class MainMenu extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ListTile(
-                        leading: Icon(Icons.exit_to_app, color: Colors.white,),
+                        leading: Icon(Icons.exit_to_app_sharp, color: Colors.black,),
                         title: Text('Exit'),
                         onTap: () {
                           showDialog(
@@ -466,12 +464,12 @@ class MainMenu extends StatelessWidget {
                       icon: Image.asset('assets/bottom_nav_images/list.png'),
 
                       onPressed: () {
-                        //Navigator.push(
-                          //context,
-                          //MaterialPageRoute(
-                           // builder: (context) => LeaderBoard(),
-                          //),
-                        //);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReportList(),
+                          ),
+                        );
                       },
                     ),
                     IconButton(

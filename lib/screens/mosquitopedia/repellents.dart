@@ -4,6 +4,8 @@ import 'package:capstone_mobile/screens/mosquitopedia/repellents_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../reports_list/reports_list.dart';
+
 class Repelents extends StatelessWidget {
   List<String> captions = [
     'Repellent 1',
@@ -56,8 +58,7 @@ class Repelents extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/background_images/123.jpg'),
-              colorFilter: ColorFilter.mode(Colors.blue.withOpacity(0.6), BlendMode.srcATop),
+              image: AssetImage('assets/sidenav_images/sidenav_background.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -66,73 +67,70 @@ class Repelents extends StatelessWidget {
               UserAccountsDrawerHeader(
                 accountName: Text(
                   'Lebron James',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
                 accountEmail: Text(
                   'kingjames@gmail.com',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage('assets/avatar_images/batman.png'),
+                  backgroundImage: AssetImage('assets/sidenav_images/lebron1.png'),
                 ),
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/background_images/sidenav_back.jpg'),
-                    fit: BoxFit.cover,
-                  ),
+                  color: Colors.transparent,
                 ),
               ),
               Column(
                 children: [
                   ListTile(
                     leading: Icon(Icons.language, color: Colors.white,),
-                    title: Text('Language'),
+                    title: Text('Language', style: TextStyle(color: Colors.white),),
                     onTap: () {
-                      // Navigator.pop(context);
-                      // Navigator.push(
-                      //  context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => LanguageSettings(),
-                      //),
-                      //);
-                    },
-
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.settings, color: Colors.white,),
-                    title: Text('Theme Settings'),
-                    onTap: () {
-                      // Navigator.pop(context);
+                      // Navigator.pop(context); // Hide the navigation before going to the nexxt screen
                       //Navigator.push(
                       //context,
-                      //MaterialPageRoute(
-                      // builder: (context) => ThemeSettings(),
-                      //),
+                      //  MaterialPageRoute(
+                      // builder: (context) => LanguageSettings(), // go to the next screen
+                      // ),
                       // );
+                    },
+                  ),
+                  ListTile(
+
+                    leading: Icon(Icons.settings, color: Colors.white,),
+                    title: Text('Theme Settings', style: TextStyle(color: Colors.white),),
+                    onTap: () {
+                      //Navigator.pop(context);
+                      // Navigator.push(
+                      // context,
+                      // MaterialPageRoute(
+                      //   builder: (context) => ThemeSettings(),
+                      // ),
+                      //  );
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About'),
+                    title: Text('About', style: TextStyle(color: Colors.white),),
                     onTap: () {
-                      //Navigator.pop(context);
-                      //Navigator.push(
-                      //context,
+                      // Navigator.pop(context);
+                      // Navigator.push(
+                      // context,
                       // MaterialPageRoute(
-                      // builder: (context) => About(),
-                      //),
-                      // );
+                      //  builder: (context) => About(),
+                      // ),
+                      //);
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.people, color: Colors.white,),
-                    title: Text('Developers'),
+                    title: Text('Developers', style: TextStyle(color: Colors.white),),
                     onTap: () {
                       //Navigator.pop(context);
-                      //Navigator.push(
-                      // context,
+                      // Navigator.push(
+                      //context,
                       //MaterialPageRoute(
-                      //builder: (context) => Developers(),
+                      // builder: (context) => Developers(),
                       //),
                       // );
                     },
@@ -144,7 +142,7 @@ class Repelents extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ListTile(
-                      leading: Icon(Icons.exit_to_app, color: Colors.white,),
+                      leading: Icon(Icons.exit_to_app_sharp, color: Colors.black,),
                       title: Text('Exit'),
                       onTap: () {
                         showDialog(
@@ -154,6 +152,8 @@ class Repelents extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
+                              elevation: 4,
+                              shadowColor: Colors.black,
                               content: Container(
                                 height: 180,
                                 child: Column(
@@ -463,12 +463,12 @@ class Repelents extends StatelessWidget {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/list.png'),
                     onPressed: () {
-                      //Navigator.push(
-                      // context,
-                      //MaterialPageRoute(
-                      //builder: (context) => LeaderBoard(),
-                      // ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReportList(),
+                        ),
+                      );
                     },
                   ),
                   IconButton(

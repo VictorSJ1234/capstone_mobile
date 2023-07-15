@@ -86,6 +86,11 @@ flutter:
       - assets/task_force_images/email.png
       - assets/task_force_images/location.png
       - assets/task_force_images/service.png
+      - assets/report_list_images/report_icon.png
+      - assets/report_list_images/open.png
+      - assets/report_list_images/delete.png
+      - assets/sidenav_images/sidenav_background.png
+      - assets/sidenav_images/lebron1.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

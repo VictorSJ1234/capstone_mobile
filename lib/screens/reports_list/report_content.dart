@@ -1,16 +1,24 @@
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
+import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../reports_list/reports_list.dart';
 
+class ReportContent extends StatelessWidget {
 
-class DengueTaskForce extends StatelessWidget {
+  final String PassReportSubject;
+  final String PassReportNumber;
+  final String PassReportId;
+  final String PassReportDate;
+
+  const ReportContent({required this.PassReportSubject, required this.PassReportNumber, required this.PassReportId, required this.PassReportDate});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color(0xff10CFF0),
         elevation: 0,
@@ -203,7 +211,7 @@ class DengueTaskForce extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background3.png',
+              'assets/background/background4.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -217,12 +225,48 @@ class DengueTaskForce extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
+                                    child: Container(
+                                      height: 80,
+                                      child: Center(
+                                        child: Text(
+                                          PassReportNumber,
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Image.asset(
-                            'assets/logo/pasig_health_department_logo.png',
-                            width: 200,
-                            height: 200,
+                          padding: EdgeInsets.fromLTRB(8.0, 5.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Barangay',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
                           ),
                         ),
                       ],
@@ -233,277 +277,224 @@ class DengueTaskForce extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                                  child: SizedBox(
-                                    child: Text(
-                                      'Information',
-                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
-                                      textAlign: TextAlign.center,
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: TextFormField(
+                                enabled: false,
+                                initialValue: 'Palatiw', style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                  hintText: 'Barangay',
+                                  contentPadding: EdgeInsets.all(15.0),
+                                  border: InputBorder.none,
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Subject of Report',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: TextFormField(
+                                enabled: false,
+                                initialValue: PassReportSubject, style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                  hintText: 'Subject of Report',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(15.0),
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Attachment',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: Colors.white,
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  //file upload
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.attach_file,
+                                        color: Colors.grey,
+                                      ),
                                     ),
-                                  ),
+                                    Text(
+                                      'Upload Picture/Video',
+                                      style: TextStyle(
+                                        color: Color(0xff666666),
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 4),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
-                                  child: Text(
-                                    'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.',
-                                    style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
-                                    textAlign: TextAlign.justify,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
 
-                    //contact information
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
-                      child: SizedBox(
-                        child: Text(
-                          'Contact Information',
-                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
-                          textAlign: TextAlign.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Status',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Button 1
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              // email
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/email.png',
-                                  width: 65,
-                                  height: 60,
+                              child: TextFormField(
+                                enabled: false,
+                                initialValue: 'Under Review', style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                  hintText: 'Status of Report',
+                                  contentPadding: EdgeInsets.all(15.0),
+                                  border: InputBorder.none,
                                 ),
-                                Text(
-                                  'Email',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        // Button 2
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                                maxLines: null,
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              // tel. no.
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/phone.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Tel. No.',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        // Button 3
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              // location
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/location.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Location',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
 
-                    //services
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 10.0),
-                      child: SizedBox(
-                        child: Text(
-                          'Services',
-                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
-                          textAlign: TextAlign.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Description of Report',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Button 1
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              // email
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/service.png',
-                                  width: 65,
-                                  height: 60,
+                              child: TextFormField(
+                                enabled: false,
+                                initialValue: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.', style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                  hintText: 'Description of Report',
+                                  contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
                                 ),
-                                Text(
-                                  'Service 1',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        // Button 2
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                                maxLines: 5,
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              // tel. no.
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/service.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Service 2',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        // Button 3
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              // location
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/service.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Service 3',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
             ),
           ),
+
 
           // Bottom Navigation Bar
           Positioned(
@@ -521,7 +512,7 @@ class DengueTaskForce extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3), // Shadow color
+                    color: Colors.black.withOpacity(0.3),
                     spreadRadius: 1,
                     blurRadius: 5,
                     offset: Offset(0, 3),
@@ -535,10 +526,10 @@ class DengueTaskForce extends StatelessWidget {
                     icon: Image.asset('assets/bottom_nav_images/home.png'),
                     onPressed: () {
                       Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                       builder: (context) => MainMenu(),
-                      ),
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainMenu(),
+                        ),
                       );
                     },
                   ),
