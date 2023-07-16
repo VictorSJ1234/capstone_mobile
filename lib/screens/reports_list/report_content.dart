@@ -23,7 +23,6 @@ class ReportContent extends StatelessWidget {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Color(0xff10CFF0),
         elevation: 0,
         leading: Builder(
           builder: (BuildContext context) {
@@ -35,7 +34,27 @@ class ReportContent extends StatelessWidget {
             );
           },
         ),
-        title: Text('User Reports', style: TextStyle(fontFamily: 'SquadaOne'),),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: Text(
+          'User Reports',
+          style: TextStyle(fontFamily: 'SquadaOne'),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              // Add your notification icon onPressed logic here
+            },
+          ),
+        ],
       ),
 
       //sidenav

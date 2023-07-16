@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../about_app/about_app.dart';
+import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
@@ -27,7 +28,6 @@ class CommunityProjects2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff00C3FF),
         elevation: 0,
         leading: Builder(
           builder: (BuildContext context) {
@@ -39,7 +39,32 @@ class CommunityProjects2 extends StatelessWidget {
             );
           },
         ),
-        title: Text('Community Projects', style: TextStyle(fontFamily: 'SquadaOne'),),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: Text(
+          'Community Projects',
+          style: TextStyle(fontFamily: 'SquadaOne'),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
 
       //sidenav

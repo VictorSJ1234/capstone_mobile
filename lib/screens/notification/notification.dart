@@ -1,15 +1,39 @@
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/repellents.dart';
+import 'package:capstone_mobile/screens/reports_list/report_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../about_app/about_app.dart';
-import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
-import 'diseases.dart';
 
-class MosquitopediaMenu extends StatelessWidget {
+class NotificationPage extends StatelessWidget {
+
+
+  List<String> notificationTitle = [
+    'Latest Update on Submitted Report',
+    'Latest Community Project',
+    'Latest Update on Submitted Report',
+  ];
+
+  List<String> notificationContent = [
+    'Report 1',
+    'Community Update 1',
+    'Report 2',
+  ];
+
+  List<String> notificationDate = [
+    '2023-07-15',
+    '2023-07-16',
+    '2023-07-17',
+  ];
+
+  List<String> images = [
+    'assets/report_list_images/report_icon.png',
+    'assets/main_menu_images/community_projects.png',
+    'assets/report_list_images/report_icon.png',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,19 +59,14 @@ class MosquitopediaMenu extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Mosquitopedia',
+          'Notification',
           style: TextStyle(fontFamily: 'SquadaOne'),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
-                ),
-              );
+              // already in notification page
             },
           ),
         ],
@@ -222,130 +241,170 @@ class MosquitopediaMenu extends StatelessWidget {
 
           // Top Row
           Positioned.fill(
+            top: 0,
+            left: 20,
+            right: 20,
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(0.0),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Diseases(),
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        elevation: MaterialStateProperty.all<double>(20.0),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/mosquitopedia_menu_images/mosquito.png',
-                              width: 60,
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Mosquito Borne-Disease Vectors',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: Text(
-                                      'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 11,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
+                                    child: Container(
+                                      height: 80,
+                                      child: Center(
+                                        child: Text(
+                                          'Latest Posts and Reports Update',
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
-                                      textAlign: TextAlign.justify,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    SizedBox(height: 20),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: notificationTitle.length,
+                      itemBuilder: (context, index) {
+                        return IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  images[index],
+                                                  width: 60,
+                                                  scale: 0.7,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 8), //  spacng between the image and text
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  notificationTitle[index],
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 4), // spacing between the two texts
+                                                Text(
+                                                  notificationContent[index],
+                                                  style: TextStyle(
+                                                    color: Colors.black54,
+                                                    fontSize: 11,
+                                                  ),
+                                                  textAlign: TextAlign.justify,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                SizedBox(height: 10), // spacing between the two texts
+                                                Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child: Text(
+                                                    "Date: "+notificationDate[index],
+                                                    style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 11,
+                                                    ),
+                                                    textAlign: TextAlign.justify,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    //
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    primary: Colors.blue,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                    ),
+                                                  ),
+                                                  icon: Icon(
+                                                    Icons.email_rounded,
+                                                    color: Colors.white,
+                                                  ),
+                                                  label: Text(
+                                                    ' Open ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
 
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Repelents(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        elevation: MaterialStateProperty.all<double>(20.0),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/mosquitopedia_menu_images/repellent.png',
-                              width: 60,
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Tools against Aedes Disease Vectors',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: Text(
-                                      'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 11,
-                                      ),
-                                      textAlign: TextAlign.justify,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
-                    SizedBox(height: 100),
+                    SizedBox(height: 125),
                   ],
                 ),
               ),
@@ -393,7 +452,6 @@ class MosquitopediaMenu extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/list.png'),
-
                     onPressed: () {
                       Navigator.push(
                         context,

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../about_app/about_app.dart';
+import '../notification/notification.dart';
 
 
 class UserProfile extends StatefulWidget  {
@@ -45,7 +46,6 @@ class _DatePickerFormState extends State<UserProfile> {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Color(0xff10CFF0),
         elevation: 0,
         leading: Builder(
           builder: (BuildContext context) {
@@ -57,7 +57,32 @@ class _DatePickerFormState extends State<UserProfile> {
             );
           },
         ),
-        title: Text('User Profile', style: TextStyle(fontFamily: 'SquadaOne'),),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: Text(
+          'User Profile',
+          style: TextStyle(fontFamily: 'SquadaOne'),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
 
       //sidenav
@@ -234,7 +259,7 @@ class _DatePickerFormState extends State<UserProfile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 30, bottom: 25),
+                      padding: const EdgeInsets.only(top: 20, bottom: 10),
                       child: GestureDetector(
                         onTap: () {
                           // this must open the phone's gallery

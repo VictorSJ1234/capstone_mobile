@@ -2,6 +2,7 @@ import 'package:capstone_mobile/screens/about_app/about_app.dart';
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/dengue_task_force/dengue_task_force.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
+import 'package:capstone_mobile/screens/notification/notification.dart';
 import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:capstone_mobile/screens/send_report/send_report.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,6 @@ class MainMenu extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff10CFF0),
           elevation: 0,
           leading: Builder(
             builder: (BuildContext context) {
@@ -32,8 +32,34 @@ class MainMenu extends StatelessWidget {
               );
             },
           ),
-          title: Text('Main Menu', style: TextStyle(fontFamily: 'SquadaOne'),),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          title: Text(
+            'Main Menu',
+            style: TextStyle(fontFamily: 'SquadaOne'),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationPage(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
+
 
         //sidenav
         drawer: Drawer(

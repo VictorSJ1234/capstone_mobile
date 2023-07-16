@@ -4,6 +4,7 @@ import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
@@ -13,7 +14,6 @@ class AboutApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff10CFF0),
         elevation: 0,
         leading: Builder(
           builder: (BuildContext context) {
@@ -25,7 +25,32 @@ class AboutApp extends StatelessWidget {
             );
           },
         ),
-        title: Text('About App', style: TextStyle(fontFamily: 'SquadaOne'),),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: Text(
+          'About App',
+          style: TextStyle(fontFamily: 'SquadaOne'),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
 
       //sidenav
