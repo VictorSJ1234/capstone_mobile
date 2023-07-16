@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../about_app/about_app.dart';
+import '../notification/notification.dart';
 import '../user_profile/user_profile.dart';
 
 
@@ -51,7 +52,12 @@ class ReportContent extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              // Add your notification icon onPressed logic here
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationPage(),
+                ),
+              );
             },
           ),
         ],
