@@ -1,45 +1,19 @@
+import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
-import 'package:capstone_mobile/screens/mosquitopedia/diseases_page2.dart';
-import 'package:capstone_mobile/screens/mosquitopedia/repellents_page2.dart';
+import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../about_app/about_app.dart';
 import '../reports_list/reports_list.dart';
+import '../user_profile/user_profile.dart';
 
-class Repelents extends StatelessWidget {
-  List<String> captions = [
-    'Repellent 1',
-    'Repellent 2',
-    'Repellent 3',
-    'Repellent 4',
-    'Repellent 5',
-    'Repellent 6'
-  ];
 
-  List<String> images = [
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg'
-  ];
-
-  final PageController _topPageController = PageController(initialPage: 5000, viewportFraction: 0.65);
-  final PageController _bottomPageController = PageController();
-
-  @override
-  void dispose() {
-    _topPageController.dispose();
-    _bottomPageController.dispose();
-  }
-
+class AboutApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff00C3FF),
+        backgroundColor: Color(0xff10CFF0),
         elevation: 0,
         leading: Builder(
           builder: (BuildContext context) {
@@ -51,7 +25,7 @@ class Repelents extends StatelessWidget {
             );
           },
         ),
-        title: Text('Repellents', style: TextStyle(fontFamily: 'SquadaOne'),),
+        title: Text('About App', style: TextStyle(fontFamily: 'SquadaOne'),),
       ),
 
       //sidenav
@@ -98,15 +72,15 @@ class Repelents extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About App', style: TextStyle(color: Colors.white),),
+                    title: Text('About', style: TextStyle(color: Colors.white),),
                     onTap: () {
-                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
-                        ),
-                      );
+                      // Navigator.pop(context);
+                      // Navigator.push(
+                      // context,
+                      // MaterialPageRoute(
+                      //  builder: (context) => About(),
+                      // ),
+                      //);
                     },
                   ),
                   ListTile(
@@ -220,40 +194,53 @@ class Repelents extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+          Positioned.fill(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 100, top: 15, left: 10, right: 10),
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Image.asset(
+                            'assets/logo/pasig_health_department_logo.png',
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                      ],
+                    ),
 
-          // Header
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 50, top: 5),
-            child: Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
-                    child: Row(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                            child: Row(
+                            padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 20.0, 0.0),
-                                    child: Container(
-                                      height: 60,
-                                      child: Center(
-                                        child: Text(
-                                          'Tools against Aedes DIsease\n Vectors',
-                                          style: TextStyle(
-                                            fontFamily: 'Outfit',
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                                  child: SizedBox(
+                                    child: Text(
+                                      'Information',
+                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
+                                      textAlign: TextAlign.center,
                                     ),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+                                  child: Text(
+                                    'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.',
+                                    style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
+                                    textAlign: TextAlign.justify,
                                   ),
                                 ),
                               ],
@@ -262,161 +249,131 @@ class Repelents extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-
-                  // Scrollable Cards - Top
-                  SizedBox(
-                    child: IntrinsicHeight(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
                       child: Container(
-                        height: 230.0,
-                        child: PageView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10000,
-                          controller: _topPageController,
-                          onPageChanged: (int index) {
-                            _bottomPageController.jumpToPage(index);
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              offset: Offset(0, 10), // Offset the shadow vertically
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            //
                           },
-                          itemBuilder: (BuildContext context, int index) {
-                            final int cardIndex = index % captions.length;
-
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: SizedBox(
-                                width: 250.0,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      top: 5, left: 20, right: 20, bottom: 10),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/about_app_images/update.png',
+                                  width: 60,
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 7.0,
-                                          ),
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20.0),
-                                            bottom: Radius.circular(20.0),
-                                          ),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(18.0),
-                                            bottom: Radius.circular(18.0),
-                                          ),
-                                          child: Container(
-                                            height: 200,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    images[cardIndex]),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
+                                      Text(
+                                        'Check for Updates',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  // Scrollable Cards - Bottom
-                  SizedBox(
-                    child: IntrinsicHeight(
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
                       child: Container(
-                        height: 260,
-                        padding: EdgeInsets.only(bottom: 0),
-                        child: PageView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10000,
-                          controller: _bottomPageController,
-                          onPageChanged: (int index) {
-                            _topPageController.jumpToPage(index);
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              offset: Offset(0, 10), // Offset the shadow vertically
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            //
                           },
-                          itemBuilder: (BuildContext context, int index) {
-                            final int cardIndex = index % captions.length;
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: SizedBox(
-                                width: 250.0,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      top: 0, left: 10, right: 10, bottom: 10),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/about_app_images/terms.png',
+                                  width: 60,
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-                                        child: Text(
-                                          captions[cardIndex],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Outfit',
-                                            fontSize: 17.5,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff338B93),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 65.0),
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => RepellentsPage2(
-                                                  PassCaption: captions[cardIndex],
-                                                  PassImage: images[cardIndex],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 8,
-                                            primary: Color(0xff6969DF),
-                                            padding: EdgeInsets.symmetric(vertical: 20.0),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30.0),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            'Read Information',
-                                            style: TextStyle(fontSize: 16.0),
-                                          ),
+                                      Text(
+                                        'Terms of Service',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                ],
+                    SizedBox(height: 100,)
+                  ],
+                ),
               ),
             ),
           ),
 
-          // Scrollable Cards
-
           // Bottom Navigation Bar
-          Align(
-            alignment: Alignment.bottomCenter,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: Container(
-              margin: EdgeInsets.only(bottom: 15.0, right: 15, left: 15),
+              margin: EdgeInsets.only(bottom: 15.0, right: 15, left: 15), //margin of the botnav
               height: 65,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -426,7 +383,7 @@ class Repelents extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withOpacity(0.3), // Shadow color
                     spreadRadius: 1,
                     blurRadius: 5,
                     offset: Offset(0, 3),
@@ -449,6 +406,7 @@ class Repelents extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/list.png'),
+
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -461,12 +419,12 @@ class Repelents extends StatelessWidget {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      //Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => UserProfile(),
-                      //),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfile(),
+                        ),
+                      );
                     },
                   ),
                 ],

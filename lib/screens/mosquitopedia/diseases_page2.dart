@@ -2,7 +2,9 @@ import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../about_app/about_app.dart';
 import '../reports_list/reports_list.dart';
+import '../user_profile/user_profile.dart';
 
 
 class DiseasesPage2 extends StatelessWidget {
@@ -94,30 +96,16 @@ class DiseasesPage2 extends StatelessWidget {
                     },
                   ),
                   ListTile(
-
-                    leading: Icon(Icons.settings, color: Colors.white,),
-                    title: Text('Theme Settings', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      //Navigator.pop(context);
-                      // Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //   builder: (context) => ThemeSettings(),
-                      // ),
-                      //  );
-                    },
-                  ),
-                  ListTile(
                     leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About', style: TextStyle(color: Colors.white),),
+                    title: Text('About App', style: TextStyle(color: Colors.white),),
                     onTap: () {
-                      // Navigator.pop(context);
-                      // Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => About(),
-                      // ),
-                      //);
+                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AboutApp(), // go to the next screen
+                        ),
+                      );
                     },
                   ),
                   ListTile(
@@ -158,7 +146,7 @@ class DiseasesPage2 extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
-                                      'assets/avatar_images/Logo.png',
+                                      'assets/exit_images/caution.png',
                                       width: 100,
                                       height: 100,
                                     ),
@@ -636,12 +624,12 @@ class DiseasesPage2 extends StatelessWidget {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      //Navigator.push(
-                      //context,
-                      //MaterialPageRoute(
-                      //builder: (context) => UserProfile(),
-                      //),
-                      //);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfile(),
+                        ),
+                      );
                     },
                   ),
                 ],

@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   dots_indicator: ^2.0.0
+  intl: ^0.18.1
   swipeable_button_view:
 
 
@@ -91,6 +92,9 @@ flutter:
       - assets/report_list_images/delete.png
       - assets/sidenav_images/sidenav_background.png
       - assets/sidenav_images/lebron1.png
+      - assets/about_app_images/update.png
+      - assets/about_app_images/terms.png
+      - assets/exit_images/caution.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

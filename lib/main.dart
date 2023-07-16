@@ -1,3 +1,4 @@
+import 'package:capstone_mobile/screens/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 
@@ -99,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MainMenu(),
+                              builder: (context) => Login(),
                             ),
                           );
 

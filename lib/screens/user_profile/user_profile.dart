@@ -4,19 +4,41 @@ import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import '../about_app/about_app.dart';
-import '../user_profile/user_profile.dart';
 
 
-class ReportContent extends StatelessWidget {
+class UserProfile extends StatefulWidget  {
+  @override
+  _DatePickerFormState createState() => _DatePickerFormState();
+}
 
-  final String PassReportSubject;
-  final String PassReportNumber;
-  final String PassReportId;
-  final String PassReportDate;
+class _DatePickerFormState extends State<UserProfile> {
+  DateTime? _selectedDate;
+  final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
-  const ReportContent({required this.PassReportSubject, required this.PassReportNumber, required this.PassReportId, required this.PassReportDate});
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +57,7 @@ class ReportContent extends StatelessWidget {
             );
           },
         ),
-        title: Text('User Reports', style: TextStyle(fontFamily: 'SquadaOne'),),
+        title: Text('User Profile', style: TextStyle(fontFamily: 'SquadaOne'),),
       ),
 
       //sidenav
@@ -200,60 +222,257 @@ class ReportContent extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background4.png',
+              'assets/background/background3.png',
               fit: BoxFit.cover,
             ),
           ),
           Positioned.fill(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 100, top: 15, left: 10, right: 10),
+              padding: const EdgeInsets.only(bottom: 100, top: 15, left: 15, right: 20),
               child: Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
-                                    child: Container(
-                                      height: 80,
-                                      child: Center(
-                                        child: Text(
-                                          PassReportNumber,
-                                          style: TextStyle(
-                                            fontFamily: 'Outfit',
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30, bottom: 25),
+                      child: GestureDetector(
+                        onTap: () {
+                          // this must open the phone's gallery
+                        },
+                        child: Container(
+                          width: 180,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.blueGrey,
+                              width: 5,
+                            ),
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: AssetImage('assets/sidenav_images/lebron1.png'),
+                                radius: 85,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.grey[800],
+                                  ),
+                                  child: Icon(
+                                    Icons.photo_camera,
+                                    color: Colors.white,
+                                    size: 24,
                                   ),
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Name',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
                             ),
                           ),
                         ),
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'Name',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(15.0),
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(8.0, 5.0, 0.0, 0.0),
+                          padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Date of Birth',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: InkWell(
+                                onTap: () => _selectDate(context),
+                                child: IgnorePointer(
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: _selectedDate != null
+                                          ? _dateFormat.format(_selectedDate!)
+                                          : 'Select Date of Birth',
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.all(15.0),
+                                      prefixIcon: Icon(Icons.calendar_today),
+                                    ),
+                                    maxLines: null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Gender',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  hintText: '--Select Gender--',
+                                  contentPadding: EdgeInsets.all(15.0),
+                                  border: InputBorder.none,
+                                ),
+                                items: ['Male', 'Female']
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Contact No.',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: TextFormField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly// Apply input formatter to allow only digits
+                                ],
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  hintText: 'Contact No.',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(15.0),
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                           child: SizedBox(
                             child: Text(
                               'Barangay',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                               textAlign: TextAlign.left,
                             ),
                           ),
@@ -273,209 +492,138 @@ class ReportContent extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(color: Colors.black),
                               ),
-                              child: TextFormField(
-                                enabled: false,
-                                initialValue: 'Palatiw', style: TextStyle(color: Colors.black),
+                              child: DropdownButtonFormField<String>(
                                 decoration: InputDecoration(
-                                  hintText: 'Barangay',
+                                  hintText: 'Select Barangay',
                                   contentPadding: EdgeInsets.all(15.0),
                                   border: InputBorder.none,
                                 ),
-                                maxLines: null,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                                items: ['Barangay 1', 'Barangay 2', 'Barangay 3']
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
-                          child: SizedBox(
-                            child: Text(
-                              'Subject of Report',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: TextFormField(
-                                enabled: false,
-                                initialValue: PassReportSubject, style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                  hintText: 'Subject of Report',
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(15.0),
-                                ),
-                                maxLines: null,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
-                          child: SizedBox(
-                            child: Text(
-                              'Attachment',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.white,
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  //file upload
                                 },
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Email',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'Email',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(15.0),
+                                ),
+                                maxLines: null,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Password',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: TextFormField(
+                                obscureText: true, // Hide the input characters
+                                keyboardType: TextInputType.visiblePassword,
+                                decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(15.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 50),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 5,
+                                  primary: Color(0xff1BCBF9),
+                                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderRadius: BorderRadius.circular(30.0),
                                   ),
                                 ),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.attach_file,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Upload Picture/Video',
-                                      style: TextStyle(
-                                        color: Color(0xff666666),
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  'Edit Information',
+                                  style: TextStyle(fontSize: 16.0),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
-                          child: SizedBox(
-                            child: Text(
-                              'Status',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: TextFormField(
-                                enabled: false,
-                                initialValue: 'Under Review', style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                  hintText: 'Status of Report',
-                                  contentPadding: EdgeInsets.all(15.0),
-                                  border: InputBorder.none,
-                                ),
-                                maxLines: null,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
-                          child: SizedBox(
-                            child: Text(
-                              'Description of Report',
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: TextFormField(
-                                enabled: false,
-                                initialValue: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.', style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                  hintText: 'Description of Report',
-                                  contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
-                                ),
-                                maxLines: 5,
-                              ),
-                            ),
-                          ),
-                        ),
+                          ],
+                        )
                       ],
                     ),
                   ],
@@ -537,12 +685,7 @@ class ReportContent extends StatelessWidget {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserProfile(),
-                        ),
-                      );
+                      //already in user profile
                     },
                   ),
                 ],

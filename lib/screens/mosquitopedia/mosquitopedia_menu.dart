@@ -3,7 +3,9 @@ import 'package:capstone_mobile/screens/mosquitopedia/repellents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../about_app/about_app.dart';
 import '../reports_list/reports_list.dart';
+import '../user_profile/user_profile.dart';
 import 'diseases.dart';
 
 class MosquitopediaMenu extends StatelessWidget {
@@ -69,30 +71,16 @@ class MosquitopediaMenu extends StatelessWidget {
                     },
                   ),
                   ListTile(
-
-                    leading: Icon(Icons.settings, color: Colors.white,),
-                    title: Text('Theme Settings', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      //Navigator.pop(context);
-                      // Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //   builder: (context) => ThemeSettings(),
-                      // ),
-                      //  );
-                    },
-                  ),
-                  ListTile(
                     leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About', style: TextStyle(color: Colors.white),),
+                    title: Text('About App', style: TextStyle(color: Colors.white),),
                     onTap: () {
-                      // Navigator.pop(context);
-                      // Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => About(),
-                      // ),
-                      //);
+                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AboutApp(), // go to the next screen
+                        ),
+                      );
                     },
                   ),
                   ListTile(
@@ -133,7 +121,7 @@ class MosquitopediaMenu extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
-                                      'assets/avatar_images/Logo.png',
+                                      'assets/exit_images/caution.png',
                                       width: 100,
                                       height: 100,
                                     ),
@@ -202,139 +190,139 @@ class MosquitopediaMenu extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background3.png',
+              'assets/background/background4.png',
               fit: BoxFit.cover,
             ),
           ),
 
           // Top Row
-          Positioned(
-            top: 20,
-            left: 20,
-            right: 20,
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Diseases(),
-                        ),
-                      );
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      elevation: MaterialStateProperty.all<double>(10.0),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+          Positioned.fill(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Diseases(),
+                          ),
+                        );
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        elevation: MaterialStateProperty.all<double>(20.0),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/mosquitopedia_menu_images/mosquito.png',
-                            width: 60,
-                          ),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Mosquito Borne-Disease Vectors',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Text(
-                                    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 11,
-                                    ),
-                                    textAlign: TextAlign.justify,
-                                  ),
-                                ),
-                              ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/mosquitopedia_menu_images/mosquito.png',
+                              width: 60,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Mosquito Borne-Disease Vectors',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: Text(
+                                      'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
+                                      style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 11,
+                                      ),
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
+                    SizedBox(height: 20),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Repelents(),
-                        ),
-                      );
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      elevation: MaterialStateProperty.all<double>(10.0),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Repelents(),
+                          ),
+                        );
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        elevation: MaterialStateProperty.all<double>(20.0),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/mosquitopedia_menu_images/repellent.png',
-                            width: 60,
-                          ),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Tools against Aedes Disease Vectors',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Text(
-                                    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-                                    style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 11,
-                                    ),
-                                    textAlign: TextAlign.justify,
-                                  ),
-                                ),
-                              ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/mosquitopedia_menu_images/repellent.png',
+                              width: 60,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tools against Aedes Disease Vectors',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Text(
+                                      'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
+                                      style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 11,
+                                      ),
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 100),
+                  ],
+                ),
               ),
             ),
           ),
@@ -393,12 +381,12 @@ class MosquitopediaMenu extends StatelessWidget {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      //Navigator.push(
-                      //context,
-                      //MaterialPageRoute(
-                      //builder: (context) => UserProfile(),
-                      //),
-                      //);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfile(),
+                        ),
+                      );
                     },
                   ),
                 ],
