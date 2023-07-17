@@ -16,6 +16,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  bool rememberMe = false; //default tickbox value
+
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
@@ -305,21 +309,47 @@ class _LoginState extends State<Login> {
                     SizedBox(height: 10,),
 
                     Padding(
-                      padding: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(right: 20),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
                             onTap: () {
+                              setState(() {
+                                rememberMe = !rememberMe;
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: rememberMe,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      rememberMe = value ?? false;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  "Remember me",
+                                  style: TextStyle(fontSize: 14, color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          InkWell(
+                            onTap: () {
+                              // Handle forgot password logic
                             },
                             child: Text(
                               "Forgot Password?",
-                              style: TextStyle(fontSize: 14, color: Colors.blueAccent,),
+                              style: TextStyle(fontSize: 14, color: Colors.blueAccent),
                             ),
                           ),
                         ],
                       ),
                     ),
+
 
                     if (_errorMessage.isNotEmpty)
                       Padding(
