@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/diseases_page2.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/repellents_page2.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,7 +9,15 @@ import '../about_app/about_app.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 
-class Repelents extends StatelessWidget {
+class Repelents extends StatefulWidget {
+  @override
+  _RepelentsState createState() => _RepelentsState();
+}
+
+class _RepelentsState extends State<Repelents> {
+
+  int _currentPageIndex = 0;
+
   List<String> captions = [
     'Repellent 1',
     'Repellent 2',
@@ -27,13 +36,14 @@ class Repelents extends StatelessWidget {
     'assets/repellents_images/repellent.jpg'
   ];
 
-  final PageController _topPageController = PageController(initialPage: 5000, viewportFraction: 0.65);
-  final PageController _bottomPageController = PageController();
+  late PageController _topPageController;
+  late PageController _bottomPageController;
 
   @override
-  void dispose() {
-    _topPageController.dispose();
-    _bottomPageController.dispose();
+  void initState() {
+    super.initState();
+    _topPageController = PageController(initialPage: captions.length * 1000, viewportFraction: 0.65);
+    _bottomPageController = PageController();
   }
 
   @override
@@ -300,6 +310,9 @@ class Repelents extends StatelessWidget {
                           controller: _topPageController,
                           onPageChanged: (int index) {
                             _bottomPageController.jumpToPage(index);
+                            setState(() {
+                              _currentPageIndex = index % captions.length;
+                            });
                           },
                           itemBuilder: (BuildContext context, int index) {
                             final int cardIndex = index % captions.length;
@@ -352,6 +365,29 @@ class Repelents extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  // Indicators
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: DotsIndicator(
+                        dotsCount: captions.length, // Number of cards==number of caption
+                        position: _currentPageIndex,
+                        decorator: DotsDecorator(
+                          activeColor: Colors.blueAccent,
+                          color: Colors.grey,
+                          activeSize: const Size(18.0, 9.0),
+                          size: const Size.square(9.0),
+                          activeShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          spacing: EdgeInsets.symmetric(horizontal: 6),
+                        ),
+                      ),
+                    ),
+                  ),
+
                   // Scrollable Cards - Bottom
                   SizedBox(
                     child: IntrinsicHeight(
