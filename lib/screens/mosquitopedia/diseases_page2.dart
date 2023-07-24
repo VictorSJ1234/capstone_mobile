@@ -294,7 +294,7 @@ class DiseasesPage2 extends StatelessWidget {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30.0),
+                            borderRadius: BorderRadius.circular(35.0),
                             border: Border.all(
                               color: Colors.white,
                               width: 5.0,

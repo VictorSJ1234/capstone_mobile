@@ -349,14 +349,14 @@ class _CommunityProjectsState extends State<CommunityProjects> {
                                             width: 7.0,
                                           ),
                                           borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20.0),
-                                            bottom: Radius.circular(20.0),
+                                            top: Radius.circular(28.0),
+                                            bottom: Radius.circular(28.0),
                                           ),
                                         ),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(10.0),
-                                            bottom: Radius.circular(10.0),
+                                            top: Radius.circular(20.0),
+                                            bottom: Radius.circular(20.0),
                                           ),
                                           child: Container(
                                             height: 190,

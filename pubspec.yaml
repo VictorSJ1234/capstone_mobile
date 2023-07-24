@@ -73,6 +73,7 @@ flutter:
       - assets/main_menu_images/dengue_task_force.png
       - assets/main_menu_images/mosquitopedia.png
       - assets/main_menu_images/reporting.png
+      - assets/main_menu_images/dengue_5s.png
       - assets/bottom_nav_images/home.png
       - assets/bottom_nav_images/list.png
       - assets/bottom_nav_images/user.png
@@ -82,6 +83,11 @@ flutter:
       - assets/diseases_page2_images/symptoms.png
       - assets/diseases_page2_images/preventions.png
       - assets/repellents_images/repellent.jpg
+      - assets/dengue5s_images/consultation.png
+      - assets/dengue5s_images/foggin.png
+      - assets/dengue5s_images/search-destroy.png
+      - assets/dengue5s_images/self-protect.png
+      - assets/dengue5s_images/sustain-hydration.png
       - assets/community_projects_images/community_project.png
       - assets/task_force_images/phone.png
       - assets/task_force_images/email.png

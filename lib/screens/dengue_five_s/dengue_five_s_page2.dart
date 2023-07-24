@@ -1,50 +1,25 @@
 import 'package:capstone_mobile/screens/main_menu.dart';
-import 'package:capstone_mobile/screens/mosquitopedia/diseases_page2.dart';
-import 'package:capstone_mobile/screens/mosquitopedia/repellents_page2.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../about_app/about_app.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
+import '../user_profile/user_profile.dart';
 
-class Repelents extends StatefulWidget {
-  @override
-  _RepelentsState createState() => _RepelentsState();
-}
 
-class _RepelentsState extends State<Repelents> {
+class Dengue5sPage2 extends StatelessWidget {
 
-  int _currentPageIndex = 0;
+  final String details = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
+      "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
+      "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
 
-  List<String> captions = [
-    'Repellent 1',
-    'Repellent 2',
-    'Repellent 3',
-    'Repellent 4',
-    'Repellent 5',
-    'Repellent 6'
-  ];
+  final String usage = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
 
-  List<String> images = [
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg'
-  ];
+  final String PassCaption;
+  final String PassImage;
+  const Dengue5sPage2({required this.PassCaption, required this.PassImage});
 
-  late PageController _topPageController;
-  late PageController _bottomPageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _topPageController = PageController(initialPage: captions.length * 1000, viewportFraction: 0.65);
-    _bottomPageController = PageController();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -256,15 +231,15 @@ class _RepelentsState extends State<Repelents> {
             ),
           ),
 
-          // Header
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 50, top: 5),
-            child: Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
-                    child: Row(
+          // Top Row
+          Positioned.fill(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 60, top: 15, left: 10, right: 10),
+              child: Container(
+                padding: EdgeInsets.only(bottom: 40),
+                child: Column(
+                  children: [
+                    Row(
                       children: [
                         Expanded(
                           child: Padding(
@@ -273,15 +248,15 @@ class _RepelentsState extends State<Repelents> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 20.0, 0.0),
+                                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 20.0, 8.0),
                                     child: Container(
-                                      height: 60,
+                                      height: 70,
                                       child: Center(
                                         child: Text(
-                                          'Tools against Aedes DIsease\n Vectors',
+                                          'Mosquito Borne-Diseases\n Vectors',
                                           style: TextStyle(
                                             fontFamily: 'Outfit',
-                                            fontSize: 20,
+                                            fontSize: 23,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
@@ -297,187 +272,128 @@ class _RepelentsState extends State<Repelents> {
                         ),
                       ],
                     ),
-                  ),
-
-                  // Scrollable Cards - Top
-                  SizedBox(
-                    child: IntrinsicHeight(
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
                       child: Container(
-                        height: 230.0,
-                        child: PageView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10000,
-                          controller: _topPageController,
-                          onPageChanged: (int index) {
-                            _bottomPageController.jumpToPage(index);
-                            setState(() {
-                              _currentPageIndex = index % captions.length;
-                            });
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final int cardIndex = index % captions.length;
-
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: SizedBox(
-                                width: 250.0,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      top: 5, left: 20, right: 20, bottom: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 7.0,
-                                          ),
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(28.0),
-                                            bottom: Radius.circular(28.0),
-                                          ),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20.0),
-                                            bottom: Radius.circular(20.0),
-                                          ),
-                                          child: Container(
-                                            height: 200,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    images[cardIndex]),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // Indicators
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: DotsIndicator(
-                        dotsCount: captions.length, // Number of cards==number of caption
-                        position: _currentPageIndex,
-                        decorator: DotsDecorator(
-                          activeColor: Colors.blueAccent,
-                          color: Colors.grey,
-                          activeSize: const Size(18.0, 9.0),
-                          size: const Size.square(9.0),
-                          activeShape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+                        child: Container(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30.0),
+                            child: Image.asset(
+                              PassImage,
+                              width: 250,
+                            ),
                           ),
-                          spacing: EdgeInsets.symmetric(horizontal: 6),
                         ),
                       ),
                     ),
-                  ),
 
-                  // Scrollable Cards - Bottom
-                  SizedBox(
-                    child: IntrinsicHeight(
-                      child: Container(
-                        height: 260,
-                        padding: EdgeInsets.only(bottom: 0),
-                        child: PageView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10000,
-                          controller: _bottomPageController,
-                          onPageChanged: (int index) {
-                            _topPageController.jumpToPage(index);
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final int cardIndex = index % captions.length;
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                              child: SizedBox(
-                                width: 250.0,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                      top: 0, left: 10, right: 10, bottom: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-                                        child: Text(
-                                          captions[cardIndex],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Outfit',
-                                            fontSize: 17.5,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff338B93),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 65.0),
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => RepellentsPage2(
-                                                  PassCaption: captions[cardIndex],
-                                                  PassImage: images[cardIndex],
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      color: Color(0xffF5F5F5),
+                      elevation: 25,
+                      child: Column(
+                        children: [
+                          IntrinsicHeight(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 20.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                                                  child: SizedBox(
+                                                    child: Text(
+                                                      PassCaption,
+                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 8,
-                                            primary: Color(0xff6969DF),
-                                            padding: EdgeInsets.symmetric(vertical: 20.0),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30.0),
+                                              ],
                                             ),
                                           ),
-                                          child: Text(
-                                            'Read Information',
-                                            style: TextStyle(fontSize: 16.0),
-                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
+                              ],
+                            ),
+                          ),
+                          IntrinsicHeight(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(15.0, 1.0, 15.0, 15.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(20.0, 5.0, 0.0, 0.0),
+                                                  child: SizedBox(
+                                                    child: Text(
+                                                      'Details',
+                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
+                                                      textAlign: TextAlign.justify,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 4),
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+                                                  child: Text(
+                                                    details,
+                                                    style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
+                                                    textAlign: TextAlign.justify,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
 
-          // Scrollable Cards
 
           // Bottom Navigation Bar
-          Align(
-            alignment: Alignment.bottomCenter,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: Container(
-              margin: EdgeInsets.only(bottom: 15.0, right: 15, left: 15),
+              margin: EdgeInsets.only(bottom: 15.0, right: 15, left: 15), //margin of the botnav
               height: 65,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -510,6 +426,7 @@ class _RepelentsState extends State<Repelents> {
                   ),
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/list.png'),
+
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -522,12 +439,12 @@ class _RepelentsState extends State<Repelents> {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      //Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => UserProfile(),
-                      //),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfile(),
+                        ),
+                      );
                     },
                   ),
                 ],

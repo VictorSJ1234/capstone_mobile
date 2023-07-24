@@ -280,7 +280,7 @@ class RepellentsPage2 extends StatelessWidget {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40.0),
+                            borderRadius: BorderRadius.circular(35.0),
                             border: Border.all(
                               color: Colors.white,
                               width: 5.0,
@@ -315,7 +315,7 @@ class RepellentsPage2 extends StatelessWidget {
                                       children: [
                                         Expanded(
                                           child: Padding(
-                                            padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 5.0),
+                                            padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 20.0),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [

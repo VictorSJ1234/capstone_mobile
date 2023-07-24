@@ -1,5 +1,6 @@
 import 'package:capstone_mobile/screens/about_app/about_app.dart';
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
+import 'package:capstone_mobile/screens/dengue_five_s/dengue_five_s.dart';
 import 'package:capstone_mobile/screens/dengue_task_force/dengue_task_force.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:capstone_mobile/screens/notification/notification.dart';
@@ -228,6 +229,66 @@ class MainMenu extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5, left: 15, right: 15),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 3,
+                                blurRadius: 10,
+                                offset: Offset(0, 10), // Offset the shadow vertically
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DengueTaskForce(),
+                                ),
+                              );
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/logo/pasig_health_department_logo.png',
+                                    width: 60,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Pasig Dengue Task Force',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -293,7 +354,7 @@ class MainMenu extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset(
-                                      'assets/main_menu_images/dengue_task_force.png',
+                                      'assets/main_menu_images/dengue_5s.png',
                                       width: 95,
                                       height: 105,
                                       scale: 0.8,
@@ -304,7 +365,7 @@ class MainMenu extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => DengueTaskForce(),
+                                            builder: (context) => DengueFiveS(),
                                           ),
                                         );
                                       },
@@ -316,7 +377,7 @@ class MainMenu extends StatelessWidget {
                                         backgroundColor: Color(0xff00C3FF),
                                         minimumSize: Size(120, 50),
                                       ),
-                                      child: Text('Dengue \n Task Force', style: TextStyle(fontSize: 15),
+                                      child: Text('Dengue 5S', style: TextStyle(fontSize: 15),
                                       textAlign: TextAlign.center,),
                                     ),
                                     SizedBox(height: 15),

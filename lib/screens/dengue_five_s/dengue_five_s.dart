@@ -8,32 +8,31 @@ import 'package:flutter/services.dart';
 import '../about_app/about_app.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
+import 'dengue_five_s_page2.dart';
 
-class Repelents extends StatefulWidget {
+class DengueFiveS extends StatefulWidget {
   @override
-  _RepelentsState createState() => _RepelentsState();
+  _DengueFiveSState createState() => _DengueFiveSState();
 }
 
-class _RepelentsState extends State<Repelents> {
+class _DengueFiveSState extends State<DengueFiveS> {
 
   int _currentPageIndex = 0;
 
   List<String> captions = [
-    'Repellent 1',
-    'Repellent 2',
-    'Repellent 3',
-    'Repellent 4',
-    'Repellent 5',
-    'Repellent 6'
+    'Search and Destroy',
+    'Self-Protect',
+    'Seek Consultation',
+    'Support Fogging in Outbreak Areas',
+    'Sustain Hydration',
   ];
 
   List<String> images = [
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg'
+    'assets/dengue5s_images/search-destroy.png',
+    'assets/dengue5s_images/self-protect.png',
+    'assets/dengue5s_images/consultation.png',
+    'assets/dengue5s_images/foggin.png',
+    'assets/dengue5s_images/sustain-hydration.png'
   ];
 
   late PageController _topPageController;
@@ -71,7 +70,7 @@ class _RepelentsState extends State<Repelents> {
           ),
         ),
         title: Text(
-          'Repellents',
+          'Dengue 5S',
           style: TextStyle(fontFamily: 'SquadaOne'),
         ),
         actions: [
@@ -278,7 +277,7 @@ class _RepelentsState extends State<Repelents> {
                                       height: 60,
                                       child: Center(
                                         child: Text(
-                                          'Tools against Aedes DIsease\n Vectors',
+                                          'Community Dengue Awareness\n 5S Strategy',
                                           style: TextStyle(
                                             fontFamily: 'Outfit',
                                             fontSize: 20,
@@ -334,14 +333,14 @@ class _RepelentsState extends State<Repelents> {
                                             width: 7.0,
                                           ),
                                           borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(28.0),
-                                            bottom: Radius.circular(28.0),
+                                            top: Radius.circular(38.0),
+                                            bottom: Radius.circular(38.0),
                                           ),
                                         ),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20.0),
-                                            bottom: Radius.circular(20.0),
+                                            top: Radius.circular(30.0),
+                                            bottom: Radius.circular(30.0),
                                           ),
                                           child: Container(
                                             height: 200,
@@ -434,7 +433,7 @@ class _RepelentsState extends State<Repelents> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => RepellentsPage2(
+                                                builder: (context) => Dengue5sPage2(
                                                   PassCaption: captions[cardIndex],
                                                   PassImage: images[cardIndex],
                                                 ),

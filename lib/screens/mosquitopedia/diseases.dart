@@ -354,14 +354,14 @@ class _DiseasesState extends State<Diseases> {
                                             width: 7.0,
                                           ),
                                           borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20.0),
-                                            bottom: Radius.circular(20.0),
+                                            top: Radius.circular(28.0),
+                                            bottom: Radius.circular(28.0),
                                           ),
                                         ),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(18.0),
-                                            bottom: Radius.circular(18.0),
+                                            top: Radius.circular(20.0),
+                                            bottom: Radius.circular(20.0),
                                           ),
                                           child: Container(
                                             height: 200,
