@@ -1,22 +1,48 @@
-import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
-import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
+import 'package:capstone_mobile/screens/mosquitopedia/repellents.dart';
+import 'package:capstone_mobile/screens/reports_list/report_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
+import '../about_app/about_app.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
-
-class AboutApp extends StatefulWidget {
+class ReportStatus extends StatefulWidget {
   final token;
-  AboutApp({@required this.token,Key? key}) : super(key: key);
+  ReportStatus({@required this.token,Key? key}) : super(key: key);
   @override
-  _AboutApp createState() => _AboutApp();
+  _ReportStatusPage createState() => _ReportStatusPage();
 }
 
-class _AboutApp extends State<AboutApp> {
+class _ReportStatusPage extends State<ReportStatus> {
+
+
+  List<String> statusTitle = [
+    'Recieved',
+    'Responded',
+  ];
+
+  List<String> statusDescription = [
+    'Your concern has been received by the Pasig Dengue Task and currently for reviewing.',
+    'The team sent a response to your concern ',
+    'The Pasig Dengue Task Force has provided necessary action to alleviate your concern. Thank you!',
+  ];
+
+  List<String> notificationDate = [
+    '2023-07-15',
+    '2023-07-16',
+    '2023-07-17',
+  ];
+
+  List<Color> statusColors = [
+    Colors.redAccent,   // Color for 'Received'
+    Colors.green,  // Color for 'Responded'
+    Colors.blue,    // Color for 'Completed'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +68,7 @@ class _AboutApp extends State<AboutApp> {
           ),
         ),
         title: Text(
-          'About App',
+          'User Reports',
           style: TextStyle(fontFamily: 'SquadaOne'),
         ),
         actions: [
@@ -104,15 +130,15 @@ class _AboutApp extends State<AboutApp> {
                   ),
                   ListTile(
                     leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About', style: TextStyle(color: Colors.white),),
+                    title: Text('About App', style: TextStyle(color: Colors.white),),
                     onTap: () {
-                      // Navigator.pop(context);
-                      // Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => About(),
-                      // ),
-                      //);
+                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
+                        ),
+                      );
                     },
                   ),
                   ListTile(
@@ -222,57 +248,47 @@ class _AboutApp extends State<AboutApp> {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background3.png',
+              'assets/background/background4.png',
               fit: BoxFit.cover,
             ),
           ),
-          Positioned.fill(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 100, top: 15, left: 10, right: 10),
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Image.asset(
-                            'assets/logo/pasig_health_department_logo.png',
-                            width: 200,
-                            height: 200,
-                          ),
-                        ),
-                      ],
-                    ),
 
+          // Top Row
+          Positioned.fill(
+            top: 0,
+            left: 20,
+            right: 20,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Column(
+                  children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                            child: Row(
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                                  child: SizedBox(
-                                    child: Text(
-                                      'Information',
-                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
-                                      textAlign: TextAlign.center,
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
+                                    child: Container(
+                                      height: 80,
+                                      child: Center(
+                                        child: Text(
+                                          'Report Status',
+                                          style: TextStyle(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
-                                  child: Text(
-                                    'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.',
-                                    style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
-                                    textAlign: TextAlign.justify,
                                   ),
                                 ),
                               ],
@@ -281,123 +297,140 @@ class _AboutApp extends State<AboutApp> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 3,
-                              blurRadius: 10,
-                              offset: Offset(0, 10), // Offset the shadow vertically
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: statusTitle.length,
+                      itemBuilder: (context, index) {
+                        final bool isLastItem = index == statusTitle.length - 1;
+                        final Color dotColor = isLastItem ? Colors.lightGreenAccent : Colors.white;
+                        return TimelineTile(
+                          alignment: TimelineAlign.start,
+                          isFirst: index == - 1,
+                          isLast: index == statusTitle.length - 1,
+                          indicatorStyle: IndicatorStyle(
+                            width: 20,
+                            color: dotColor, // Set the color based on the condition
+                            padding: EdgeInsets.all(4),
+                          ),
+                          beforeLineStyle: LineStyle(
+                            color: Colors.white,
+                            thickness: 4,
+                          ),
+                          endChild: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/diseases_page2_images/symptoms.png',
+                                            width: 60,
+                                            scale: 0.7,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 8), //  spacng between the image and text
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            statusTitle[index],
+                                            style: TextStyle(
+                                              color: statusColors[index],
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4), // spacing between the two texts
+                                          Text(
+                                            statusDescription[index],
+                                            style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 11,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          SizedBox(height: 10), // spacing between the two texts
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 10),
+                                            child: Text(
+                                              "Date: "+notificationDate[index],
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 11,
+                                              ),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton.icon(
+                                            onPressed: () {
+                                              //
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.blue,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(15),
+                                              ),
+                                            ),
+                                            icon: Icon(
+                                              Icons.content_paste_search,
+                                              color: Colors.white,
+                                            ),
+                                            label: Text(
+                                              ' View ',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/about_app_images/update.png',
-                                  width: 60,
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Check for Updates',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 3,
-                              blurRadius: 10,
-                              offset: Offset(0, 10), // Offset the shadow vertically
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/about_app_images/terms.png',
-                                  width: 60,
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Terms of Service',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 100,)
+                    SizedBox(height: 125),
                   ],
                 ),
               ),
             ),
           ),
+
+
 
           // Bottom Navigation Bar
           Positioned(
@@ -415,7 +448,7 @@ class _AboutApp extends State<AboutApp> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3), // Shadow color
+                    color: Colors.black.withOpacity(0.3),
                     spreadRadius: 1,
                     blurRadius: 5,
                     offset: Offset(0, 3),
@@ -438,7 +471,6 @@ class _AboutApp extends State<AboutApp> {
                   ),
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/list.png'),
-
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -465,6 +497,7 @@ class _AboutApp extends State<AboutApp> {
           ),
         ],
       ),
+
     );
   }
-}//test
+}

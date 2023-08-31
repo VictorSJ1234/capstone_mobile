@@ -8,20 +8,24 @@ import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:http/http.dart' as http;
+import '../../config.dart';
 import '../about_app/about_app.dart';
 import '../notification/notification.dart';
 import '../user_profile/user_profile.dart';
 
 
 class SendReport extends StatefulWidget {
-  SendReport({Key? key}) : super(key: key);
+  final token;
+  SendReport({@required this.token,Key? key}) : super(key: key);
   @override
   _SendReportState createState() => _SendReportState();
 }
 
 class _SendReportState extends State<SendReport> with SingleTickerProviderStateMixin {
   late AnimationController loadingController;
+  late String userId;
 
   List<File> _selectedFiles = [];
   List<PlatformFile> _selectedPlatformFiles = [];
@@ -61,15 +65,17 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
     return extension != null && imageExtensions.contains(extension.toLowerCase());
   }
 
-
   @override
   void initState() {
     loadingController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 10),
     )..addListener(() { setState(() {}); });
-
+    // TODO: implement initState
     super.initState();
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+
+    userId = jwtDecodedToken['_id'];
   }
 
   //function to remove the selected file
@@ -110,32 +116,178 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
       );
       return;
     }
+    else {
 
-    // Convert selected files to base64 strings
-    List<String> fileDataList = [];
-    for (var file in _selectedFiles) {
-      List<int> bytes = await file.readAsBytes();
-      String base64FileData = base64Encode(bytes);
-      fileDataList.add(base64FileData);
+      // Convert selected files to base64 strings
+      List<String> fileDataList = [];
+      for (var file in _selectedFiles) {
+        List<int> bytes = await file.readAsBytes();
+        String base64FileData = base64Encode(bytes);
+        fileDataList.add(base64FileData);
+      }
+
+      // Check if total file size exceeds 15 MB
+      int totalFileSize = getTotalFileSize();
+      int maxSizeInBytes = 15 * 1024 * 1024; // 15 MB in bytes
+      if (totalFileSize > maxSizeInBytes) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Total file size should not exceed 15 MB."),
+        ));
+
+        //this is important!! // this will exit the function and not going directly at the data insertiion
+        return;
+      }
+
+      //for testing only
+      print(selectedBarangay);
+      print(subjectController.text);
+      print(fileDataList);
+      print(descriptionController.text);
+
+      var regBody = {
+        "userId":userId,
+        "barangay":selectedBarangay.toString(),
+        "report_subject":subjectController.text.toString(),
+        "uploaded_file": fileDataList,
+        "report_description":descriptionController.text.toString(),
+      };
+
+      var response = await http.post(Uri.parse(createUserReport),
+          headers: {"Content-Type":"application/json"},
+          body: jsonEncode(regBody)
+      );
+
+      var jsonResponse = jsonDecode(response.body);
+
+      print(jsonResponse['status']);
+
+      print(response);
+
+      //for testing only
+      print(selectedBarangay);
+      print(subjectController.text);
+      print(descriptionController.text);
+
+
+      if (response.statusCode == 200) {
+        _clearFields();//clear all fields
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              elevation: 4,
+              shadowColor: Colors.black,
+              content: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/send_report_images/submit_successfully.png',
+                        width: 50,
+                        height: 50,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Pasig Dengue Task Force',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Hi, (User) we have received your report and we are currently taking action to solve your concern. Once complete, we will update the status of your concern. For other concern, you may submit another report. Thank you!',
+                        style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 10,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainMenu(token: widget.token),
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          backgroundColor: Colors.blue,
+                        ),
+                        child: Text(
+                          'Go back\n to main menu',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                        child: Text(
+                          'Submit \n another report?',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+
+      } else {
+        // Registration failed due to other reasons
+        // Show generic error dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Registration Failed"),
+              content: Text("An error occurred during registration."),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the dialog
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
+  }
 
-    // Check if total file size exceeds 15 MB
-    int totalFileSize = getTotalFileSize();
-    int maxSizeInBytes = 15 * 1024 * 1024; // 15 MB in bytes
-    if (totalFileSize > maxSizeInBytes) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Total file size should not exceed 15 MB."),
-      ));
-
-      //this is important!! // this will exit the function and not going directly at the data insertiion
-      return;
-    }
-
-    //for testing only
-    print(selectedBarangay);
-    print(subjectController.text);
-    print(fileDataList);
-    print(descriptionController.text);
+  //clear all fields after submitting
+  //clear all fields after submitting
+  void _clearFields(){
+    subjectController.text="";
+    selectedBarangay=null;
+    descriptionController.text="";
   }
 
   @override
@@ -174,7 +326,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -232,7 +384,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -795,7 +947,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -807,7 +959,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       Navigator.push(
                       context,
                       MaterialPageRoute(
-                       builder: (context) => ReportList(),
+                       builder: (context) => ReportList(token: widget.token),
                       ),
                       );
                     },
@@ -818,7 +970,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

@@ -9,7 +9,17 @@ import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 import 'diseases.dart';
 
-class MosquitopediaMenu extends StatelessWidget {
+class MosquitopediaMenu extends StatefulWidget  {
+  final token;
+  MosquitopediaMenu({@required this.token,Key? key}) : super(key: key);
+  @override
+  _MosquitopediaMenu createState() => _MosquitopediaMenu();
+}
+
+class _MosquitopediaMenu extends State<MosquitopediaMenu> {
+
+  late String userId;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +55,7 @@ class MosquitopediaMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -103,7 +113,7 @@ class MosquitopediaMenu extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -232,7 +242,7 @@ class MosquitopediaMenu extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Diseases(),
+                            builder: (context) => Diseases(token: widget.token),
                           ),
                         );
                       },
@@ -292,7 +302,7 @@ class MosquitopediaMenu extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Repelents(),
+                            builder: (context) => Repelents(token: widget.token),
                           ),
                         );
                       },
@@ -386,7 +396,7 @@ class MosquitopediaMenu extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -398,7 +408,7 @@ class MosquitopediaMenu extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -409,7 +419,7 @@ class MosquitopediaMenu extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

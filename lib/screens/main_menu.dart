@@ -8,11 +8,30 @@ import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:capstone_mobile/screens/send_report/send_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import 'mosquitopedia/diseases.dart';
 import 'user_profile/user_profile.dart';
 
-class MainMenu extends StatelessWidget {
+class MainMenu extends StatefulWidget  {
+  final token;
+  MainMenu({@required this.token,Key? key}) : super(key: key);
+  @override
+  _MainMenu createState() => _MainMenu();
+}
+
+class _MainMenu extends State<MainMenu> {
+
+  late String email;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+
+    email = jwtDecodedToken['email'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -53,7 +72,7 @@ class MainMenu extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => NotificationPage(),
+                    builder: (context) => NotificationPage(token: widget.token),
                   ),
                 );
               },
@@ -92,13 +111,6 @@ class MainMenu extends StatelessWidget {
                 Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.language, color: Colors.white,),
-                      title: Text('Language', style: TextStyle(color: Colors.white),),
-                      onTap: () {
-                        //
-                      },
-                    ),
-                    ListTile(
                       leading: Icon(Icons.info, color: Colors.white,),
                       title: Text('About App', style: TextStyle(color: Colors.white),),
                       onTap: () {
@@ -106,7 +118,7 @@ class MainMenu extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AboutApp(), // go to the next screen
+                            builder: (context) => AboutApp(token: widget.token), // go to the next screen
                           ),
                         );
                       },
@@ -247,7 +259,7 @@ class MainMenu extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => DengueTaskForce(),
+                                  builder: (context) => DengueTaskForce(token: widget.token),
                                 ),
                               );
                             },
@@ -318,7 +330,7 @@ class MainMenu extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => MosquitopediaMenu(),
+                                            builder: (context) => MosquitopediaMenu(token: widget.token),
                                           ),
                                         );
                                       },
@@ -365,7 +377,7 @@ class MainMenu extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => DengueFiveS(),
+                                            builder: (context) => DengueFiveS(token: widget.token),
                                           ),
                                         );
                                       },
@@ -419,7 +431,7 @@ class MainMenu extends StatelessWidget {
                                          Navigator.push(
                                           context,
                                          MaterialPageRoute(
-                                         builder: (context) => CommunityProjects(),
+                                         builder: (context) => CommunityProjects(token: widget.token),
                                           ),
                                         );
                                       },
@@ -468,7 +480,7 @@ class MainMenu extends StatelessWidget {
                                         Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                         builder: (context) => SendReport(),
+                                          builder: (context) => SendReport(token: widget.token),
                                         ),
                                          );
                                       },
@@ -536,7 +548,7 @@ class MainMenu extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ReportList(),
+                            builder: (context) => ReportList(token: widget.token),
                           ),
                         );
                       },
@@ -547,7 +559,7 @@ class MainMenu extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => UserProfile(),
+                            builder: (context) => UserProfile(token: widget.token),
                           ),
                         );
                       },

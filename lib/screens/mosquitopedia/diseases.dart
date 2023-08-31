@@ -7,10 +7,13 @@ import 'package:flutter/services.dart';
 import '../about_app/about_app.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
+import '../user_profile/user_profile.dart';
 
 
 
 class Diseases extends StatefulWidget {
+  final token;
+  Diseases({@required this.token,Key? key}) : super(key: key);
   @override
   _DiseasesState createState() => _DiseasesState();
 }
@@ -20,12 +23,11 @@ class _DiseasesState extends State<Diseases> {
   int _currentPageIndex = 0;
 
   List<String> captions = [
-    'Mosquito 1',
-    'Mosquito 2',
-    'Mosquito 3',
-    'Mosquito 4',
-    'Mosquito 5',
-    'Mosquito 6'
+    'Dengue ',
+    'Malaria',
+    'Filariasis',
+    'Chikungunya',
+    'Zika Virus',
   ];
 
   List<String> scientificName = [
@@ -34,16 +36,22 @@ class _DiseasesState extends State<Diseases> {
     'Scientific Scientific Name 3',
     'Scientific Scientific Name 4',
     'Scientific Scientific Name 5',
-    'Scientific Scientific Name 6'
   ];
 
   List<String> images = [
-    'assets/mosquitopedia_images/mosquito_sample.jpg',
-    'assets/mosquitopedia_images/mosquito_sample.jpg',
-    'assets/mosquitopedia_images/mosquito_sample.jpg',
-    'assets/mosquitopedia_images/mosquito_sample.jpg',
-    'assets/mosquitopedia_images/mosquito_sample.jpg',
-    'assets/mosquitopedia_images/mosquito_sample.jpg'
+    'assets/mosquitopedia_images/dengue.jpeg',
+    'assets/mosquitopedia_images/malaria.png',
+    'assets/mosquitopedia_images/filariasis.png',
+    'assets/mosquitopedia_images/chikungunya.png',
+    'assets/mosquitopedia_images/zikavirus.png',
+  ];
+
+  List<String> details = [
+    'Dengue is a viral infection caused by the dengue virus (DENV), transmitted to humans through the bite of infected mosquitoes. About half of the world\'s population is now at risk of dengue with an estimated 100–400 million infections occurring each year. ',
+    'Malaria is a serious and sometimes fatal disease caused by a parasite that commonly infects a certain type of mosquito which feeds on humans. People who get malaria are typically very sick with high fevers, shaking chills, and flu-like illness.',
+    'Lymphatic filariasis, considered globally as a neglected tropical disease (NTD), is a parasitic disease caused by microscopic, thread-like worms. The adult worms only live in the human lymph system. The lymph system maintains the body’s fluid balance and fights infections.',
+    'Chikungunya is a viral disease transmitted to humans through the bites of mosquitoes infected with the chikungunya virus.',
+    'Zika is spread mostly by the bite of an infected Aedes species mosquito (Ae. aegypti and Ae. albopictus). These mosquitoes bite during the day and night. Zika can be passed from a pregnant woman to her fetus. Infection during pregnancy can cause certain birth defects.',
   ];
 
   late PageController _topPageController;
@@ -100,7 +108,7 @@ class _DiseasesState extends State<Diseases> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -158,7 +166,7 @@ class _DiseasesState extends State<Diseases> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -468,9 +476,11 @@ class _DiseasesState extends State<Diseases> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => DiseasesPage2(
+                                                  token: widget.token,
                                                   PassCaption: captions[cardIndex],
                                                   PassScientificName: scientificName[cardIndex],
                                                   PassImage: images[cardIndex],
+                                                  PassDetails: details[cardIndex],
                                                 ),
                                               ),
                                             );
@@ -537,7 +547,7 @@ class _DiseasesState extends State<Diseases> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -548,7 +558,7 @@ class _DiseasesState extends State<Diseases> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -556,12 +566,12 @@ class _DiseasesState extends State<Diseases> {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      //Navigator.push(
-                       // context,
-                       // MaterialPageRoute(
-                        //  builder: (context) => UserProfile(),
-                        //),
-                     // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfile(token: widget.token),
+                        ),
+                      );
                     },
                   ),
                 ],

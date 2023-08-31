@@ -8,7 +8,14 @@ import '../about_app/about_app.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
-class NotificationPage extends StatelessWidget {
+class NotificationPage extends StatefulWidget {
+  final token;
+  NotificationPage({@required this.token,Key? key}) : super(key: key);
+  @override
+  _NotificationPage createState() => _NotificationPage();
+}
+
+class _NotificationPage extends State<NotificationPage> {
 
 
   List<String> notificationTitle = [
@@ -122,7 +129,7 @@ class NotificationPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -445,7 +452,7 @@ class NotificationPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -456,7 +463,7 @@ class NotificationPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -467,7 +474,7 @@ class NotificationPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

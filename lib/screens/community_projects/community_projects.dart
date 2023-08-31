@@ -3,6 +3,7 @@ import 'package:capstone_mobile/screens/mosquitopedia/diseases_page2.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../about_app/about_app.dart';
 import '../notification/notification.dart';
@@ -10,11 +11,16 @@ import '../reports_list/reports_list.dart';
 import 'community_projects_page2.dart';
 
 class CommunityProjects extends StatefulWidget {
+  final token;
+  CommunityProjects({@required this.token,Key? key}) : super(key: key);
   @override
   _CommunityProjectsState createState() => _CommunityProjectsState();
 }
 
 class _CommunityProjectsState extends State<CommunityProjects> {
+
+  late String userId;
+
 
   int _currentPageIndex = 0;
 
@@ -53,6 +59,9 @@ class _CommunityProjectsState extends State<CommunityProjects> {
     super.initState();
     _topPageController = PageController(initialPage: captions.length * 1000, viewportFraction: 0.65);
     _bottomPageController = PageController();
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+
+    userId = jwtDecodedToken['_id'];
   }
 
 
@@ -98,7 +107,7 @@ class _CommunityProjectsState extends State<CommunityProjects> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -156,7 +165,7 @@ class _CommunityProjectsState extends State<CommunityProjects> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -466,6 +475,7 @@ class _CommunityProjectsState extends State<CommunityProjects> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => CommunityProjects2(
+                                                  token: widget.token,
                                                   PassCaption: captions[cardIndex],
                                                   PassDate: date[cardIndex],
                                                   PassImage: images[cardIndex],
@@ -535,7 +545,7 @@ class _CommunityProjectsState extends State<CommunityProjects> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -546,7 +556,7 @@ class _CommunityProjectsState extends State<CommunityProjects> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -557,7 +567,7 @@ class _CommunityProjectsState extends State<CommunityProjects> {
                       //Navigator.push(
                       // context,
                       // MaterialPageRoute(
-                      //  builder: (context) => UserProfile(),
+                      //  builder: (context) => UserProfile(token: widget.token),
                       //),
                       // );
                     },

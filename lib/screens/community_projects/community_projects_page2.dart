@@ -8,21 +8,23 @@ import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
 
-class CommunityProjects2 extends StatelessWidget {
+class CommunityProjects2 extends StatefulWidget {
+  final token;
+  final String PassCaption;
+  final String PassDate;
+  final String PassImage;
+  CommunityProjects2({@required this.token,Key? key, required this.PassCaption, required this.PassDate, required this.PassImage}) : super(key: key);
+  @override
+  _CommunityProjects2 createState() => _CommunityProjects2();
+}
+
+class _CommunityProjects2 extends State<CommunityProjects2> {
 
   final String details = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
       "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
       "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
 
   final String location = "Location Here";
-
-
-  final String PassCaption;
-  final String PassDate;
-  final String PassImage;
-
-  const CommunityProjects2({required this.PassCaption, required this.PassDate, required this.PassImage});
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class CommunityProjects2 extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -117,7 +119,7 @@ class CommunityProjects2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -292,7 +294,7 @@ class CommunityProjects2 extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30.0),
                             child: Image.asset(
-                              PassImage,
+                              widget.PassImage,
                               width: 250,
                             ),
                           ),
@@ -326,7 +328,7 @@ class CommunityProjects2 extends StatelessWidget {
                                                   padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
-                                                      PassCaption,
+                                                      widget.PassCaption,
                                                       style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -346,7 +348,7 @@ class CommunityProjects2 extends StatelessWidget {
                                                   padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
-                                                      PassDate,
+                                                      widget.PassDate,
                                                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -494,7 +496,7 @@ class CommunityProjects2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -506,7 +508,7 @@ class CommunityProjects2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -517,7 +519,7 @@ class CommunityProjects2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

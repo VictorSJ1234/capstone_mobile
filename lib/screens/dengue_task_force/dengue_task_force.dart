@@ -10,7 +10,14 @@ import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
 
-class DengueTaskForce extends StatelessWidget {
+class DengueTaskForce extends StatefulWidget {
+  final token;
+  DengueTaskForce({@required this.token,Key? key}) : super(key: key);
+  @override
+  _DengueTaskForce createState() => _DengueTaskForce();
+}
+
+class _DengueTaskForce extends State<DengueTaskForce> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +53,7 @@ class DengueTaskForce extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -104,7 +111,7 @@ class DengueTaskForce extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -550,7 +557,7 @@ class DengueTaskForce extends StatelessWidget {
                       Navigator.push(
                       context,
                       MaterialPageRoute(
-                       builder: (context) => MainMenu(),
+                       builder: (context) => MainMenu(token: widget.token),
                       ),
                       );
                     },
@@ -562,7 +569,7 @@ class DengueTaskForce extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -573,7 +580,7 @@ class DengueTaskForce extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

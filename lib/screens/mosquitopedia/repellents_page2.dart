@@ -8,18 +8,22 @@ import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
 
-class RepellentsPage2 extends StatelessWidget {
+class RepellentsPage2 extends StatefulWidget {
+  final String PassCaption;
+  final String PassImage;
+  final token;
+  RepellentsPage2({@required this.token,Key? key, required this.PassCaption, required this.PassImage}) : super(key: key);
+  @override
+  _RepellentsPage2 createState() => _RepellentsPage2();
+}
+
+class _RepellentsPage2 extends State<RepellentsPage2> {
 
   final String details = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
       "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
       "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
 
   final String usage = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
-
-  final String PassCaption;
-  final String PassImage;
-  const RepellentsPage2({required this.PassCaption, required this.PassImage});
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,7 @@ class RepellentsPage2 extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -114,7 +118,7 @@ class RepellentsPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -289,7 +293,7 @@ class RepellentsPage2 extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30.0),
                             child: Image.asset(
-                              PassImage,
+                              widget.PassImage,
                               width: 250,
                             ),
                           ),
@@ -323,7 +327,7 @@ class RepellentsPage2 extends StatelessWidget {
                                                   padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
-                                                      PassCaption,
+                                                      widget.PassCaption,
                                                       style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -455,7 +459,7 @@ class RepellentsPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -467,7 +471,7 @@ class RepellentsPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -478,7 +482,7 @@ class RepellentsPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

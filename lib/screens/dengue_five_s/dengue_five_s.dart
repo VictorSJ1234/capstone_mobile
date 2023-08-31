@@ -4,6 +4,7 @@ import 'package:capstone_mobile/screens/mosquitopedia/repellents_page2.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../about_app/about_app.dart';
 import '../notification/notification.dart';
@@ -11,11 +12,15 @@ import '../reports_list/reports_list.dart';
 import 'dengue_five_s_page2.dart';
 
 class DengueFiveS extends StatefulWidget {
+  final token;
+  DengueFiveS({@required this.token,Key? key}) : super(key: key);
   @override
   _DengueFiveSState createState() => _DengueFiveSState();
 }
 
 class _DengueFiveSState extends State<DengueFiveS> {
+
+  late String userId;
 
   int _currentPageIndex = 0;
 
@@ -43,6 +48,10 @@ class _DengueFiveSState extends State<DengueFiveS> {
     super.initState();
     _topPageController = PageController(initialPage: captions.length * 1000, viewportFraction: 0.65);
     _bottomPageController = PageController();
+
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+
+    userId = jwtDecodedToken['_id'];
   }
 
   @override
@@ -80,7 +89,7 @@ class _DengueFiveSState extends State<DengueFiveS> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -138,7 +147,7 @@ class _DengueFiveSState extends State<DengueFiveS> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -434,6 +443,7 @@ class _DengueFiveSState extends State<DengueFiveS> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => Dengue5sPage2(
+                                                  token: widget.token,
                                                   PassCaption: captions[cardIndex],
                                                   PassImage: images[cardIndex],
                                                 ),
@@ -502,7 +512,7 @@ class _DengueFiveSState extends State<DengueFiveS> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -513,7 +523,7 @@ class _DengueFiveSState extends State<DengueFiveS> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -524,7 +534,7 @@ class _DengueFiveSState extends State<DengueFiveS> {
                       //Navigator.push(
                       // context,
                       // MaterialPageRoute(
-                      //  builder: (context) => UserProfile(),
+                      //  builder: (context) => UserProfile(token: widget.token),
                       //),
                       // );
                     },

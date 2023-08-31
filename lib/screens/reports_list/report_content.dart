@@ -1,6 +1,7 @@
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
+import 'package:capstone_mobile/screens/reports_list/report_status.dart';
 import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,14 +11,27 @@ import '../notification/notification.dart';
 import '../user_profile/user_profile.dart';
 
 
-class ReportContent extends StatelessWidget {
-
+class ReportContent extends StatefulWidget {
+  final token;
   final String PassReportSubject;
   final String PassReportNumber;
   final String PassReportId;
+  final String PassReportDescription;
   final String PassReportDate;
+  ReportContent({@required this.token,Key? key, required this.PassReportSubject, required this.PassReportNumber, required this.PassReportId, required this.PassReportDate, required this.PassReportDescription}) : super(key: key);
+  @override
+  _ReportContent createState() => _ReportContent();
+}
 
-  const ReportContent({required this.PassReportSubject, required this.PassReportNumber, required this.PassReportId, required this.PassReportDate});
+class _ReportContent extends State<ReportContent> {
+
+  List<String> reportStatus = [
+    'Received',
+  ];
+
+  List<String> images = [
+    'assets/report_list_images/report_icon.png',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +69,7 @@ class ReportContent extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -113,7 +127,7 @@ class ReportContent extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -251,7 +265,7 @@ class ReportContent extends StatelessWidget {
                                       height: 80,
                                       child: Center(
                                         child: Text(
-                                          PassReportNumber,
+                                          widget.PassReportNumber,
                                           style: TextStyle(
                                             fontFamily: 'Outfit',
                                             fontSize: 20,
@@ -343,7 +357,7 @@ class ReportContent extends StatelessWidget {
                               ),
                               child: TextFormField(
                                 enabled: false,
-                                initialValue: PassReportSubject, style: TextStyle(color: Colors.black),
+                                initialValue: widget.PassReportSubject, style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: 'Subject of Report',
                                   border: InputBorder.none,
@@ -434,33 +448,109 @@ class ReportContent extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    ListView(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: TextFormField(
-                                enabled: false,
-                                initialValue: 'Under Review', style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                  hintText: 'Status of Report',
-                                  contentPadding: EdgeInsets.all(15.0),
-                                  border: InputBorder.none,
+                        IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  images[0],
+                                                  width: 60,
+                                                  scale: 0.7,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 8), // spacing between the image and text
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  reportStatus[0], // Use the first status
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => ReportStatus(token: widget.token),
+                                                      ),
+                                                    );
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    primary: Colors.blue,
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(15),
+                                                    ),
+                                                  ),
+                                                  icon: Icon(
+                                                    Icons.content_paste_search,
+                                                    color: Colors.white,
+                                                  ),
+                                                  label: Text(
+                                                    ' View Status ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                maxLines: null,
                               ),
-                            ),
+                            ],
                           ),
                         ),
                       ],
                     ),
+
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -491,7 +581,7 @@ class ReportContent extends StatelessWidget {
                               ),
                               child: TextFormField(
                                 enabled: false,
-                                initialValue: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.', style: TextStyle(color: Colors.black),
+                                initialValue:widget.PassReportDescription, style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: 'Description of Report',
                                   contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
@@ -542,7 +632,7 @@ class ReportContent extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -554,7 +644,7 @@ class ReportContent extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -565,7 +655,7 @@ class ReportContent extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

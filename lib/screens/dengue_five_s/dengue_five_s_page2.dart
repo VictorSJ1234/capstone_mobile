@@ -8,18 +8,20 @@ import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
 
-class Dengue5sPage2 extends StatelessWidget {
-
-  final String details = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
-      "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
-      "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
-
-  final String usage = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
-
+class Dengue5sPage2 extends StatefulWidget {
   final String PassCaption;
   final String PassImage;
-  const Dengue5sPage2({required this.PassCaption, required this.PassImage});
+  final token;
+  Dengue5sPage2({@required this.token,Key? key, required this.PassCaption, required this.PassImage}) : super(key: key);
+  @override
+  _Dengue5sPage2 createState() => _Dengue5sPage2();
+}
 
+class _Dengue5sPage2 extends State<Dengue5sPage2> {
+
+  final String details = "Sudden high fever, severe headache, joint and muscle pain, vomiting and skin rashes are some of the symptoms of dengue. If the mentioned symptoms lasts for about 2 days and you, a family member or a friend are showing these, go and see a doctor immediately.";
+
+  final String usage = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class Dengue5sPage2 extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Repellents',
+          'Dengue 5s',
           style: TextStyle(fontFamily: 'SquadaOne'),
         ),
         actions: [
@@ -56,7 +58,7 @@ class Dengue5sPage2 extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -114,7 +116,7 @@ class Dengue5sPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -282,7 +284,7 @@ class Dengue5sPage2 extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30.0),
                             child: Image.asset(
-                              PassImage,
+                              widget.PassImage,
                               width: 250,
                             ),
                           ),
@@ -316,7 +318,7 @@ class Dengue5sPage2 extends StatelessWidget {
                                                   padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
-                                                      PassCaption,
+                                                      widget.PassCaption,
                                                       style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -419,7 +421,7 @@ class Dengue5sPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -431,7 +433,7 @@ class Dengue5sPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -442,7 +444,7 @@ class Dengue5sPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

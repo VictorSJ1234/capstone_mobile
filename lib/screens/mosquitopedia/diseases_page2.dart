@@ -8,32 +8,39 @@ import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
 
-class DiseasesPage2 extends StatelessWidget {
-
-  final String details = "A virus called dengue, also known as break-bone fever, is"
-      "transmitted from mosquitoes to humans. Tropical and subtropical"
-      "areas are where it is more prevalent. Most dengue patients won''t"
-      "have any symptoms. High temperature, headache, body aches, nausea,"
-      "and rash are the most typical symptoms for those who do, though.";
-
-  static const List<String> symptoms = [
-    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-  ];
-
-  static const List<String> preventions = [
-    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-    'A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.',
-  ];
-
+class DiseasesPage2 extends StatefulWidget {
+  final token;
   final String PassCaption;
   final String PassScientificName;
   final String PassImage;
+  final String PassDetails;
 
-  const DiseasesPage2({required this.PassCaption, required this.PassScientificName, required this.PassImage});
+  DiseasesPage2({
+    @required this.token,
+    required this.PassCaption,
+    required this.PassScientificName,
+    required this.PassImage,
+    required this.PassDetails,
+    Key? key,
+  }) : super(key: key);
 
+  @override
+  _DiseasesPage2 createState() => _DiseasesPage2();
+}
+
+class _DiseasesPage2 extends State<DiseasesPage2> {
+
+  static const List<String> symptoms = [
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
+  ];
+
+  static const List<String> preventions = [
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +77,7 @@ class DiseasesPage2 extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -128,7 +135,7 @@ class DiseasesPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -303,7 +310,7 @@ class DiseasesPage2 extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(30.0),
                             child: Image.asset(
-                              PassImage,
+                              widget.PassImage,
                               width: 250,
                             ),
                           ),
@@ -337,7 +344,7 @@ class DiseasesPage2 extends StatelessWidget {
                                                   padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
-                                                      PassCaption,
+                                                      widget.PassCaption,
                                                       style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -357,7 +364,7 @@ class DiseasesPage2 extends StatelessWidget {
                                                   padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
-                                                      PassScientificName,
+                                                      widget.PassScientificName,
                                                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -402,7 +409,7 @@ class DiseasesPage2 extends StatelessWidget {
                                                 Padding(
                                                   padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
                                                   child: Text(
-                                                    details,
+                                                    widget.PassDetails,
                                                     style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
                                                     textAlign: TextAlign.justify,
                                                   ),
@@ -424,7 +431,7 @@ class DiseasesPage2 extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: SizedBox(
                                 child: Text(
-                                  'Symptoms of '+PassCaption,
+                                  'Symptoms of '+widget.PassCaption,
                                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
                                   textAlign: TextAlign.justify,
                                 ),
@@ -629,7 +636,7 @@ class DiseasesPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -641,7 +648,7 @@ class DiseasesPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -652,7 +659,7 @@ class DiseasesPage2 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(),
+                          builder: (context) => UserProfile(token: widget.token),
                         ),
                       );
                     },

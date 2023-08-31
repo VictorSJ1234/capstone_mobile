@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
@@ -6,6 +8,9 @@ import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:capstone_mobile/config.dart';
 
 import '../about_app/about_app.dart';
 
@@ -22,37 +27,124 @@ class _LoginState extends State<Login> {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  String _errorMessage = '';
+  String credentialInvalid = '';
   bool _isPasswordVisible = false;
+  late SharedPreferences prefs;
 
-  List<Map<String, String>> _credentials = [
-    {'email': 'admin@gmail.com', 'password': 'Admin123@'},
-    {'email': '123@gmail.com', 'password': '123123'}
-  ];
+  bool _errorMesage = false;
+  String _errorMessage = '';
 
-  void _login() {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSharedPref();
+  }
 
-    bool isAuthenticated = false;
+  void initSharedPref() async{
+    prefs = await SharedPreferences.getInstance();
+  }
 
-    for (Map<String, String> credential in _credentials) {
-      if (credential['email'] == email && credential['password'] == password) {
-        isAuthenticated = true;
-        break;
+
+  Future<void> _login() async {
+    // Check for network/internet connectivity
+    try {
+      await http.get(Uri.parse('https://www.google.com'));
+    } catch (networkError) {
+      // Handle network/internet connection error
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Network Error"),
+            content: Text("Please check your network/internet connection."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    // Prepare the request body with inputted user's email and password
+    var reqBody = {
+      "email": _emailController.text,
+      "password": _passwordController.text
+    };
+
+    var response = await http.post(
+      Uri.parse(login),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(reqBody),
+    );
+
+    //200 is code for ok
+    if (response.statusCode == 200) {
+      // Successful login
+      var jsonResponse = jsonDecode(response.body);
+      print("JSON response: $jsonResponse");
+      if (jsonResponse['status']) {
+        var myToken = jsonResponse['token'];
+        prefs.setString('token', myToken);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainMenu(token: myToken),
+          ),
+        );
       }
     }
 
-    if (isAuthenticated) {
-      // Navigate to main menu if the credentials are correct
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainMenu()),
-      );
-    } else {
+    //404 is code for user does not found
+    else if (response.statusCode == 404) {
+        setState(() {
+          _errorMesage = true;
+          _errorMessage = 'Invalid login credentials. Please try again.';
+        });
+    }
+
+    //401 is for Unauthorized account
+    else if (response.statusCode == 401) {
+        setState(() {
+          _errorMesage = true;
+          _errorMessage = 'Invalid login credentials. Please try again.';
+        });
+    }
+
+    //401 is for Unauthorized account
+    else if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       setState(() {
-        _errorMessage = 'Invalid Login Credentials. Please try again.';
+        _errorMesage = true;
+        _errorMessage = 'Please fill in both email and password fields.';
       });
+    }
+
+    else {
+      // login failed due to other reasons
+      // Show generic error dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Registration Failed"),
+            content: Text("An error occurred during registration."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -351,7 +443,8 @@ class _LoginState extends State<Login> {
                     ),
 
 
-                    if (_errorMessage.isNotEmpty)
+
+                    if (_errorMesage==true)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
@@ -359,6 +452,7 @@ class _LoginState extends State<Login> {
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
+
 
 
                     Row(

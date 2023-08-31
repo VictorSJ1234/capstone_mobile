@@ -8,8 +8,11 @@ import 'package:flutter/services.dart';
 import '../about_app/about_app.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
+import '../user_profile/user_profile.dart';
 
 class Repelents extends StatefulWidget {
+  final token;
+  Repelents({@required this.token,Key? key}) : super(key: key);
   @override
   _RepelentsState createState() => _RepelentsState();
 }
@@ -19,21 +22,17 @@ class _RepelentsState extends State<Repelents> {
   int _currentPageIndex = 0;
 
   List<String> captions = [
-    'Repellent 1',
-    'Repellent 2',
-    'Repellent 3',
-    'Repellent 4',
-    'Repellent 5',
-    'Repellent 6'
+    'Mosquito Repellent',
+    'Mosquito Coil',
+    'Mosquito Net',
+    'Anti Mosquito Racket',
   ];
 
   List<String> images = [
     'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg',
-    'assets/repellents_images/repellent.jpg'
+    'assets/repellents_images/coil.jpg',
+    'assets/repellents_images/nets.jpg',
+    'assets/repellents_images/racket.jpg',
   ];
 
   late PageController _topPageController;
@@ -81,7 +80,7 @@ class _RepelentsState extends State<Repelents> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(),
+                  builder: (context) => NotificationPage(token: widget.token),
                 ),
               );
             },
@@ -139,7 +138,7 @@ class _RepelentsState extends State<Repelents> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutApp(), // go to the next screen
+                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
                         ),
                       );
                     },
@@ -435,6 +434,7 @@ class _RepelentsState extends State<Repelents> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => RepellentsPage2(
+                                                  token: widget.token,
                                                   PassCaption: captions[cardIndex],
                                                   PassImage: images[cardIndex],
                                                 ),
@@ -503,7 +503,7 @@ class _RepelentsState extends State<Repelents> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(),
+                          builder: (context) => MainMenu(token: widget.token),
                         ),
                       );
                     },
@@ -514,7 +514,7 @@ class _RepelentsState extends State<Repelents> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(),
+                          builder: (context) => ReportList(token: widget.token),
                         ),
                       );
                     },
@@ -522,12 +522,12 @@ class _RepelentsState extends State<Repelents> {
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      //Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => UserProfile(),
-                      //),
-                      // );
+                      Navigator.push(
+                       context,
+                       MaterialPageRoute(
+                        builder: (context) => UserProfile(token: widget.token),
+                      ),
+                       );
                     },
                   ),
                 ],
