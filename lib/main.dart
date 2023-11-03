@@ -5,10 +5,18 @@ import 'package:swipeable_button_view/swipeable_button_view.dart';
 
 import 'screens/main_menu.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(token: prefs.getString('token'),));
+
+  String? token;
+  if (prefs.containsKey('token')) {
+    token = prefs.getString('token'); // Use the permanent token
+  } else if (prefs.containsKey('temporary_token')) {
+    token = prefs.getString('temporary_token'); // Use the non-permanent token
+  }
+
+  runApp(MyApp(token: token));
 }
 
 class MyApp extends StatelessWidget {
@@ -44,12 +52,20 @@ class _MyHomePageState extends State<MyHomePage> {
         fit: StackFit.expand,
         children: [
           // Background Image
+          /**
           Positioned.fill(
             child: Image.asset(
               'assets/background/main_background.png',
               fit: BoxFit.cover,
             ),
           ),
+              **/
+          Positioned.fill(
+            child: Container(
+              color: Color(0xff28376d),
+            ),
+          ),
+
 
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -101,12 +117,26 @@ class _MyHomePageState extends State<MyHomePage> {
                           });
                         },
                         onFinish: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Login(),
-                            ),
-                          );
+                          // Check if the token is valid before navigating to the appropriate screen.
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          String? token = prefs.getString('token');
+                          if (token == null) {
+                            // Token is expired or null, navigate to Login().
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Login(),
+                              ),
+                            );
+                          } else {
+                            // Token is valid, navigate to MainMenu().
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainMenu(token: token, notificationCount: 0,),
+                              ),
+                            );
+                          }
 
                           setState(() {
                             isFinished = false;

@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:capstone_mobile/custom_app_bar.dart';
+import 'package:http/http.dart' as http;
+import 'package:capstone_mobile/config.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../about_app/about_app.dart';
+import 'package:capstone_mobile/sidenav.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
@@ -11,216 +17,101 @@ import '../user_profile/user_profile.dart';
 class Dengue5sPage2 extends StatefulWidget {
   final String PassCaption;
   final String PassImage;
-  final token;
-  Dengue5sPage2({@required this.token,Key? key, required this.PassCaption, required this.PassImage}) : super(key: key);
+  final token; final int notificationCount;
+  Dengue5sPage2({@required this.token,Key? key, required this.PassCaption, required this.PassImage, required this.notificationCount}) : super(key: key);
   @override
   _Dengue5sPage2 createState() => _Dengue5sPage2();
 }
 
 class _Dengue5sPage2 extends State<Dengue5sPage2> {
+void updateUnreadCardCount(int count) {
+    setState(() {
+      unreadCardCount = count;
+    });
+
+  }
 
   final String details = "Sudden high fever, severe headache, joint and muscle pain, vomiting and skin rashes are some of the symptoms of dengue. If the mentioned symptoms lasts for about 2 days and you, a family member or a friend are showing these, go and see a doctor immediately.";
 
   final String usage = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
 
+  late String _id;
+List? readItems;
+List? unreadItems;
+Future<void> fetchUnreadNotificationsList() async {
+
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          unreadItems = jsonResponse['notifications'];
+          unreadItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchReadNotifications();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
+  Future<void> fetchReadNotifications() async {
+
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          readItems = jsonResponse['notifications'];
+          readItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchUnreadNotificationsList();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
+
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+    _id = jwtDecodedToken['_id'];
+fetchUnreadNotificationsList();
+    fetchReadNotifications();
+    fetchUnreadNotifications(_id);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: Text(
-          'Dengue 5s',
-          style: TextStyle(fontFamily: 'SquadaOne'),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationPage(token: widget.token),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Dengue 5s'),
 
       //sidenav
-      drawer: Drawer(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/sidenav_images/sidenav_background.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            children: [
-              UserAccountsDrawerHeader(
-                accountName: Text(
-                  'Lebron James',
-                  style: TextStyle(color: Colors.white),
-                ),
-                accountEmail: Text(
-                  'kingjames@gmail.com',
-                  style: TextStyle(color: Colors.white),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage('assets/sidenav_images/lebron1.png'),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                ),
-              ),
-              Column(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.language, color: Colors.white,),
-                    title: Text('Language', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      // Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      //Navigator.push(
-                      //context,
-                      //  MaterialPageRoute(
-                      // builder: (context) => LanguageSettings(), // go to the next screen
-                      // ),
-                      // );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About App', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.people, color: Colors.white,),
-                    title: Text('Developers', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      //Navigator.pop(context);
-                      // Navigator.push(
-                      //context,
-                      //MaterialPageRoute(
-                      // builder: (context) => Developers(),
-                      //),
-                      // );
-                    },
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.exit_to_app_sharp, color: Colors.black,),
-                      title: Text('Exit'),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              elevation: 4,
-                              shadowColor: Colors.black,
-                              content: Container(
-                                height: 180,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/exit_images/caution.png',
-                                      width: 100,
-                                      height: 100,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      'Are you sure you want to exit?',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                      child: Text(
-                                        'Cancel',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    TextButton(
-                                      onPressed: () {
-                                        SystemNavigator.pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                      child: Text(
-                                        'Exit',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),
 
       //content
       body: Stack(
@@ -228,7 +119,7 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background3.png',
+              'assets/background/background6.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -255,10 +146,10 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                                       height: 70,
                                       child: Center(
                                         child: Text(
-                                          'Mosquito Borne-Diseases\n Vectors',
+                                          'Community Dengue Awareness\n 5S Strategy',
                                           style: TextStyle(
                                             fontFamily: 'Outfit',
-                                            fontSize: 23,
+                                            fontSize: 22,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
@@ -274,8 +165,59 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                         ),
                       ],
                     ),
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black12, // Shadow color
+                                                blurRadius: 2.0, // Spread of the shadow
+                                                offset: Offset(0, 5), // Offset of the shadow
+                                              ),
+                                            ],
+                                          ),
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(15.0),
+                                            ),
+                                            color: Color(0xffF5F5F5),
+                                            elevation: 5,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                              child: SizedBox(
+                                                child: Text(
+                                                  widget.PassCaption,
+                                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                      padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30.0),
@@ -285,7 +227,7 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                             borderRadius: BorderRadius.circular(30.0),
                             child: Image.asset(
                               widget.PassImage,
-                              width: 250,
+                              width: 260,
                             ),
                           ),
                         ),
@@ -305,42 +247,7 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 20.0),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                                                  child: SizedBox(
-                                                    child: Text(
-                                                      widget.PassCaption,
-                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IntrinsicHeight(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+                                    padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                                     child: Column(
                                       children: [
                                         Expanded(
@@ -354,7 +261,7 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                                                   child: SizedBox(
                                                     child: Text(
                                                       'Details',
-                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
+                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.justify,
                                                     ),
                                                   ),
@@ -421,7 +328,7 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(token: widget.token),
+                          builder: (context) => MainMenu(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -433,7 +340,7 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(token: widget.token),
+                          builder: (context) => ReportList(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -444,7 +351,7 @@ class _Dengue5sPage2 extends State<Dengue5sPage2> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(token: widget.token),
+                          builder: (context) => UserProfile(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },

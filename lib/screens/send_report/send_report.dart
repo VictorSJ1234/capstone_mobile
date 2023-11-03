@@ -1,24 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:capstone_mobile/custom_app_bar.dart';
+import 'package:capstone_mobile/config.dart';
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
+import 'package:capstone_mobile/sidenav.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:http/http.dart' as http;
 import '../../config.dart';
-import '../about_app/about_app.dart';
+import 'package:capstone_mobile/sidenav.dart';
 import '../notification/notification.dart';
 import '../user_profile/user_profile.dart';
 
 
 class SendReport extends StatefulWidget {
-  final token;
-  SendReport({@required this.token,Key? key}) : super(key: key);
+  final token; final int notificationCount;
+  SendReport({@required this.token,Key? key, required this.notificationCount}) : super(key: key);
   @override
   _SendReportState createState() => _SendReportState();
 }
@@ -26,15 +29,80 @@ class SendReport extends StatefulWidget {
 class _SendReportState extends State<SendReport> with SingleTickerProviderStateMixin {
   late AnimationController loadingController;
   late String userId;
+  List? readItems;
+  List? unreadItems;
+
+  void updateUnreadCardCount(int count) {
+    setState(() {
+      unreadCardCount = count;
+    });
+
+  }
+ 
+Future<void> fetchUnreadNotificationsList() async {
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          unreadItems = jsonResponse['notifications'];
+          unreadItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchReadNotifications();
+          fetchUnreadNotifications(userId);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
+  Future<void> fetchReadNotifications() async {
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          readItems = jsonResponse['notifications'];
+          readItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchUnreadNotificationsList();
+          fetchUnreadNotifications(userId);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
 
   List<File> _selectedFiles = [];
   List<PlatformFile> _selectedPlatformFiles = [];
+  bool _isLoading = false;
 
   selectFile() async {
     final files = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
-      allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf', 'docx'],
+      allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
     );
 
     if (files != null && files.files.isNotEmpty) {
@@ -74,8 +142,11 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
     // TODO: implement initState
     super.initState();
     Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
-
     userId = jwtDecodedToken['_id'];
+    fetchUnreadNotifications(userId);
+    fetchUnreadNotificationsList();
+    fetchReadNotifications();
+    fetchUnreadNotifications(userId);
   }
 
   //function to remove the selected file
@@ -99,16 +170,55 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
 
   //user input data containers
   String? selectedBarangay;
+  String? selectedType;
   var subjectController = new TextEditingController();
   var descriptionController = new TextEditingController();
+  var customTypeController = TextEditingController();
 
   //send report function
   void sendReport() async{
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Check for network/internet connectivity
+    try {
+      await http.get(Uri.parse('https://www.google.com'));
+    } catch (networkError) {
+      setState(() {
+        _isLoading = false;
+      });
+      // Handle network/internet connection error
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Network Error"),
+            content: Text("Please check your network/internet connection."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    if (selectedType == 'Others') {
+      selectedType = customTypeController.text;
+    }
+
     // Check if any of the required fields are empty
-    if (selectedBarangay == null || subjectController.text.isEmpty || descriptionController.text.isEmpty) {
+    if (selectedBarangay == null || selectedType == null || subjectController.text.isEmpty || descriptionController.text.isEmpty) {
       setState(() {
         // Set the isButtonPressed to true to display error messages
         isButtonPressed = true;
+        _isLoading = false;
       });
       // Show a snackbar or any other feedback to inform the user about the missing fields
       ScaffoldMessenger.of(context).showSnackBar(
@@ -147,9 +257,12 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
       var regBody = {
         "userId":userId,
         "barangay":selectedBarangay.toString(),
+        "report_type":selectedType.toString(),
         "report_subject":subjectController.text.toString(),
         "uploaded_file": fileDataList,
         "report_description":descriptionController.text.toString(),
+        "report_status":'New Report'.toString(),
+
       };
 
       var response = await http.post(Uri.parse(createUserReport),
@@ -170,6 +283,9 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
 
 
       if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
+        });
         _clearFields();//clear all fields
         showDialog(
           context: context,
@@ -218,7 +334,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MainMenu(token: widget.token),
+                              builder: (context) => MainMenu(token: widget.token, notificationCount: widget.notificationCount),
                             ),
                           );
                         },
@@ -236,7 +352,12 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReportList(token: widget.token, notificationCount: widget.notificationCount),
+                            ),
+                          );
                         },
                         style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -245,7 +366,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                           backgroundColor: Colors.red,
                         ),
                         child: Text(
-                          'Submit \n another report?',
+                          'Go to \n your report list',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
@@ -259,6 +380,9 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
         );
 
       } else {
+        setState(() {
+          _isLoading = false;
+        });
         // Registration failed due to other reasons
         // Show generic error dialog
         showDialog(
@@ -287,6 +411,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
   void _clearFields(){
     subjectController.text="";
     selectedBarangay=null;
+    selectedType=null;
     descriptionController.text="";
   }
 
@@ -294,201 +419,10 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        elevation: 0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: Text(
-          'Send a Report',
-          style: TextStyle(fontFamily: 'SquadaOne'),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationPage(token: widget.token),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Send a Report'),
 
       //sidenav
-      drawer: Drawer(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/sidenav_images/sidenav_background.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            children: [
-              UserAccountsDrawerHeader(
-                accountName: Text(
-                  'Lebron James',
-                  style: TextStyle(color: Colors.white),
-                ),
-                accountEmail: Text(
-                  'kingjames@gmail.com',
-                  style: TextStyle(color: Colors.white),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage('assets/sidenav_images/lebron1.png'),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                ),
-              ),
-              Column(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.language, color: Colors.white,),
-                    title: Text('Language', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      // Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      //Navigator.push(
-                      //context,
-                      //  MaterialPageRoute(
-                      // builder: (context) => LanguageSettings(), // go to the next screen
-                      // ),
-                      // );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About App', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.people, color: Colors.white,),
-                    title: Text('Developers', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      //Navigator.pop(context);
-                      // Navigator.push(
-                      //context,
-                      //MaterialPageRoute(
-                      // builder: (context) => Developers(),
-                      //),
-                      // );
-                    },
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.exit_to_app_sharp, color: Colors.black,),
-                      title: Text('Exit'),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              elevation: 4,
-                              shadowColor: Colors.black,
-                              content: Container(
-                                height: 180,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/exit_images/caution.png',
-                                      width: 100,
-                                      height: 100,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      'Are you sure you want to exit?',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                      child: Text(
-                                        'Cancel',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    TextButton(
-                                      onPressed: () {
-                                        SystemNavigator.pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                      child: Text(
-                                        'Exit',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),
 
       //content
       body: Stack(
@@ -496,7 +430,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background4.png',
+              'assets/background/background5.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -575,6 +509,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                                   decoration: InputDecoration(
                                     hintText: 'Select Barangay',
                                     contentPadding: EdgeInsets.all(15.0),
+                                    prefixIcon: Icon(Icons.apartment_sharp),
                                     border: OutlineInputBorder(),
                                   ),
                                   items: ['Bagong Ilog', 'Bagong Katipunan', 'Bambang', 'Buting', 'Caniogan', 'Palatiw']
@@ -598,6 +533,101 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       ),
                       isButtonPressed
                           ? (selectedBarangay == null || selectedBarangay!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(selectedBarangay!)
+                          ? Container(
+                        padding: EdgeInsets.only(left: 8.0),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'This field is required!',
+                          style: TextStyle(color: Colors.orangeAccent, fontSize: 13),
+                        ),
+                      )
+                          : Container())
+                          : Container(), // Empty container if there is no error or the button was not pressed
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
+                            child: SizedBox(
+                              child: Text(
+                                'Report Type',
+                                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(color: Colors.black),
+                                ),
+                                child: DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    hintText: 'Select Report Type',
+                                    contentPadding: EdgeInsets.all(15.0),
+                                    prefixIcon: Icon(Icons.apartment_sharp),
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  items: ['Suspected Dengue Case', 'Diagnosed Dengue Fever', 'Clean-up Drive', 'Community Health Teaching'
+                                    , 'Mosquito OL Trap', 'Larvical Application',  'Others']
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      selectedType = newValue;
+                                    });
+
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (selectedType == 'Others')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(color: Colors.black),
+                                  ),
+                                  child: TextFormField(
+                                    controller: customTypeController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Enter Custom Type',
+                                      contentPadding: EdgeInsets.all(15.0),
+                                      prefixIcon: Icon(Icons.description),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      isButtonPressed
+                          ? (selectedType == null || selectedType!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(selectedType!)
                           ? Container(
                         padding: EdgeInsets.only(left: 8.0),
                         alignment: Alignment.centerLeft,
@@ -642,6 +672,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                                   decoration: InputDecoration(
                                     hintText: 'Subject of Report',
                                     border: OutlineInputBorder(),
+                                    prefixIcon: Icon(Icons.subject),
                                     contentPadding: EdgeInsets.all(15.0),
                                   ),
                                   maxLines: null,
@@ -875,6 +906,13 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       )
                           : Container())
                           : Container(),
+
+                      SizedBox(height: 10,),
+                      if (_isLoading)
+                        Center(
+                          child: CircularProgressIndicator(), //loading
+                        ),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -891,10 +929,10 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                                   },
                                   style: ElevatedButton.styleFrom(
                                     elevation: 5,
-                                    primary: Color(0xff1BCBF9),
-                                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50),
+                                    primary: Color(0xff28376d),
+                                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 40),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                   ),
                                   child: Text(
@@ -947,7 +985,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(token: widget.token),
+                          builder: (context) => MainMenu(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -959,7 +997,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       Navigator.push(
                       context,
                       MaterialPageRoute(
-                       builder: (context) => ReportList(token: widget.token),
+                       builder: (context) => ReportList(token: widget.token, notificationCount: widget.notificationCount),
                       ),
                       );
                     },
@@ -970,7 +1008,7 @@ class _SendReportState extends State<SendReport> with SingleTickerProviderStateM
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(token: widget.token),
+                          builder: (context) => UserProfile(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },

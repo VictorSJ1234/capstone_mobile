@@ -1,15 +1,21 @@
+import 'dart:convert';
+
+import 'package:capstone_mobile/custom_app_bar.dart';
+import 'package:http/http.dart' as http;
+import 'package:capstone_mobile/config.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../about_app/about_app.dart';
+import 'package:capstone_mobile/sidenav.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
 
 class DiseasesPage2 extends StatefulWidget {
-  final token;
+  final token; final int notificationCount;
   final String PassCaption;
   final String PassScientificName;
   final String PassImage;
@@ -21,7 +27,7 @@ class DiseasesPage2 extends StatefulWidget {
     required this.PassScientificName,
     required this.PassImage,
     required this.PassDetails,
-    Key? key,
+    Key? key, required this.notificationCount,
   }) : super(key: key);
 
   @override
@@ -29,6 +35,12 @@ class DiseasesPage2 extends StatefulWidget {
 }
 
 class _DiseasesPage2 extends State<DiseasesPage2> {
+void updateUnreadCardCount(int count) {
+    setState(() {
+      unreadCardCount = count;
+    });
+
+  }
 
   static const List<String> symptoms = [
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
@@ -42,204 +54,80 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
   ];
 
+  late String _id;
+List? readItems;
+List? unreadItems;
+Future<void> fetchUnreadNotificationsList() async {
+
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          unreadItems = jsonResponse['notifications'];
+          unreadItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchReadNotifications();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
+  Future<void> fetchReadNotifications() async {
+
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          readItems = jsonResponse['notifications'];
+          readItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchUnreadNotificationsList();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+    _id = jwtDecodedToken['_id'];
+fetchUnreadNotificationsList();
+    fetchUnreadNotifications(_id);
+  }
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: Text(
-          'Diseases',
-          style: TextStyle(fontFamily: 'SquadaOne'),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationPage(token: widget.token),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Diseases'),
 
       //sidenav
-      drawer: Drawer(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/sidenav_images/sidenav_background.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            children: [
-              UserAccountsDrawerHeader(
-                accountName: Text(
-                  'Lebron James',
-                  style: TextStyle(color: Colors.white),
-                ),
-                accountEmail: Text(
-                  'kingjames@gmail.com',
-                  style: TextStyle(color: Colors.white),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage('assets/sidenav_images/lebron1.png'),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                ),
-              ),
-              Column(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.language, color: Colors.white,),
-                    title: Text('Language', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      // Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      //Navigator.push(
-                      //context,
-                      //  MaterialPageRoute(
-                      // builder: (context) => LanguageSettings(), // go to the next screen
-                      // ),
-                      // );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About App', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.people, color: Colors.white,),
-                    title: Text('Developers', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      //Navigator.pop(context);
-                      // Navigator.push(
-                      //context,
-                      //MaterialPageRoute(
-                      // builder: (context) => Developers(),
-                      //),
-                      // );
-                    },
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.exit_to_app_sharp, color: Colors.black,),
-                      title: Text('Exit'),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              elevation: 4,
-                              shadowColor: Colors.black,
-                              content: Container(
-                                height: 180,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/exit_images/caution.png',
-                                      width: 100,
-                                      height: 100,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      'Are you sure you want to exit?',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                      child: Text(
-                                        'Cancel',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    TextButton(
-                                      onPressed: () {
-                                        SystemNavigator.pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                      child: Text(
-                                        'Exit',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),
 
       //content
       body: Stack(
@@ -247,7 +135,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background3.png',
+              'assets/background/background6.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -294,7 +182,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                      padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30.0),
@@ -311,10 +199,62 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                             borderRadius: BorderRadius.circular(30.0),
                             child: Image.asset(
                               widget.PassImage,
-                              width: 250,
+                              width: 260,
                             ),
                           ),
                         ),
+                      ),
+                    ),
+
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black12, // Shadow color
+                                                blurRadius: 2.0, // Spread of the shadow
+                                                offset: Offset(0, 5), // Offset of the shadow
+                                              ),
+                                            ],
+                                          ),
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                            ),
+                                            color: Color(0xffF5F5F5),
+                                            elevation: 5,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                              child: SizedBox(
+                                                child: Text(
+                                                  widget.PassCaption,
+                                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff28376d), fontFamily: 'Outfit'),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
 
@@ -331,43 +271,32 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                                    padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                                     child: Column(
                                       children: [
                                         Expanded(
                                           child: Padding(
-                                            padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 5.0),
+                                            padding: EdgeInsets.fromLTRB(15.0, 1.0, 15.0, 15.0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
                                               children: [
                                                 Padding(
-                                                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                                                  padding: EdgeInsets.fromLTRB(20.0, 5.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
-                                                      widget.PassCaption,
-                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
-                                                      textAlign: TextAlign.center,
+                                                      'Scientific Name of Vector',
+                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376d), fontFamily: 'Outfit'),
+                                                      textAlign: TextAlign.justify,
                                                     ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
+                                                SizedBox(height: 4),
                                                 Padding(
-                                                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                                  child: SizedBox(
-                                                    child: Text(
-                                                      widget.PassScientificName,
-                                                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Outfit'),
-                                                      textAlign: TextAlign.center,
-                                                    ),
+                                                  padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+                                                  child: Text(
+                                                    widget.PassScientificName,
+                                                    style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
+                                                    textAlign: TextAlign.justify,
                                                   ),
                                                 ),
                                               ],
@@ -393,14 +322,14 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                                           child: Padding(
                                             padding: EdgeInsets.fromLTRB(15.0, 1.0, 15.0, 15.0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
                                               children: [
                                                 Padding(
                                                   padding: EdgeInsets.fromLTRB(20.0, 5.0, 0.0, 0.0),
                                                   child: SizedBox(
                                                     child: Text(
                                                       'Details',
-                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
+                                                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376d), fontFamily: 'Outfit'),
                                                       textAlign: TextAlign.justify,
                                                     ),
                                                   ),
@@ -432,7 +361,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                               child: SizedBox(
                                 child: Text(
                                   'Symptoms of '+widget.PassCaption,
-                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
+                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376d), fontFamily: 'Outfit'),
                                   textAlign: TextAlign.justify,
                                 ),
                               ),
@@ -473,7 +402,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                                                 SizedBox(width: 8), //  spacng between the image and text
                                                 Expanded(
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                                     children: [
                                                       Text(
                                                         'Symptoms',
@@ -516,7 +445,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                               child: SizedBox(
                                 child: Text(
                                   'Preventions',
-                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Outfit'),
+                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376d), fontFamily: 'Outfit'),
                                   textAlign: TextAlign.justify,
                                 ),
                               ),
@@ -557,7 +486,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                                                 SizedBox(width: 8), //  spacng between the image and text
                                                 Expanded(
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                                     children: [
                                                       Text(
                                                         'Preventions',
@@ -636,7 +565,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(token: widget.token),
+                          builder: (context) => MainMenu(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -648,7 +577,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(token: widget.token),
+                          builder: (context) => ReportList(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -659,7 +588,7 @@ class _DiseasesPage2 extends State<DiseasesPage2> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(token: widget.token),
+                          builder: (context) => UserProfile(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },

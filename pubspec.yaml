@@ -41,6 +41,10 @@ dependencies:
   http: ^1.1.0
   shared_preferences: ^2.2.0
   timeline_tile: ^2.0.0
+  open_file: ^3.3.2
+  badges: ^3.1.2
+  path_provider: ^2.1.1
+  image_picker: ^1.0.4
   jwt_decoder:
   swipeable_button_view:
 
@@ -72,8 +76,11 @@ flutter:
       - assets/background/main_background.png
       - assets/logo/Logo.png
       - assets/logo/pasig_health_department_logo.png
-      - assets/background/background3.png
-      - assets/background/background4.png
+      - assets/background/background5.png
+      - assets/background/background6.png
+      - assets/background/background6.png
+      - assets/background/background5.png
+      - assets/background/background3_updated.png
       - assets/main_menu_images/community_projects.png
       - assets/main_menu_images/dengue_task_force.png
       - assets/main_menu_images/mosquitopedia.png
@@ -107,9 +114,11 @@ flutter:
       - assets/task_force_images/location.png
       - assets/task_force_images/service.png
       - assets/report_list_images/report_icon.png
+      - assets/report_list_images/report_icon_2.png
       - assets/report_list_images/open.png
       - assets/report_list_images/delete.png
-      - assets/sidenav_images/sidenav_background.png
+      - assets/sidenav_images/sidenav_background_1.png
+      - assets/sidenav_images/sidenav_background_1.png
       - assets/sidenav_images/lebron1.png
       - assets/sidenav_images/defaultProfile.jpg
       - assets/about_app_images/update.png

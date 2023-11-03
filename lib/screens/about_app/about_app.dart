@@ -1,8 +1,15 @@
+import 'dart:convert';
+
+import 'package:capstone_mobile/config.dart';
+import 'package:capstone_mobile/custom_app_bar.dart';
+import 'package:http/http.dart' as http;
+import 'package:capstone_mobile/config.dart';
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
@@ -10,62 +17,99 @@ import '../user_profile/user_profile.dart';
 
 
 class AboutApp extends StatefulWidget {
-  final token;
-  AboutApp({@required this.token,Key? key}) : super(key: key);
+  final token; final int notificationCount;
+  AboutApp({@required this.token,Key? key, required this.notificationCount}) : super(key: key);
   @override
   _AboutApp createState() => _AboutApp();
 }
 
 class _AboutApp extends State<AboutApp> {
+void updateUnreadCardCount(int count) {
+    setState(() {
+      unreadCardCount = count;
+    });
+
+  }
+late String _id;
+List? readItems;
+List? unreadItems;
+Future<void> fetchUnreadNotificationsList() async {
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          unreadItems = jsonResponse['notifications'];
+          unreadItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchReadNotifications();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
+  Future<void> fetchReadNotifications() async {
+
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          readItems = jsonResponse['notifications'];
+          readItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchUnreadNotificationsList();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+    _id = jwtDecodedToken['_id'];
+  fetchUnreadNotificationsList();
+    fetchReadNotifications();
+    fetchUnreadNotifications(_id);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: Text(
-          'About App',
-          style: TextStyle(fontFamily: 'SquadaOne'),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationPage(token: widget.token),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'About App'),
 
       //sidenav
       drawer: Drawer(
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/sidenav_images/sidenav_background.png'),
+              image: AssetImage('assets/sidenav_images/sidenav_background_1.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -222,7 +266,7 @@ class _AboutApp extends State<AboutApp> {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background3.png',
+              'assets/background/background6.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -431,7 +475,7 @@ class _AboutApp extends State<AboutApp> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(token: widget.token),
+                          builder: (context) => MainMenu(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -443,7 +487,7 @@ class _AboutApp extends State<AboutApp> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(token: widget.token),
+                          builder: (context) => ReportList(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -454,7 +498,7 @@ class _AboutApp extends State<AboutApp> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(token: widget.token),
+                          builder: (context) => UserProfile(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },

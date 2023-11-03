@@ -1,221 +1,107 @@
+import 'dart:convert';
+
+import 'package:capstone_mobile/custom_app_bar.dart';
+import 'package:http/http.dart' as http;
+import 'package:capstone_mobile/config.dart';
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
 import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../about_app/about_app.dart';
+import 'package:capstone_mobile/sidenav.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
 import '../user_profile/user_profile.dart';
 
 
 class DengueTaskForce extends StatefulWidget {
-  final token;
-  DengueTaskForce({@required this.token,Key? key}) : super(key: key);
+  final token; final int notificationCount;
+  DengueTaskForce({@required this.token,Key? key, required this.notificationCount}) : super(key: key);
   @override
   _DengueTaskForce createState() => _DengueTaskForce();
 }
 
 class _DengueTaskForce extends State<DengueTaskForce> {
+  void updateUnreadCardCountGlobally(int count) {
+    updateUnreadCardCount(count);
+
+
+  }
+  late String _id;
+  List? readItems;
+  List? unreadItems;
+  Future<void> fetchUnreadNotificationsList() async {
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          unreadItems = jsonResponse['notifications'];
+          unreadItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchReadNotifications();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+
+  Future<void> fetchReadNotifications() async {
+
+    try {
+      var response = await http.post(
+        Uri.parse(getNotificationStatus),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          readItems = jsonResponse['notifications'];
+          readItems?.sort((a, b) => b['dateCreated'].compareTo(a['dateCreated']));
+
+          // Fetch and set the read notifications
+          fetchUnreadNotificationsList();
+          fetchUnreadNotifications(_id);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+    _id = jwtDecodedToken['_id'];
+    fetchUnreadNotificationsList();
+    fetchReadNotifications();
+    fetchUnreadNotifications(_id);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF6C65DE), Color(0xFF1BC3EE)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: Text(
-          'Anti-Dengue Task Force',
-          style: TextStyle(fontFamily: 'SquadaOne'),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotificationPage(token: widget.token),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Anti-Dengue Task Force'),
 
       //sidenav
-      drawer: Drawer(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/sidenav_images/sidenav_background.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            children: [
-              UserAccountsDrawerHeader(
-                accountName: Text(
-                  'Lebron James',
-                  style: TextStyle(color: Colors.white),
-                ),
-                accountEmail: Text(
-                  'kingjames@gmail.com',
-                  style: TextStyle(color: Colors.white),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage('assets/sidenav_images/lebron1.png'),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                ),
-              ),
-              Column(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.language, color: Colors.white,),
-                    title: Text('Language', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      // Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      //Navigator.push(
-                      //context,
-                      //  MaterialPageRoute(
-                      // builder: (context) => LanguageSettings(), // go to the next screen
-                      // ),
-                      // );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info, color: Colors.white,),
-                    title: Text('About App', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AboutApp(token: widget.token), // go to the next screen
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.people, color: Colors.white,),
-                    title: Text('Developers', style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      //Navigator.pop(context);
-                      // Navigator.push(
-                      //context,
-                      //MaterialPageRoute(
-                      // builder: (context) => Developers(),
-                      //),
-                      // );
-                    },
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.exit_to_app_sharp, color: Colors.black,),
-                      title: Text('Exit'),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              elevation: 4,
-                              shadowColor: Colors.black,
-                              content: Container(
-                                height: 180,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/exit_images/caution.png',
-                                      width: 100,
-                                      height: 100,
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      'Are you sure you want to exit?',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                      child: Text(
-                                        'Cancel',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    TextButton(
-                                      onPressed: () {
-                                        SystemNavigator.pop();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                      child: Text(
-                                        'Exit',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),
 
       //content
       body: Stack(
@@ -223,7 +109,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background/background3.png',
+              'assets/background/background6.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -313,6 +199,66 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                           ),
                           child: TextButton(
                             onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    elevation: 4,
+                                    shadowColor: Colors.black,
+                                    content: SingleChildScrollView(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.8,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Text(
+                                              'pasigdenguetaskforce@gmail.com',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              "If you have any concerns or questions, please don't hesitate to reach out to us. We're here to assist you. Feel free to contact us at pasigdenguetaskforce@gmail.com. Your feedback is important, and we're ready to help.",
+                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      Center(
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          spacing: 10,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: TextButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: Text(
+                                                'Back',
+                                                style: TextStyle(color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                               // email
                             },
                             child: Column(
@@ -347,7 +293,66 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              // tel. no.
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    elevation: 4,
+                                    shadowColor: Colors.black,
+                                    content: SingleChildScrollView(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.8,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Text(
+                                              '(02) 8643 8047',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              "If you have any concerns or questions, please don't hesitate to reach out to us. We're here to assist you. Feel free to contact us at  (02) 8643 8047. Your feedback is important, and we're ready to help.",
+                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      Center(
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          spacing: 10,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: TextButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: Text(
+                                                'Back',
+                                                style: TextStyle(color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             child: Column(
                               children: [
@@ -381,7 +386,66 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              // location
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    elevation: 4,
+                                    shadowColor: Colors.black,
+                                    content: SingleChildScrollView(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.8,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Text(
+                                              'Address',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              "Room 12, 5th floor, City Government of Pasig, 1600 Caruncho Ave, Pasig, Metro Manila.",
+                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      Center(
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          spacing: 10,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: TextButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: Text(
+                                                'Back',
+                                                style: TextStyle(color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             child: Column(
                               children: [
@@ -431,7 +495,66 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              // email
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    elevation: 4,
+                                    shadowColor: Colors.black,
+                                    content: SingleChildScrollView(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.8,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Text(
+                                              'Services',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              "No info yet",
+                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      Center(
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          spacing: 10,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: TextButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: Text(
+                                                'Back',
+                                                style: TextStyle(color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             child: Column(
                               children: [
@@ -465,7 +588,66 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              // tel. no.
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    elevation: 4,
+                                    shadowColor: Colors.black,
+                                    content: SingleChildScrollView(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.8,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Text(
+                                              'Services',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              "No info yet",
+                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      Center(
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          spacing: 10,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: TextButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: Text(
+                                                'Back',
+                                                style: TextStyle(color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             child: Column(
                               children: [
@@ -499,7 +681,66 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                           ),
                           child: TextButton(
                             onPressed: () {
-                              // location
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                    elevation: 4,
+                                    shadowColor: Colors.black,
+                                    content: SingleChildScrollView(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.8,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Text(
+                                              'Services',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+                                            ),
+                                            SizedBox(height: 20),
+                                            Text(
+                                              "No info yet",
+                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      Center(
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          spacing: 10,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: TextButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: Text(
+                                                'Back',
+                                                style: TextStyle(color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             child: Column(
                               children: [
@@ -557,7 +798,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                       Navigator.push(
                       context,
                       MaterialPageRoute(
-                       builder: (context) => MainMenu(token: widget.token),
+                       builder: (context) => MainMenu(token: widget.token, notificationCount: widget.notificationCount),
                       ),
                       );
                     },
@@ -569,7 +810,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ReportList(token: widget.token),
+                          builder: (context) => ReportList(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
@@ -580,7 +821,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserProfile(token: widget.token),
+                          builder: (context) => UserProfile(token: widget.token, notificationCount: widget.notificationCount),
                         ),
                       );
                     },
