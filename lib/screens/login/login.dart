@@ -114,7 +114,6 @@ class _LoginState extends State<Login> {
         Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(myToken);
         var userId = jwtDecodedToken['_id'];
 
-        // Now you have the userId, you can use it to fetch unread notifications
         fetchUnreadNotifications(userId);
 
         Navigator.push(

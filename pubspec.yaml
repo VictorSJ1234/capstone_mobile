@@ -126,6 +126,7 @@ flutter:
       - assets/exit_images/caution.png
       - assets/send_report_images/file_icon.png
       - assets/send_report_images/submit_successfully.png
+      - assets/TERMS AND CONDITIONS_Mosquinator 2.pdf
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
