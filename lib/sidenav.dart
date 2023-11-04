@@ -164,6 +164,7 @@ void updateUnreadCardCount(int count) {
                     );
                   },
                 ),
+                /**
                 ListTile(
                   leading: Icon(Icons.people, color: Colors.white,),
                   title: Text(
@@ -178,6 +179,7 @@ void updateUnreadCardCount(int count) {
                     // );
                   },
                 ),
+                    **/
               ],
             ),
             Expanded(
