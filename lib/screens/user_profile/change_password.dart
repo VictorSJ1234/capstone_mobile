@@ -127,6 +127,9 @@ Future<void> fetchUnreadNotificationsList() async {
       });
     }
     else {
+      setState(() {
+        _isLoading = true;
+      });
       passwordsMatch = true;
       showDialog(
         context: context,

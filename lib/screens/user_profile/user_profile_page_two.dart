@@ -205,6 +205,9 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
         print(updatedData);
      */
     else {
+      setState(() {
+        _isLoading = true;
+      });
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -607,9 +610,36 @@ fetchUnreadNotificationsList();
                                       ),
                                       value: selectedBarangay,
                                       items: [
-                                        'Barangay 1',
-                                        'Barangay 2',
-                                        'Barangay 3'
+                                        'Bagong Ilog',
+                                        'Bagong Katipunan',
+                                        'Bambang',
+                                        'Buting',
+                                        'Caniogan',
+                                        'Dela Paz',
+                                        'Kalawaan',
+                                        'Kapasigan',
+                                        'Kapitolyo',
+                                        'Malinao',
+                                        'Manggahan (incl. Napico)',
+                                        'Maybunga',
+                                        'Oranbo',
+                                        'Palatiw',
+                                        'Pinagbuhatan',
+                                        'Pineda',
+                                        'Rosario',
+                                        'Sagad',
+                                        'San Antonio',
+                                        'San Joaquin',
+                                        'San Jose',
+                                        'San Miguel',
+                                        'San Nicolas',
+                                        'Santa Cruz',
+                                        'Santa Lucia',
+                                        'Santa Rosa',
+                                        'Santolan',
+                                        'Santo Tomas',
+                                        'Sumilang',
+                                        'Ugong',
                                       ]
                                           .map<DropdownMenuItem<String>>((
                                           String value) {

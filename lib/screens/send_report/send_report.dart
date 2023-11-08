@@ -185,10 +185,6 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       await http.get(Uri.parse('https://www.google.com'));
     } catch (networkError) {
-      setState(() {
-        _isLoading = false;
-      });
-      // Handle network/internet connection error
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -315,7 +311,7 @@ Future<void> fetchUnreadNotificationsList() async {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Hi, (User) we have received your report and we are currently taking action to solve your concern. Once complete, we will update the status of your concern. For other concern, you may submit another report. Thank you!',
+                        'Hi, we have received your report and we are currently taking action to solve your concern. Once complete, we will update the status of your concern. For other concern, you may submit another report. Thank you!',
                         style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
                         textAlign: TextAlign.justify,
                       ),
@@ -512,7 +508,38 @@ Future<void> fetchUnreadNotificationsList() async {
                                     prefixIcon: Icon(Icons.apartment_sharp),
                                     border: OutlineInputBorder(),
                                   ),
-                                  items: ['Bagong Ilog', 'Bagong Katipunan', 'Bambang', 'Buting', 'Caniogan', 'Palatiw']
+                                  items: [
+                                    'Bagong Ilog',
+                                    'Bagong Katipunan',
+                                    'Bambang',
+                                    'Buting',
+                                    'Caniogan',
+                                    'Dela Paz',
+                                    'Kalawaan',
+                                    'Kapasigan',
+                                    'Kapitolyo',
+                                    'Malinao',
+                                    'Manggahan (incl. Napico)',
+                                    'Maybunga',
+                                    'Oranbo',
+                                    'Palatiw',
+                                    'Pinagbuhatan',
+                                    'Pineda',
+                                    'Rosario',
+                                    'Sagad',
+                                    'San Antonio',
+                                    'San Joaquin',
+                                    'San Jose',
+                                    'San Miguel',
+                                    'San Nicolas',
+                                    'Santa Cruz',
+                                    'Santa Lucia',
+                                    'Santa Rosa',
+                                    'Santolan',
+                                    'Santo Tomas',
+                                    'Sumilang',
+                                    'Ugong',
+                                  ]
                                       .map<DropdownMenuItem<String>>((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,

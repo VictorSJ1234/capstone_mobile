@@ -746,7 +746,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'House / Unit / Apartment No.',
+                                      'House / Unit / Apartment No. (Opt)',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),
@@ -793,7 +793,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'Floor',
+                                      'Floor (Opt)',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),
@@ -840,7 +840,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'Building Name',
+                                      'Building Name (Opt)',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),

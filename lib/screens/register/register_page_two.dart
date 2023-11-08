@@ -155,13 +155,9 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
     try {
       await http.get(Uri.parse('https://www.google.com'));
     } catch (networkError) {
-      // Handle network/internet connection error
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          setState(() {
-            _isLoading = false;
-          });
           return AlertDialog(
             title: Text("Network Error"),
             content: Text("Please check your network/internet connection."),
@@ -646,7 +642,38 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                         contentPadding: EdgeInsets.all(15.0),
                                         border: InputBorder.none,
                                       ),
-                                      items: ['Barangay 1', 'Barangay 2', 'Barangay 3']
+                                      items: [
+                                        'Bagong Ilog',
+                                        'Bagong Katipunan',
+                                        'Bambang',
+                                        'Buting',
+                                        'Caniogan',
+                                        'Dela Paz',
+                                        'Kalawaan',
+                                        'Kapasigan',
+                                        'Kapitolyo',
+                                        'Malinao',
+                                        'Manggahan (incl. Napico)',
+                                        'Maybunga',
+                                        'Oranbo',
+                                        'Palatiw',
+                                        'Pinagbuhatan',
+                                        'Pineda',
+                                        'Rosario',
+                                        'Sagad',
+                                        'San Antonio',
+                                        'San Joaquin',
+                                        'San Jose',
+                                        'San Miguel',
+                                        'San Nicolas',
+                                        'Santa Cruz',
+                                        'Santa Lucia',
+                                        'Santa Rosa',
+                                        'Santolan',
+                                        'Santo Tomas',
+                                        'Sumilang',
+                                        'Ugong',
+                                      ]
                                           .map<DropdownMenuItem<String>>((String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,

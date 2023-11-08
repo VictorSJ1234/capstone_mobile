@@ -58,18 +58,18 @@ class _LoginState extends State<Login> {
     try {
       await http.get(Uri.parse('https://www.google.com'));
     } catch (networkError) {
-      // Handle network/internet connection error
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          _isLoading = false;
           return AlertDialog(
             title: Text("Network Error"),
             content: Text("Please check your network/internet connection."),
             actions: [
               TextButton(
                 onPressed: () {
-                  _isLoading = false;
+                  setState(() {
+                    _isLoading = false;
+                  });
                   Navigator.pop(context); // Close the dialog
                 },
                 child: Text("OK"),
@@ -436,11 +436,12 @@ class _LoginState extends State<Login> {
 
                       SizedBox(height: 10,),
 
+                      /**
                       if (_isLoading)
                         Center(
                           child: CircularProgressIndicator(), //loading
                         ),
-
+                      **/
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Row(
@@ -502,33 +503,39 @@ class _LoginState extends State<Login> {
 
 
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-                                child: ElevatedButton(
-                                  onPressed: _login,
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 5,
-                                    primary: Color(0xff28376D),
-                                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
+                      Visibility(
+                        visible: !_isLoading,
+                        replacement: Center(
+                          child: CircularProgressIndicator(), // Show a loading indicator if loading
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+                                  child: ElevatedButton(
+                                    onPressed: _login,
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 5,
+                                      primary: Color(0xff28376D),
+                                      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30.0),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Login',
+                                      style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
-                                  child: Text(
-                                    'Login',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            )
+                          ],
+                        ),
                       ),
 
 
