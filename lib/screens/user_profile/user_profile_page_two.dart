@@ -59,6 +59,121 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
 
   }
 
+  Future<void> _confirmSave() async{
+    setState(() {
+      _isLoading = true;
+    });
+
+    print(profilePhotoBase64);
+    try {
+      // Prepare the updated user information
+      var updatedData = {
+        "name": widget.name.toString(),
+        "birthday": widget.birthday.toString(),
+        "gender": widget.selectedGender.toString(),
+        "contact_number": widget.contactNumber.toString(),
+        "street_name": widget.street.toString(),
+        "house_number": widget.houseNumber.toString(),
+        "floor": widget.floor.toString(),
+        "building_name": widget.buildingName.toString(),
+        "barangay": selectedBarangay.toString(),
+        "district": selectedDistrict.toString(),
+        "city":_cityController.text.toString(),
+        "email": _emailController.text,
+        "profilePicture": widget.Base64Image.toString(),
+      };
+
+      // Make an HTTP PUT request to update the user information
+      var response = await http.put(
+        Uri.parse(editUserData + '/$_id'),
+        // api end point
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(updatedData),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              elevation: 4,
+              shadowColor: Colors.black,
+              content: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                          'assets/send_report_images/submit_successfully.png',
+                          width: 100,
+                          height: 100
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 20),
+                      Text(
+                        'Your account has been edited successfully!',
+                        style: TextStyle(fontSize: 16, color: Color(0xFF338B93), fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 10,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          },
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          backgroundColor: Colors.blue,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Done',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+        // User information updated successfully
+        // done na
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        // Handle errors, e.g., display an error message
+        print("Error updating user information: ${response.statusCode}");
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   late String _id;
 
   //fetched data container
@@ -241,10 +356,6 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 10,),
-                    if (_isLoading)
-                      Center(
-                        child: CircularProgressIndicator(), //loading
-                      ),
                   ],
                 ),
               ),
@@ -257,7 +368,11 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
                   children: [
                     TextButton(
                       onPressed: () {
+                        setState(() {
+                          _isLoading = false;
+                        });
                         Navigator.of(context).pop();
+
                       },
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -276,121 +391,8 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-
-                        print(profilePhotoBase64);
-                        try {
-                          // Prepare the updated user information
-                          var updatedData = {
-                            "name": widget.name.toString(),
-                            "birthday": widget.birthday.toString(),
-                            "gender": widget.selectedGender.toString(),
-                            "contact_number": widget.contactNumber.toString(),
-                            "street_name": widget.street.toString(),
-                            "house_number": widget.houseNumber.toString(),
-                            "floor": widget.floor.toString(),
-                            "building_name": widget.buildingName.toString(),
-                            "barangay": selectedBarangay.toString(),
-                            "district": selectedDistrict.toString(),
-                            "city":_cityController.text.toString(),
-                            "email": _emailController.text,
-                            "profilePicture": widget.Base64Image.toString(),
-                          };
-
-                          // Make an HTTP PUT request to update the user information
-                          var response = await http.put(
-                            Uri.parse(editUserData + '/$_id'),
-                            // api end point
-                            headers: {"Content-Type": "application/json"},
-                            body: jsonEncode(updatedData),
-                          );
-
-                          if (response.statusCode == 200) {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            Navigator.of(context).pop();
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  elevation: 4,
-                                  shadowColor: Colors.black,
-                                  content: SingleChildScrollView(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * 0.8,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                              'assets/send_report_images/submit_successfully.png',
-                                              width: 100,
-                                              height: 100
-                                          ),
-                                          SizedBox(height: 10),
-                                          SizedBox(height: 20),
-                                          Text(
-                                            'Your account has been edited successfully!',
-                                            style: TextStyle(fontSize: 16, color: Color(0xFF338B93), fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  actions: [
-                                    Center(
-                                      child: Wrap(
-                                        alignment: WrapAlignment.center,
-                                        spacing: 10,
-                                        children: [
-                                          TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _isLoading = false;
-                                              });
-                                              Navigator.of(context).pop();
-                                            },
-                                            style: TextButton.styleFrom(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              ),
-                                              backgroundColor: Colors.blue,
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                'Done',
-                                                style: TextStyle(color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            // User information updated successfully
-                            // done na
-                          } else {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            // Handle errors, e.g., display an error message
-                            print("Error updating user information: ${response.statusCode}");
-                          }
-                        } catch (error) {
-                          print(error);
-                        }
+                        Navigator.of(context).pop();
+                        _confirmSave();
                       },
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -959,69 +961,83 @@ fetchUnreadNotificationsList();
                             ],
                           ),
 
+                          SizedBox(height: 10,),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: 20, right: 20, top: 30, bottom: 5),
-                                    child: ElevatedButton(
-                                      onPressed: updateUserInformation,
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 5,
-                                        primary: Color(0xff28376d),
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 20.0, horizontal: 50),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
+
+                          Visibility(
+                            visible: !_isLoading,
+                            replacement: Center(
+                              child: CircularProgressIndicator(), // Show a loading indicator if loading
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          left: 20, right: 20, top: 30, bottom: 5),
+                                      child: ElevatedButton(
+                                        onPressed: updateUserInformation,
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 5,
+                                          primary: Color(0xff28376d),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20.0, horizontal: 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Save',
+                                          style: TextStyle(fontSize: 16.0),
                                         ),
                                       ),
-                                      child: Text(
-                                        'Save',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: 20, right: 20, top: 20, bottom: 30),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 5,
-                                        primary: Colors.redAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 20.0, horizontal: 50),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
+                          Visibility(
+                            visible: !_isLoading,
+                            replacement: Center(
+                              child: SizedBox(), // Show a loading indicator if loading
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          left: 20, right: 20, top: 20, bottom: 30),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 5,
+                                          primary: Colors.redAccent,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20.0, horizontal: 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Back',
+                                          style: TextStyle(fontSize: 16.0),
                                         ),
                                       ),
-                                      child: Text(
-                                        'Back',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),

@@ -44,19 +44,19 @@ void updateUnreadCardCount(int count) {
   ];
 
   List<String> scientificName = [
-    'Scientific Scientific Name 1',
-    'Scientific Scientific Name 2',
-    'Scientific Scientific Name 3',
-    'Scientific Scientific Name 4',
-    'Scientific Scientific Name 5',
+    'Aedes species \n (Ae. aegypti or Ae. albopictus) mosquito',
+    'Anopheles mosquitoes',
+    'Culex, Anopheles, Aedes Mosquitos',
+    'Aedes (Stegomyia) aegypti,\n Aedes (Stegomyia) albopictus',
+    'Aedes (Ae. aegypti) mosquito',
   ];
 
   List<String> images = [
     'assets/mosquitopedia_images/dengue.jpeg',
-    'assets/mosquitopedia_images/malaria.png',
-    'assets/mosquitopedia_images/filariasis.png',
-    'assets/mosquitopedia_images/chikungunya.png',
-    'assets/mosquitopedia_images/zikavirus.png',
+    'assets/mosquitopedia_images/malaria.jpg',
+    'assets/mosquitopedia_images/filariasis.jpg',
+    'assets/mosquitopedia_images/chikungunya.jpg',
+    'assets/mosquitopedia_images/zikavirus.jpg',
   ];
 
   List<String> details = [

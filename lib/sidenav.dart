@@ -37,6 +37,8 @@ void updateUnreadCardCount(int count) {
   String? profilePhotoBase64;
   List? items;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +49,9 @@ void updateUnreadCardCount(int count) {
   }
 
   Future<void> fetchUserInformation(String _id) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       var response = await http.post(
         Uri.parse(getUserData),
@@ -65,11 +70,15 @@ void updateUnreadCardCount(int count) {
             _gender = items![0]['gender'].toString();
             _contactNumber = items![0]['contact_number'].toString();
             profilePhotoBase64 = items![0]['profilePicture'].toString();
+            _isLoading = false;
           }
         });
       }
     }  catch (error) {
       print(error);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -119,11 +128,17 @@ void updateUnreadCardCount(int count) {
                 _email,
                 style: TextStyle(color: Colors.white),
               ),
-              currentAccountPicture:  CircleAvatar(
-                backgroundImage: profilePhotoBase64 != null
-                    ? MemoryImage(base64Decode(profilePhotoBase64!))  as ImageProvider
-                    : AssetImage('assets/sidenav_images/defaultProfile.jpg'),
-                radius: 85,
+              currentAccountPicture:  Visibility(
+                visible: !_isLoading, // Show the ElevatedButton if not loading
+                replacement: Center(
+                  child: CircularProgressIndicator(), // Show a loading indicator if loading
+                ),
+                child: CircleAvatar(
+                  backgroundImage: profilePhotoBase64 != null
+                      ? MemoryImage(base64Decode(profilePhotoBase64!))  as ImageProvider
+                      : AssetImage('assets/sidenav_images/defaultProfile.jpg'),
+                  radius: 85,
+                ),
               ),
               decoration: BoxDecoration(
                 color: Colors.transparent,

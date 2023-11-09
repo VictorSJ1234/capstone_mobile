@@ -180,7 +180,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
 
     // Check if any of the required fields are empty
     if (selectedBarangay == null || cityController.text.isEmpty ||_selectedFiles.isEmpty || selectedDistrict == null || _selectedFiles == null ||
-        emailController.text==null || passwordController.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(passwordController.text)||
+        emailController.text==null || passwordController.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)||
         !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(emailController.text)) {
       setState(() {
         // Set the isButtonPressed to true to display error messages
@@ -1142,13 +1142,13 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                             ],
                           ),
                           isButtonPressed
-                              ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(passwordController.text)
+                              ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)
                               ? Container(
                             padding: EdgeInsets.only(left: 8.0),
                             alignment: Alignment.centerLeft,
                             child: Text(
                               // Display an error message if the field is empty
-                              'Password must include atleast one uppercase and lowercase letter, one digit, and one special character.',
+                              'Password must include atleast one uppercase and lowercase letter, one digit, one special character, must be at least 10 characters long',
                               style: TextStyle(color: Colors.orangeAccent, fontSize: 13),
                             ),
                           )

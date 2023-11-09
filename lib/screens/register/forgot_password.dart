@@ -42,6 +42,159 @@ class _ForgotPassword extends State<ForgotPassword> {
   bool _isLoading = false;
   bool passwordsMatch = true;
 
+  Future<void> _confirmChange() async{
+    setState(() {
+      _isLoading = true;
+    });
+    // Check for network/internet connectivity
+    try {
+      await http.get(Uri.parse('https://www.google.com'));
+    } catch (networkError) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Network Error"),
+            content: Text("Please check your network/internet connection."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.pop(context); // Close the dialog
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+    try {
+      // Prepare the updated user information
+      var updatedData = {
+        "email" : _emailController.text.toString(),
+        "newPassword": passwordController.text.toString(),
+      };
+
+      // Make an HTTP PUT request to update the user information
+      var response = await http.post(
+        Uri.parse(resetPassword),
+        // api end point
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(updatedData),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
+        });
+        _clearFields();
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              elevation: 4,
+              shadowColor: Colors.black,
+              content: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                          'assets/send_report_images/submit_successfully.png',
+                          width: 100,
+                          height: 100
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(height: 20),
+                      Text(
+                        'Your password has been changed successfully!',
+                        style: TextStyle(fontSize: 16, color: Color(0xFF338B93), fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ),
+                            (route) => false,
+                      );
+                    }
+                    ,
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                    child: Text(
+                      'Go to Login Page',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+        // User information updated successfully
+        // done na
+      }
+      else if (response.statusCode == 404 || response.statusCode == 500) {
+        setState(() {
+          _isLoading = false;
+        });
+        // Registration failed due to duplicate email
+        // Show error dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Failed Changing Password"),
+              content: Text("Email address does not exist!"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    Navigator.pop(context); // Close the dialog
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+      else {
+        setState(() {
+          _isLoading = false;
+        });
+        // Handle errors, e.g., display an error message
+        print("Error updating user information: ${response.statusCode}");
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   Future<void> updateUserInformation() async {
     setState(() {
       _isLoading = true;
@@ -75,11 +228,18 @@ class _ForgotPassword extends State<ForgotPassword> {
 
     // Check if any of the required fields are empty
     if (passwordController.text.isEmpty || _emailController.text.isEmpty  || repeatPasswordController.text.isEmpty || passwordController.text.isEmpty ||
-        !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(passwordController.text)) {
+        !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)) {
       setState(() {
         // Set the isButtonPressed to true to display error messages
-        passwordsMatch = false;
         isButtonPressed = true;
+        _isLoading = false;
+      });
+    }
+    else if (passwordController.text != repeatPasswordController.text) {
+      setState(() {
+        // Set the isButtonPressed to true to display error messages
+        isButtonPressed = true;
+        passwordsMatch = false;
         _isLoading = false;
       });
     }
@@ -152,131 +312,8 @@ class _ForgotPassword extends State<ForgotPassword> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        try {
-                          // Prepare the updated user information
-                          var updatedData = {
-                            "email" : _emailController.text.toString(),
-                            "newPassword": passwordController.text.toString(),
-                          };
-
-                          // Make an HTTP PUT request to update the user information
-                          var response = await http.post(
-                            Uri.parse(resetPassword),
-                            // api end point
-                            headers: {"Content-Type": "application/json"},
-                            body: jsonEncode(updatedData),
-                          );
-
-                          if (response.statusCode == 200) {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            _clearFields();
-                            Navigator.of(context).pop();
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  elevation: 4,
-                                  shadowColor: Colors.black,
-                                  content: SingleChildScrollView(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * 0.8,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                              'assets/send_report_images/submit_successfully.png',
-                                              width: 100,
-                                              height: 100
-                                          ),
-                                          SizedBox(height: 10),
-                                          SizedBox(height: 20),
-                                          Text(
-                                            'Your password has been changed successfully!',
-                                            style: TextStyle(fontSize: 16, color: Color(0xFF338B93), fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  actions: [
-                                    Center(
-                                      child: TextButton(
-                                        onPressed: () {
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Login(),
-                                            ),
-                                                (route) => false,
-                                          );
-                                        }
-                                        ,
-                                        style: TextButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(30.0),
-                                          ),
-                                          backgroundColor: Colors.green,
-                                        ),
-                                        child: Text(
-                                          'Go to Login Page',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            // User information updated successfully
-                            // done na
-                          }
-                          else if (response.statusCode == 404 || response.statusCode == 500) {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            // Registration failed due to duplicate email
-                            // Show error dialog
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Failed Changing Password"),
-                                  content: Text("Email address does not exist!"),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _isLoading = false;
-                                        });
-                                        Navigator.pop(context); // Close the dialog
-                                      },
-                                      child: Text("OK"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                          else {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            // Handle errors, e.g., display an error message
-                            print("Error updating user information: ${response.statusCode}");
-                          }
-                        } catch (error) {
-                          print(error);
-                        }
+                        Navigator.of(context).pop();
+                        _confirmChange();
                       },
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -497,13 +534,13 @@ class _ForgotPassword extends State<ForgotPassword> {
                           ],
                         ),
                         isButtonPressed
-                            ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(passwordController.text)
+                            ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)
                             ? Container(
                           padding: EdgeInsets.only(left: 8.0),
                           alignment: Alignment.centerLeft,
                           child: Text(
                             // Display an error message if the field is empty
-                            'Password must include atleast one uppercase and lowercase letter, one digit, and one special character.',
+                            'Password must include atleast one uppercase and lowercase letter, one digit, one special character, must be at least 10 characters long',
                             style: TextStyle(color: Colors.orangeAccent, fontSize: 13),
                           ),
                         )
@@ -578,78 +615,85 @@ class _ForgotPassword extends State<ForgotPassword> {
 
                         SizedBox(height: 10,),
 
-                        if (_isLoading)
-                          Center(
-                            child: CircularProgressIndicator(), //loading
+                        Visibility(
+                          visible: !_isLoading,
+                          replacement: Center(
+                            child: CircularProgressIndicator(), // Show a loading indicator if loading
                           ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        left: 20, right: 20, top: 30, bottom: 5),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Future.delayed(Duration.zero, () {
+                                          updateUserInformation();
+                                        });
+                                      },
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 20, right: 20, top: 30, bottom: 5),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Future.delayed(Duration.zero, () {
-                                        updateUserInformation();
-                                      });
-                                    },
-
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 5,
-                                      primary: Color(0xff28376d),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 20.0, horizontal: 50),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 5,
+                                        primary: Color(0xff28376d),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0, horizontal: 50),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Save',
+                                        style: TextStyle(fontSize: 16.0),
                                       ),
                                     ),
-                                    child: Text(
-                                      'Save',
-                                      style: TextStyle(fontSize: 16.0),
-                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
+                                ],
+                              )
+                            ],
+                          ),
                         ),
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 20, right: 20, top: 20, bottom: 30),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 5,
-                                      primary: Colors.redAccent,
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 20.0, horizontal: 50),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
+                        Visibility(
+                          visible: !_isLoading,
+                          replacement: Center(
+                            child: SizedBox(), // Show a loading indicator if loading
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        left: 20, right: 20, top: 20, bottom: 30),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 5,
+                                        primary: Colors.redAccent,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 20.0, horizontal: 50),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Back',
+                                        style: TextStyle(fontSize: 16.0),
                                       ),
                                     ),
-                                    child: Text(
-                                      'Back',
-                                      style: TextStyle(fontSize: 16.0),
-                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),

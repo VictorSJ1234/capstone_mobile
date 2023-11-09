@@ -45,6 +45,7 @@ dependencies:
   badges: ^3.1.2
   path_provider: ^2.1.1
   image_picker: ^1.0.4
+  flutter_launcher_icons: ^0.13.1
   jwt_decoder:
   swipeable_button_view:
 
@@ -92,11 +93,11 @@ flutter:
       - assets/mosquitopedia_images/mosquito_sample.jpg
       - assets/mosquitopedia_menu_images/repellent.png
       - assets/mosquitopedia_menu_images/mosquito.png
-      - assets/mosquitopedia_images/zikavirus.png
-      - assets/mosquitopedia_images/chikungunya.png
+      - assets/mosquitopedia_images/zikavirus.jpg
+      - assets/mosquitopedia_images/chikungunya.jpg
       - assets/mosquitopedia_images/dengue.jpeg
-      - assets/mosquitopedia_images/filariasis.png
-      - assets/mosquitopedia_images/malaria.png
+      - assets/mosquitopedia_images/filariasis.jpg
+      - assets/mosquitopedia_images/malaria.jpg
       - assets/diseases_page2_images/symptoms.png
       - assets/diseases_page2_images/preventions.png
       - assets/repellents_images/repellent.jpg
@@ -159,3 +160,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+flutter_icons:
+  image_path: "assets/mainLogo.png"
+  android: true
+  ios: true

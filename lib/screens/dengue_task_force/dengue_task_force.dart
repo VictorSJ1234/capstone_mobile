@@ -157,7 +157,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
                                   child: Text(
-                                    'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.',
+                                    'Pasig Anti-Dengue Task Force is tasked to clean, fumigate, and monitor high-risk areas in the city against dengue-causing mosquitoes.',
                                     style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.justify,
                                   ),
@@ -518,7 +518,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                                             ),
                                             SizedBox(height: 20),
                                             Text(
-                                              "No info yet",
+                                              "Community Teaching: Larvae Control of Infestation",
                                               style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
                                               textAlign: TextAlign.justify,
                                             ),
@@ -611,7 +611,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                                             ),
                                             SizedBox(height: 20),
                                             Text(
-                                              "No info yet",
+                                              "Clean-Up Drive",
                                               style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
                                               textAlign: TextAlign.justify,
                                             ),
@@ -704,7 +704,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                                             ),
                                             SizedBox(height: 20),
                                             Text(
-                                              "No info yet",
+                                              "Fumigation",
                                               style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
                                               textAlign: TextAlign.justify,
                                             ),

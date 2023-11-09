@@ -42,6 +42,84 @@ void updateUnreadCardCount(int count) {
 
   }
 
+  final Map<String, List<String>> diseaseData = {
+    'Dengue': [
+      'High fever (40°C/104°F)',
+      'Severe headachet',
+      'Pain behind the eyes',
+      'muscle and joint pains',
+      'Nausea',
+      'Vomiting',
+    ],
+    'Malaria': [
+      'Exhaustion',
+      'Trouble breathing',
+      'Fever',
+      'Chills',
+      'Dark or bloody urine jaundice',
+      'Yellowing of the eyes and skin',
+    ],
+    'Filariasis': [
+      "Symptoms can be confused with other illnesses like Zika, leading to misdiagnosis.",
+      "In some cases, symptoms are mild, and people may not realize they're infected",
+      'Recurrent episodes of acute inflammation, including fever and pain',
+      'Skin rashes and itching',
+      'Asymptomatic infection (no immediate symptoms)',
+      'Lymphedema (swelling), often in the legs',
+
+    ],
+    'Chikungunya': [
+      'Joint swelling',
+      'Muscular discomfort',
+      'Headache',
+      'Nauseaa',
+      'Exhaustion',
+      'Rash ',
+    ],
+    'Zika Virus': [
+      'Joint swelling',
+      'Muscular discomfort',
+      'Headache',
+      'Nauseaa',
+      'Exhaustion',
+      'Rash ',
+    ],
+  };
+
+  final Map<String, List<String>> preventionData = {
+    'Dengue': [
+      'clothing that covers the most of your body',
+      'If sleeping during the day, use mosquito nets that have been sprayed with insect repellent.',
+      'Mosquito repellents (DEET, Picaridin, or IR3535) ',
+      'Coils, as well as vaporizers.',
+    ],
+    'Malaria': [
+      'Vector control is a vital component of malaria control and elimination strategies as it is highly effective in preventing infection and reducing disease transmission.',
+      'Use mosquito nets when sleeping in places where malaria is present Use mosquito repellents (containing DEET, IR3535, or Icaridin) after dusk Use coils and vaporizers.',
+      'Talk to a doctor about taking medicines such as chemoprophylaxis before traveling to areas where malaria is common. ',
+      'Lower the risk of getting malaria by avoiding mosquito bites.',
+    ],
+    'Filariasis': [
+      'Elimination of lymphatic filariasis is possible by preventing infection spread with preventive chemotherapy.',
+      'Mass drug administration (MDA) entails giving an annual dose of medications to the entire at-risk population.',
+      'The MDA regimen recommended is determined by the co-occurrence of lymphatic filariasis and other filarial diseases. ',
+      'Take preventive measures when traveling to areas where filariasis is common, such as using insect repellent, wearing protective clothing, and sleeping under bed nets.',
+    ],
+    'Chikungunya': [
+      'The main method to reduce transmission of CHIKV is through control of the mosquito vectors.',
+      'Insecticide-treated mosquito nets should be used against day-biting mosquitoes by persons who sleep during the daytime, for example young children, sick patients or older people.',
+      'For protection during outbreaks of chikungunya, clothing which minimizes skin exposure to the day-biting vectors is advised.',
+      'Repellents can be applied to exposed skin or to clothing in strict accordance with product label instructions.',
+    ],
+    'Zika Virus': [
+      'Wearing clothing (preferably light-colored) that covers as much of the body as possible.',
+      'Use physical barriers such as window screens and closed doors and windows',
+      'Applying insect repellent to skin or clothing that contains DEET, IR3535, or icaridin according to product label instructions are all examples of personal protection measures.',
+      'Preventing mosquito bites during the day and early evening is a critical step in preventing Zika virus infection, particularly in pregnant women, women of reproductive age, and young children.',
+    ],
+  };
+
+  /**
   static const List<String> symptoms = [
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
@@ -53,6 +131,7 @@ void updateUnreadCardCount(int count) {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget nisi ac velit dictum facilisis vel at arcu.',
   ];
+      **/
 
   late String _id;
 List? readItems;
@@ -123,6 +202,9 @@ fetchUnreadNotificationsList();
     fetchUnreadNotifications(_id);
   }
   Widget build(BuildContext context) {
+    final List<String> symptoms = diseaseData[widget.PassCaption] ?? [];
+    final List<String> preventions = preventionData[widget.PassCaption] ?? [];
+
     return Scaffold(
       appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Diseases'),
 
