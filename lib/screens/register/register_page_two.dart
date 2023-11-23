@@ -180,7 +180,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
 
     // Check if any of the required fields are empty
     if (selectedBarangay == null || cityController.text.isEmpty ||_selectedFiles.isEmpty || selectedDistrict == null || _selectedFiles == null ||
-        emailController.text==null || passwordController.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)||
+        emailController.text==null || passwordController.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.!@#$%^&*_-])[A-Za-z\d.!@#$%^&*_-]{10,}$').hasMatch(passwordController.text)||
         !RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(emailController.text)) {
       setState(() {
         // Set the isButtonPressed to true to display error messages
@@ -232,12 +232,12 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
         fileDataList.add(base64FileData);
       }
 
-      // Check if total file size exceeds 15 MB
+      // Check if total file size exceeds 10 MB
       int totalFileSize = getTotalFileSize();
-      int maxSizeInBytes = 15 * 1024 * 1024; // 15 MB in bytes
+      int maxSizeInBytes = 10 * 1024 * 1024; // 10 MB in bytes
       if (totalFileSize > maxSizeInBytes) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Total file size should not exceed 15 MB."),
+          content: Text("Total file size should not exceed 10 MB."),
         ));
 
         //this is important!! // this will exit the function and not going directly at the data insertiion
@@ -311,11 +311,37 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
       print(widget.buildingName);
       print(selectedBarangay);
       print(selectedDistrict);
-      print(cityController);
+      print(cityController.text);
       print(emailController.text);
       print(passwordController.text);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 400) {
+        setState(() {
+          _isLoading = false;
+        });
+        // Registration failed due to duplicate email
+        // Show error dialog with specific error message
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Registration Failed"),
+              content: Text("Email Address Already Exist"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    Navigator.pop(context); // Close the dialog
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }else if (response.statusCode == 200) {
         setState(() {
           _isLoading = false;
         });
@@ -347,7 +373,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'You account has been successfully created.',
+                      'Your account has been successfully created. You may now login your registered account.',
                       style: TextStyle(fontSize: 12),
                       textAlign: TextAlign.center,
                     ),
@@ -378,32 +404,6 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                ),
-              ],
-            );
-          },
-        );
-      } else if (response.statusCode == 400) {
-        setState(() {
-          _isLoading = false;
-        });
-        // Registration failed due to duplicate email
-        // Show error dialog
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Registration Failed"),
-              content: Text("Email address already exist."),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    Navigator.pop(context); // Close the dialog
-                  },
-                  child: Text("OK"),
                 ),
               ],
             );
@@ -614,7 +614,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Barangay',
+                                    'Barangay *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -712,7 +712,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'District',
+                                    'District *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -779,7 +779,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'City',
+                                    'City *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -835,7 +835,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Barangay Certificate of Residency',
+                                    'Barangay Certificate of Residency *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -1039,7 +1039,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Email',
+                                    'Email *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -1095,7 +1095,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Password',
+                                    'Password *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -1142,7 +1142,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                             ],
                           ),
                           isButtonPressed
-                              ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)
+                              ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.!@#$%^&*_-])[A-Za-z\d.!@#$%^&*_-]{10,}$').hasMatch(passwordController.text)
                               ? Container(
                             padding: EdgeInsets.only(left: 8.0),
                             alignment: Alignment.centerLeft,
@@ -1161,7 +1161,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Repeat Password',
+                                    'Repeat Password *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -1291,99 +1291,107 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                             ],
                           ),
 
-                          SizedBox(height: 10,),
-                          if (_isLoading)
-                            Center(
-                              child: CircularProgressIndicator(),
-                            ),
+                          SizedBox(height: 5,),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: 20, right: 20, top: 30, bottom: 5),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        if (formKey.currentState!.validate()) {
-                                          if (!policyBox) {
-                                            // Show a dialog if the checkbox is unchecked
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text("Privacy Policy Agreement"),
-                                                  content: Text("You must agree to the Privacy Policy and Terms of Service."),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context); // Close the dialog
-                                                      },
-                                                      child: Text("OK"),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          } else {
-                                            registerUser();
+                          Visibility(
+                            visible: !_isLoading,
+                            replacement: Center(
+                              child: CircularProgressIndicator(), // Show a loading indicator if loading
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          left: 20, right: 20, top: 30, bottom: 5),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (formKey.currentState!.validate()) {
+                                            if (!policyBox) {
+                                              // Show a dialog if the checkbox is unchecked
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text("Privacy Policy Agreement"),
+                                                    content: Text("You must agree to the Privacy Policy and Terms of Service."),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(context); // Close the dialog
+                                                        },
+                                                        child: Text("OK"),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            } else {
+                                              registerUser();
+                                            }
                                           }
-                                        }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 5,
-                                        primary: Color(0xff28376d),
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 20.0, horizontal: 50),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 5,
+                                          primary: Color(0xff28376d),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20.0, horizontal: 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Register',
+                                          style: TextStyle(fontSize: 16.0),
                                         ),
                                       ),
-                                      child: Text(
-                                        'Save',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: 20, right: 20, top: 20, bottom: 30),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 5,
-                                        primary: Colors.redAccent,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 20.0, horizontal: 50),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
+                          Visibility(
+                            visible: !_isLoading,
+                            replacement: Center(
+                              child: SizedBox(), // Show a loading indicator if loading
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          left: 20, right: 20, top: 20, bottom: 30),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 5,
+                                          primary: Colors.redAccent,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20.0, horizontal: 50),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          ' Back ',
+                                          style: TextStyle(fontSize: 16.0),
                                         ),
                                       ),
-                                      child: Text(
-                                        'Back',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),

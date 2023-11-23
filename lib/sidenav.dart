@@ -134,11 +134,21 @@ void updateUnreadCardCount(int count) {
                   child: CircularProgressIndicator(), // Show a loading indicator if loading
                 ),
                 child: CircleAvatar(
-                  backgroundImage: profilePhotoBase64 != null
-                      ? MemoryImage(base64Decode(profilePhotoBase64!))  as ImageProvider
-                      : AssetImage('assets/sidenav_images/defaultProfile.jpg'),
                   radius: 85,
+                  backgroundColor: Colors.transparent, // Specify a transparent background
+                  child: ClipOval(
+                    child: FadeInImage(
+                      placeholder: AssetImage('assets/sidenav_images/defaultProfile.jpg'),
+                      image: profilePhotoBase64 != null
+                          ? MemoryImage(base64Decode(profilePhotoBase64!))
+                          : AssetImage('assets/sidenav_images/defaultProfile.jpg') as ImageProvider,
+                      fit: BoxFit.cover,
+                      width: 170,
+                      height: 170,
+                    ),
+                  ),
                 ),
+
               ),
               decoration: BoxDecoration(
                 color: Colors.transparent,

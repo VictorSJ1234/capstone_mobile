@@ -355,7 +355,7 @@ Future<void> fetchUnreadNotificationsList() async {
                                         child: Column(
                                           children: [
                                             Text(
-                                              reportType,
+                                              "Report Type: "+reportType,
                                               style: TextStyle(
                                                 fontFamily: 'Outfit',
                                                 fontSize: 20,
@@ -391,12 +391,13 @@ Future<void> fetchUnreadNotificationsList() async {
                         ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'No reports available.',
+                        'Please wait for the status response from Pasig Dengue Task Force.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     )
                         : Container(),

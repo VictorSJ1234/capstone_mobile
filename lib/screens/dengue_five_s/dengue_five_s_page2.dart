@@ -31,13 +31,18 @@ void updateUnreadCardCount(int count) {
 
   }
 
-  final String details = "Sudden high fever, severe headache, joint and muscle pain, vomiting and skin rashes are some of the symptoms of dengue. If the mentioned symptoms lasts for about 2 days and you, a family member or a friend are showing these, go and see a doctor immediately.";
-
-  final String usage = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
-
   late String _id;
-List? readItems;
-List? unreadItems;
+  List? readItems;
+  List? unreadItems;
+  String details = "";
+
+final Map<String, String> dengue5sDetails = {
+  'Search and Destroy': "The 'Search and Destroy' strategy involves identifying and eliminating breeding sites of mosquitoes. This includes emptying containers that collect and store water, as stagnant water is a breeding ground for mosquitoes.",
+  'Self-Protect': "The 'Self-Protect' strategy focuses on personal protection measures to prevent mosquito bites. This includes wearing long sleeves and using mosquito repellent on exposed skin.",
+  'Seek Consultation': "If you or someone you know experiences symptoms of dengue, it is crucial to seek medical consultation immediately. Symptoms may include sudden high fever, severe headache, joint and muscle pain, vomiting, and skin rashes.",
+  'Support Fogging in Outbreak Areas': "Supporting fogging operations in outbreak areas is part of community efforts to control mosquito populations. Fogging helps reduce adult mosquito numbers and prevent the spread of diseases.",
+  'Sustain Hydration': "Sustaining hydration is vital, especially during a dengue outbreak. Dengue can cause dehydration, so it's essential to drink plenty of fluids to stay hydrated.",
+};
 Future<void> fetchUnreadNotificationsList() async {
 
     try {
@@ -107,6 +112,8 @@ fetchUnreadNotificationsList();
   }
 
   Widget build(BuildContext context) {
+    details = dengue5sDetails[widget.PassCaption]!;
+
     return Scaffold(
       appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Dengue 5s'),
 

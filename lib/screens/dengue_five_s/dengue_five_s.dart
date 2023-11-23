@@ -15,6 +15,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:capstone_mobile/sidenav.dart';
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
+import '../user_profile/user_profile.dart';
 import 'dengue_five_s_page2.dart';
 
 class DengueFiveS extends StatefulWidget {
@@ -414,12 +415,12 @@ fetchReadNotifications();
                   IconButton(
                     icon: Image.asset('assets/bottom_nav_images/user.png'),
                     onPressed: () {
-                      //Navigator.push(
-                      // context,
-                      // MaterialPageRoute(
-                      //  builder: (context) => UserProfile(token: widget.token, notificationCount: widget.notificationCount),
-                      //),
-                      // );
+                      Navigator.push(
+                       context,
+                       MaterialPageRoute(
+                        builder: (context) => UserProfile(token: widget.token, notificationCount: widget.notificationCount),
+                      ),
+                       );
                     },
                   ),
                 ],

@@ -109,7 +109,7 @@ Future<void> fetchUnreadNotificationsList() async {
     });
     // Check if any of the required fields are empty
     if (passwordController.text.isEmpty || repeatPasswordController.text.isEmpty || currentPasswordController.text.isEmpty ||
-        !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)) {
+        !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.!@#$%^&*_-])[A-Za-z\d.!@#$%^&*_-]{10,}$').hasMatch(passwordController.text)) {
       setState(() {
         // Set the isButtonPressed to true to display error messages
         isButtonPressed = true;
@@ -418,7 +418,7 @@ fetchUnreadNotificationsList();
                               padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                               child: SizedBox(
                                 child: Text(
-                                  'Current Password',
+                                  'Current Password *',
                                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                   textAlign: TextAlign.left,
                                 ),
@@ -485,7 +485,7 @@ fetchUnreadNotificationsList();
                               padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                               child: SizedBox(
                                 child: Text(
-                                  'New Password',
+                                  'New Password *',
                                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                   textAlign: TextAlign.left,
                                 ),
@@ -532,7 +532,7 @@ fetchUnreadNotificationsList();
                           ],
                         ),
                         isButtonPressed
-                            ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)
+                            ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.!@#$%^&*_-])[A-Za-z\d.!@#$%^&*_-]{10,}$').hasMatch(passwordController.text)
                             ? Container(
                           padding: EdgeInsets.only(left: 8.0),
                           alignment: Alignment.centerLeft,
@@ -551,7 +551,7 @@ fetchUnreadNotificationsList();
                               padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                               child: SizedBox(
                                 child: Text(
-                                  'Repeat Password',
+                                  'Repeat Password *',
                                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                   textAlign: TextAlign.left,
                                 ),

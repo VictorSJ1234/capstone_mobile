@@ -162,7 +162,7 @@ fetchReadNotifications();
     if (items == null) {
       return Scaffold(
 
-        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'User Reports'),
+        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Community Projects'),
 
         //sidenav
         drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),

@@ -282,7 +282,7 @@ fetchUnreadNotificationsList();
     if (items == null) {
       return Scaffold(
 
-        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'User Reports'),
+        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'User Profile'),
 
         //sidenav
         drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),
@@ -414,9 +414,17 @@ fetchUnreadNotificationsList();
                               alignment: Alignment.center,
                               children: [
                                 CircleAvatar(
-                                  backgroundImage: profilePhotoBase64 != null
-                                      ? MemoryImage(base64Decode(profilePhotoBase64!))  as ImageProvider
-                                      : AssetImage('assets/sidenav_images/defaultProfile.jpg'),
+                                  child: ClipOval(
+                                    child: FadeInImage(
+                                      placeholder: AssetImage('assets/sidenav_images/defaultProfile.jpg'),
+                                      image: profilePhotoBase64 != null
+                                          ? MemoryImage(base64Decode(profilePhotoBase64!))
+                                          : AssetImage('assets/sidenav_images/defaultProfile.jpg') as ImageProvider,
+                                      fit: BoxFit.cover,
+                                      width: 170,
+                                      height: 170,
+                                    ),
+                                  ),
                                   radius: 85,
                                 ),
                                 Positioned(
@@ -452,7 +460,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'Name',
+                                      'Name *',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),
@@ -477,6 +485,10 @@ fetchUnreadNotificationsList();
                                         border: Border.all(color: Colors.black),
                                       ),
                                       child: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
+                                        ],
                                         controller: _nameController,
                                         decoration: InputDecoration(
                                           hintText: 'Name',
@@ -519,7 +531,7 @@ fetchUnreadNotificationsList();
                                           padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
                                           child: SizedBox(
                                             child: Text(
-                                              'Date of Birth',
+                                              'Date of Birth *',
                                               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                               textAlign: TextAlign.left,
                                             ),
@@ -565,7 +577,7 @@ fetchUnreadNotificationsList();
                                           padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
                                           child: SizedBox(
                                             child: Text(
-                                              'Gender',
+                                              'Gender *',
                                               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                               textAlign: TextAlign.left,
                                             ),
@@ -619,7 +631,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'Contact No.',
+                                      'Contact No. *',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),
@@ -685,7 +697,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'Street',
+                                      'Street *',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),
@@ -746,7 +758,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'House / Unit / Apartment No. (Opt)',
+                                      'House / Unit / Apartment No.',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),
@@ -793,7 +805,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'Floor (Opt)',
+                                      'Floor',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),
@@ -840,7 +852,7 @@ fetchUnreadNotificationsList();
                                   padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                   child: SizedBox(
                                     child: Text(
-                                      'Building Name (Opt)',
+                                      'Building Name',
                                       style: TextStyle(fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xff28376D),

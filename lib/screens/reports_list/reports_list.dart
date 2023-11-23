@@ -136,7 +136,7 @@ Future<void> fetchUnreadNotificationsList() async {
 
 
   //delete function
-  Future<void> deleteReport(String reportId) async {
+  Future<void> deleteReport(String reportId, String reportId2) async {
     try {
       var response = await http.post(
         Uri.parse(deleteUserReport),
@@ -150,6 +150,21 @@ Future<void> fetchUnreadNotificationsList() async {
           items?.removeWhere((report) => report['reportId'] == reportId);
         });
         // not done, show a success message or perform other actions.
+      } else {
+        print("Failed to delete report. Status code: ${response.statusCode}");
+      }
+    } catch (error) {
+      print("Error deleting report: $error");
+    }
+    try {
+      var response = await http.post(
+        Uri.parse(deleteReportNotification),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"reportId": reportId2}),
+      );
+
+      if (response.statusCode == 200) {
+
       } else {
         print("Failed to delete report. Status code: ${response.statusCode}");
       }
@@ -544,7 +559,7 @@ Future<void> fetchUnreadNotificationsList() async {
                                                                   ),
                                                                   TextButton(
                                                                     onPressed: () {
-                                                                      deleteReport(report['reportId']);
+                                                                      deleteReport(report['reportId'], report['_id']);
                                                                       Navigator.of(context).pop(); // Close the dialog
                                                                     },
                                                                     style: TextButton.styleFrom(

@@ -316,7 +316,7 @@ class _DatePickerFormState extends State<Register> {
                                 padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Name',
+                                    'Name *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -338,6 +338,10 @@ class _DatePickerFormState extends State<Register> {
                                     ),
                                     child: TextFormField(
                                       controller: nameController,
+                                      keyboardType: TextInputType.text,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
+                                      ],
                                       decoration: InputDecoration(
                                         hintText: 'Name',
                                         border: InputBorder.none,
@@ -378,7 +382,7 @@ class _DatePickerFormState extends State<Register> {
                                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
                                         child: SizedBox(
                                           child: Text(
-                                            'Date of Birth',
+                                            'Date of Birth *',
                                             style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                             textAlign: TextAlign.left,
                                           ),
@@ -437,7 +441,7 @@ class _DatePickerFormState extends State<Register> {
                                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
                                         child: SizedBox(
                                           child: Text(
-                                            'Gender',
+                                            'Gender *',
                                             style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                             textAlign: TextAlign.left,
                                           ),
@@ -502,7 +506,7 @@ class _DatePickerFormState extends State<Register> {
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Contact No.',
+                                    'Contact No. *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -563,7 +567,7 @@ class _DatePickerFormState extends State<Register> {
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Street Name',
+                                    'Street Name *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -619,7 +623,7 @@ class _DatePickerFormState extends State<Register> {
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'House / Unit / Apartment No. (Opt)',
+                                    'House / Unit / Apartment No.',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -677,7 +681,7 @@ class _DatePickerFormState extends State<Register> {
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Floor (Opt)',
+                                    'Floor',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -735,7 +739,7 @@ class _DatePickerFormState extends State<Register> {
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Building Name (Opt)',
+                                    'Building Name',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),

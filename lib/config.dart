@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-final url = 'http://192.168.0.113:3000/';
+final url = 'https://mosquinator-api.onrender.com/';
 final registration = url + "registration";
 final login = url + "login";
 final createUserReport = url + "createUserReport";
@@ -19,6 +19,7 @@ final updateNotificationStatus = url + 'updateNotificationStatus';
 final updateReportNotificationStatus = url + 'updateReportNotificationStatus';
 final getReportById = url + 'getUserReportById';
 final resetPassword = url + 'resetPassword';
+final deleteReportNotification =  url + 'deleteReportNotification';
 
 
 //192.168.1.119 - dorm ip

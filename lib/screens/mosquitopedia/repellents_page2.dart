@@ -31,15 +31,29 @@ void updateUnreadCardCount(int count) {
 
   }
 
-  final String details = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
-      "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface."
-      "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
-
-  final String usage = "A substance put on skin, clothing, or other surfaces which discourages mosquitoes from landing or crawling on that surface.";
-
+final Map<String, Map<String, String>> repellentDetails = {
+  'Mosquito Repellent': {
+    'details': "Mosquito Repellent is a substance applied to skin, clothing, or other surfaces to prevent mosquitoes from landing or biting. It typically contains ingredients like DEET or picaridin.",
+    'usage': "Apply the mosquito repellent evenly on exposed skin, and if wearing clothing, apply on clothing as well. Reapply as needed, especially after swimming or sweating.",
+  },
+  'Mosquito Coil': {
+    'details': "A mosquito coil is a type of mosquito repellant that comes in the form of a spiral-shaped coil. When burned, it releases smoke that repels mosquitoes.",
+    'usage': "Place the mosquito coil on a suitable holder and light one end. Ensure proper ventilation, and keep it away from flammable materials. It provides protection in the immediate area.",
+  },
+  'Mosquito Net': {
+    'details': "A mosquito net is a mesh curtain designed to block mosquitoes from entering a sleeping area. It acts as a physical barrier to protect individuals from mosquito bites.",
+    'usage': "Suspend the mosquito net over the bed or sleeping area, ensuring it covers all sides. Tuck the edges under the mattress for full protection while sleeping.",
+  },
+  'Anti Mosquito Racket': {
+    'details': "An anti-mosquito racket is an electronic device that zaps mosquitoes on contact. It is handheld and powered by batteries.",
+    'usage': "Swing the racket in the air to hit mosquitoes in flight. The racket emits a small electric shock upon contact, eliminating mosquitoes effectively.",
+  },
+};
   late String _id;
-List? readItems;
-List? unreadItems;
+  List? readItems;
+  List? unreadItems;
+  String details = "";
+  String usage = "";
 Future<void> fetchUnreadNotificationsList() async {
 
     try {
@@ -101,6 +115,9 @@ Future<void> fetchUnreadNotificationsList() async {
     super.initState();
     Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
     _id = jwtDecodedToken['_id'];
+
+    details = repellentDetails[widget.PassCaption]!['details']!;
+    usage = repellentDetails[widget.PassCaption]!['usage']!;
 fetchUnreadNotificationsList();
     fetchUnreadNotifications(_id);
   }

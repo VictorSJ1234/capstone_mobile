@@ -463,7 +463,7 @@ fetchUnreadNotificationsList();
     if (items == null) {
       return Scaffold(
 
-        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'User Reports'),
+        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'User Profile'),
 
         //sidenav
         drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),
@@ -578,7 +578,7 @@ fetchUnreadNotificationsList();
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Barangay',
+                                    'Barangay *',
                                     style: TextStyle(fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xff28376D),
@@ -683,7 +683,7 @@ fetchUnreadNotificationsList();
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'District',
+                                    'District *',
                                     style: TextStyle(fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xff28376D),
@@ -757,7 +757,7 @@ fetchUnreadNotificationsList();
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'City',
+                                    'City *',
                                     style: TextStyle(fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xff28376D),
@@ -851,7 +851,7 @@ fetchUnreadNotificationsList();
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Email',
+                                    'Email *',
                                     style: TextStyle(fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xff28376D),

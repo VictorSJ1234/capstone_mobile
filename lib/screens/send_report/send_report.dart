@@ -480,7 +480,7 @@ Future<void> fetchUnreadNotificationsList() async {
                             padding: EdgeInsets.fromLTRB(8.0, 5.0, 0.0, 0.0),
                             child: SizedBox(
                               child: Text(
-                                'Barangay',
+                                'Barangay *',
                                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
                                 textAlign: TextAlign.left,
                               ),
@@ -578,7 +578,7 @@ Future<void> fetchUnreadNotificationsList() async {
                             padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
                             child: SizedBox(
                               child: Text(
-                                'Report Type',
+                                'Report Type *',
                                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
                                 textAlign: TextAlign.left,
                               ),
@@ -674,7 +674,7 @@ Future<void> fetchUnreadNotificationsList() async {
                             padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
                             child: SizedBox(
                               child: Text(
-                                'Subject of Report',
+                                'Subject of Report *',
                                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
                                 textAlign: TextAlign.left,
                               ),
@@ -887,7 +887,7 @@ Future<void> fetchUnreadNotificationsList() async {
                             padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
                             child: SizedBox(
                               child: Text(
-                                'Description of Report',
+                                'Description of Report *',
                                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
                                 textAlign: TextAlign.left,
                               ),
@@ -934,43 +934,45 @@ Future<void> fetchUnreadNotificationsList() async {
                           : Container())
                           : Container(),
 
-                      SizedBox(height: 10,),
-                      if (_isLoading)
-                        Center(
-                          child: CircularProgressIndicator(), //loading
-                        ),
+                      SizedBox(height: 5,),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 50),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      sendReport();
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 5,
-                                    primary: Color(0xff28376d),
-                                    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 40),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
+                      Visibility(
+                        visible: !_isLoading,
+                        replacement: Center(
+                          child: CircularProgressIndicator(), // Show a loading indicator if loading
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 50),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        sendReport();
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 5,
+                                      primary: Color(0xff28376d),
+                                      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 40),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Send Report',
+                                      style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
-                                  child: Text(
-                                    'Send Report',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),

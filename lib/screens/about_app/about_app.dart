@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:capstone_mobile/config.dart';
 import 'package:capstone_mobile/custom_app_bar.dart';
@@ -11,6 +12,8 @@ import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../notification/notification.dart';
 import '../reports_list/reports_list.dart';
@@ -31,6 +34,20 @@ void updateUnreadCardCount(int count) {
     });
 
   }
+
+Future<void> openPrivacyPolicyPDF() async {
+  final String pdfAssetPath = 'assets/TERMS AND CONDITIONS_Mosquinator 2.pdf';
+
+  try {
+    final ByteData data = await rootBundle.load(pdfAssetPath);
+    final List<int> bytes = data.buffer.asUint8List();
+    final tempFile = File('${(await getTemporaryDirectory()).path}/TERMS AND CONDITIONS.pdf');
+    await tempFile.writeAsBytes(bytes, flush: true);
+    await OpenFile.open(tempFile.path);
+  } catch (e) {
+    print('Error opening PDF: $e');
+  }
+}
 late String _id;
 List? readItems;
 List? unreadItems;
@@ -162,7 +179,7 @@ Future<void> fetchUnreadNotificationsList() async {
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
                                   child: Text(
-                                    'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.',
+                                    'A mobile application and web platform of Pasig Dengue Task Force that aims to provide community based reporting platform to Barangays of Pasig and campaign about awareness and prevention of Mosquito Borne-Diseases ',
                                     style: TextStyle(fontSize: 15, color: Color(0xff8B8B8B), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.justify,
                                   ),
@@ -172,61 +189,6 @@ Future<void> fetchUnreadNotificationsList() async {
                           ),
                         ),
                       ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 3,
-                              blurRadius: 10,
-                              offset: Offset(0, 10), // Offset the shadow vertically
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/about_app_images/update.png',
-                                  width: 60,
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Check for Updates',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
                     ),
 
                     Padding(
@@ -244,7 +206,8 @@ Future<void> fetchUnreadNotificationsList() async {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            //
+
+                            openPrivacyPolicyPDF();
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.white),

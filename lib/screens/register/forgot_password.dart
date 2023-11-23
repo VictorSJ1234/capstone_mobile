@@ -228,7 +228,7 @@ class _ForgotPassword extends State<ForgotPassword> {
 
     // Check if any of the required fields are empty
     if (passwordController.text.isEmpty || _emailController.text.isEmpty  || repeatPasswordController.text.isEmpty || passwordController.text.isEmpty ||
-        !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)) {
+        !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.!@#$%^&*_-])[A-Za-z\d.!@#$%^&*_-]{10,}$').hasMatch(passwordController.text)) {
       setState(() {
         // Set the isButtonPressed to true to display error messages
         isButtonPressed = true;
@@ -534,7 +534,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                           ],
                         ),
                         isButtonPressed
-                            ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{10,}$').hasMatch(passwordController.text)
+                            ? (passwordController == null || passwordController!.text.isEmpty || !RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[.!@#$%^&*_-])[A-Za-z\d.!@#$%^&*_-]{10,}$').hasMatch(passwordController.text)
                             ? Container(
                           padding: EdgeInsets.only(left: 8.0),
                           alignment: Alignment.centerLeft,

@@ -180,7 +180,7 @@ List? unreadItems;
     if (_title.toString().isEmpty || _details.toString().isEmpty || _date.toString().isEmpty) {
       return Scaffold(
 
-        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'User Reports'),
+        appBar: CustomAppBar(token: widget.token, notificationCount: unreadCardCount, title: 'Community Projects'),
 
         //sidenav
         drawer: SideNavigation(token: widget.token, notificationCount: widget.notificationCount),
