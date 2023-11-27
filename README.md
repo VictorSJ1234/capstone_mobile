@@ -1,6 +1,6 @@
-# capstone_mobile
+# Mosquinator Mobile Application
 
-A new Flutter project.
+Mosquinator: A Community-Based Reporting Mobile and Web Application on Mosquito Borne-Diseases Awareness for Pasig Anti Dengue Task Force
 
 ## Getting Started
 
