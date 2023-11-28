@@ -6,4 +6,4 @@ Mosquinator: A Community-Based Reporting Mobile and Web Application on Mosquito 
 
 ## Technologies Used
 
-Flutter, DART, Angular, Node js, Express js, HTML, MongoDb and CSS. 
+Flutter, DART, Angular, Node js, Express js, HTML, MongoDb and CSS.  
