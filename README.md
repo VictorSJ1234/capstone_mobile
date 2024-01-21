@@ -1,16 +1,9 @@
-# capstone_mobile
+# Mosquinator Mobile Application
 
-A new Flutter project.
+Mosquinator: A Community-Based Reporting Mobile and Web Application on Mosquito Borne-Diseases Awareness for Pasig Anti Dengue Task Force.
+![MicrosoftTeams-image(26)](https://github.com/VictorSJ1234/capstone_mobile/assets/69832062/8a4f7fe4-74a9-4dcc-84e7-d28923200f20)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Technologies Used
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Flutter, DART, Angular, Node js, Express js, HTML, MongoDb and CSS.  
