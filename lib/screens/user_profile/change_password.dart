@@ -41,7 +41,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -69,7 +72,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -244,7 +250,10 @@ Future<void> fetchUnreadNotificationsList() async {
       var response = await http.put(
         Uri.parse(editPassword + '/$_id'),
         // api end point
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode(updatedData),
       );
 
@@ -675,7 +684,7 @@ fetchUnreadNotificationsList();
                                       },
                                       style: ElevatedButton.styleFrom(
                                         elevation: 5,
-                                        primary: Colors.redAccent,
+                                        primary: Colors.red,
                                         padding: EdgeInsets.symmetric(
                                             vertical: 20.0, horizontal: 50),
                                         shape: RoundedRectangleBorder(

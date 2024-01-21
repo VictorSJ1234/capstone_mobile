@@ -141,7 +141,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -169,7 +172,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -486,22 +492,14 @@ fetchUnreadNotificationsList();
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                                     children: [
-                                                      Text(
-                                                        'Symptoms',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
                                                       SizedBox(height: 4), // spacing between the two texts
                                                       Padding(
                                                         padding: EdgeInsets.only(right: 10),
                                                         child: Text(
                                                           symptoms[index],
                                                           style: TextStyle(
-                                                            color: Colors.black54,
-                                                            fontSize: 11,
+                                                            color: Colors.black,
+                                                            fontSize: 13,
                                                           ),
                                                           textAlign: TextAlign.justify,
                                                         ),
@@ -570,22 +568,14 @@ fetchUnreadNotificationsList();
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                                     children: [
-                                                      Text(
-                                                        'Preventions',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
                                                       SizedBox(height: 4), // spacing between the two texts
                                                       Padding(
                                                         padding: EdgeInsets.only(right: 10),
                                                         child: Text(
                                                           preventions[index],
                                                           style: TextStyle(
-                                                            color: Colors.black54,
-                                                            fontSize: 11,
+                                                            color: Colors.black,
+                                                            fontSize: 13,
                                                           ),
                                                           textAlign: TextAlign.justify,
                                                         ),

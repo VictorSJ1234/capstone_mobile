@@ -40,7 +40,10 @@ List? unreadItems;
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -68,7 +71,10 @@ List? unreadItems;
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -150,7 +156,10 @@ List? unreadItems;
     try {
       var response = await http.post(
         Uri.parse(getCommunityProjectsById),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"_id": projectId}),
       );
 

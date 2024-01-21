@@ -253,7 +253,7 @@ class _DatePickerFormState extends State<Register> {
                                     Expanded(
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: Color(0xff28376D),
                                           borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                           boxShadow: [
                                             BoxShadow(
@@ -268,7 +268,7 @@ class _DatePickerFormState extends State<Register> {
                                           onPressed: () {  },
                                           child: Text(
                                             'Register',
-                                            style: TextStyle(fontSize: 16.0, color: Colors.black),
+                                            style: TextStyle(fontSize: 16.0, color: Colors.white),
                                           ),
                                         ),
                                       ),
@@ -278,6 +278,14 @@ class _DatePickerFormState extends State<Register> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.3),
+                                              spreadRadius: 2,
+                                              blurRadius: 5,
+                                              offset: Offset(0, 3),
+                                            ),
+                                          ],
                                         ),
                                         child: TextButton(
                                           onPressed: () {
@@ -290,8 +298,8 @@ class _DatePickerFormState extends State<Register> {
                                             );
                                           },
                                           child: Text(
-                                            '   Login   ',
-                                            style: TextStyle(fontSize: 16.0, color: Colors.grey),
+                                            '   Sign in   ',
+                                            style: TextStyle(fontSize: 16.0, color: Colors.black),
                                           ),
                                         ),
                                       ),
@@ -441,7 +449,7 @@ class _DatePickerFormState extends State<Register> {
                                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
                                         child: SizedBox(
                                           child: Text(
-                                            'Gender *',
+                                            'Sex *',
                                             style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                             textAlign: TextAlign.left,
                                           ),
@@ -455,7 +463,7 @@ class _DatePickerFormState extends State<Register> {
                                         ),
                                         child: DropdownButtonFormField<String>(
                                           decoration: InputDecoration(
-                                            hintText: '--Gender--',
+                                            hintText: '--Sex--',
                                             contentPadding: EdgeInsets.all(15.0),
                                             border: InputBorder.none,
                                             prefixIcon: Icon(selectedGender == 'Male'

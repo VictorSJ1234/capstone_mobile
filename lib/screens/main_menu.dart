@@ -50,7 +50,8 @@ List? unreadItems;
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -79,7 +80,8 @@ List? unreadItems;
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -111,7 +113,8 @@ List? unreadItems;
     try {
       var response = await http.post(
         Uri.parse(getUserData),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode({"_id": _id}),
       );
 
@@ -280,66 +283,6 @@ List? unreadItems;
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, left: 15, right: 15),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 3,
-                                blurRadius: 10,
-                                offset: Offset(0, 10), // Offset the shadow vertically
-                              ),
-                            ],
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DengueTaskForce(token: widget.token, notificationCount: widget.notificationCount),
-                                ),
-                              );
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/logo/pasig_health_department_logo.png',
-                                    width: 60,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Pasig Dengue Task Force',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -561,6 +504,106 @@ List? unreadItems;
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
+                                    ),
+                                    SizedBox(height: 15),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // mosquitopedia Card
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(10.0, 15.0, 5.0, 10.0),
+                              child: Card(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                elevation: 10,
+                                shadowColor: Colors.black,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/logo/pasig_health_department_logo.png',
+                                      width: 95,
+                                      height: 105,
+                                      scale: 0.8,
+                                    ),
+                                    SizedBox(height: 5), //space between image and button
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DengueTaskForce(token: widget.token, notificationCount: widget.notificationCount),
+                                          ),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20.0),
+                                        ),
+                                        backgroundColor: Color(0xff28376d),
+                                        minimumSize: Size(120, 50),
+                                      ),
+                                      child: Text('Pasig Dengue \n Task Force', style: TextStyle(fontSize: 15), textAlign: TextAlign.center,),
+                                    ),
+                                    SizedBox(height: 15),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // task force Card
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(5.0, 15.0, 10, 10.0),
+                              child: Card(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                elevation: 10,
+                                shadowColor: Colors.black,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/main_menu_images/about_app.png',
+                                      width: 95,
+                                      height: 105,
+                                      scale: 0.8,
+                                    ),
+                                    SizedBox(height: 5), // space between image and button
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AboutApp(token: widget.token, notificationCount: widget.notificationCount),
+                                          ),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20.0),
+                                        ),
+                                        backgroundColor: Color(0xff28376d),
+                                        minimumSize: Size(120, 50),
+                                      ),
+                                      child: Text('About App', style: TextStyle(fontSize: 15),
+                                        textAlign: TextAlign.center,),
                                     ),
                                     SizedBox(height: 15),
                                   ],

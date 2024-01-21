@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:capstone_mobile/config.dart';
 import 'package:capstone_mobile/screens/about_app/about_app.dart';
+import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/login/login.dart';
+import 'package:capstone_mobile/screens/send_report/send_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -36,6 +38,8 @@ void updateUnreadCardCount(int count) {
   String _email = '';
   String? profilePhotoBase64;
   List? items;
+  String accountStatus = '';
+  bool isAccountValidated = false;
 
   bool _isLoading = false;
 
@@ -55,7 +59,8 @@ void updateUnreadCardCount(int count) {
     try {
       var response = await http.post(
         Uri.parse(getUserData),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode({"_id": _id}),
       );
 
@@ -70,6 +75,9 @@ void updateUnreadCardCount(int count) {
             _gender = items![0]['gender'].toString();
             _contactNumber = items![0]['contact_number'].toString();
             profilePhotoBase64 = items![0]['profilePicture'].toString();
+            accountStatus= items![0]['accountStatus'].toString();
+
+            isAccountValidated = (accountStatus == "Validated");
             _isLoading = false;
           }
         });
@@ -81,6 +89,107 @@ void updateUnreadCardCount(int count) {
       });
     }
   }
+
+//check if user is validated
+Future<void> _sendReportButtonPressed(BuildContext context) async {
+  // Check for network/internet connectivity
+  try {
+    await http.get(Uri.parse('https://www.google.com'));
+  } catch (networkError) {
+    // Handle network/internet connection error
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Network Error"),
+          content: Text("Please check your network/internet connection."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+  if (isAccountValidated) {
+    Navigator.pop(
+        context);
+    // Enable the "Send a Report" functionality
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SendReport(token: widget.token, notificationCount: widget.notificationCount),
+      ),
+    );
+  } else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          elevation: 4,
+          shadowColor: Colors.black,
+          content: Container(
+            height: 180,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/exit_images/caution.png',
+                  width: 100,
+                  height: 100,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'You can\'t send a report yet as your account is not yet validated. Please wait for approval.',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    backgroundColor: Colors.blue,
+                  ),
+                  child: Text(
+                    'Back',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    /** Show a Snackbar if the account is not validated
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+        content: Text('Your account is not validated.'),
+        duration: Duration(seconds: 2),
+        ),
+        );
+     **/
+  }
+}
 
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -156,22 +265,39 @@ void updateUnreadCardCount(int count) {
             ),
             Column(
               children: [
-                /**
+                Visibility(
+                  visible: !_isLoading, // Show the ElevatedButton if not loading
+                  replacement: Center(
+                    child: CircularProgressIndicator(), // Show a loading indicator if loading
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.send, color: Colors.white,),
+                    title: Text(
+                      'Send a Report', style: TextStyle(color: Colors.white),),
+                    onTap: () {
+                      _sendReportButtonPressed(context);
+                    },
+                  ),
+                ),
+
                 ListTile(
-                  leading: Icon(Icons.language, color: Colors.white,),
+                  leading: Icon(Icons.newspaper, color: Colors.white,),
                   title: Text(
-                    'Language', style: TextStyle(color: Colors.white),),
+                    'Community Projects', style: TextStyle(color: Colors.white),),
                   onTap: () {
-                    // Navigator.pop(context); // Hide the navigation before going to the nexxt screen
-                    //Navigator.push(
-                    //context,
-                    //  MaterialPageRoute(
-                    // builder: (context) => LanguageSettings(), // go to the next screen
-                    // ),
-                    // );
+                    Navigator.pop(
+                        context); // Hide the navigation before going to the nexxt screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            CommunityProjects(token: widget
+                                .token, notificationCount: widget.notificationCount,), // go to the next screen
+                      ),
+                    );
                   },
                 ),
-                    **/
+
                 ListTile(
                   leading: Icon(Icons.info, color: Colors.white,),
                   title: Text(
@@ -189,22 +315,6 @@ void updateUnreadCardCount(int count) {
                     );
                   },
                 ),
-                /**
-                ListTile(
-                  leading: Icon(Icons.people, color: Colors.white,),
-                  title: Text(
-                    'Developers', style: TextStyle(color: Colors.white),),
-                  onTap: () {
-                    //Navigator.pop(context);
-                    // Navigator.push(
-                    //context,
-                    //MaterialPageRoute(
-                    // builder: (context) => Developers(),
-                    //),
-                    // );
-                  },
-                ),
-                    **/
               ],
             ),
             Expanded(

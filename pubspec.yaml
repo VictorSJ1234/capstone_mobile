@@ -87,6 +87,7 @@ flutter:
       - assets/main_menu_images/mosquitopedia.png
       - assets/main_menu_images/reporting.png
       - assets/main_menu_images/dengue_5s.png
+      - assets/main_menu_images/about_app.png
       - assets/bottom_nav_images/home.png
       - assets/bottom_nav_images/list.png
       - assets/bottom_nav_images/user.png

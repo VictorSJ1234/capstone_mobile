@@ -49,21 +49,6 @@ class RegisterPage2 extends StatefulWidget {
 
 class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProviderStateMixin {
 
-  Future<void> openPrivacyPolicyPDF() async {
-    final String pdfAssetPath = 'assets/TERMS AND CONDITIONS_Mosquinator 2.pdf';
-
-    try {
-      final ByteData data = await rootBundle.load(pdfAssetPath);
-      final List<int> bytes = data.buffer.asUint8List();
-      final tempFile = File('${(await getTemporaryDirectory()).path}/TERMS AND CONDITIONS.pdf');
-      await tempFile.writeAsBytes(bytes, flush: true);
-      await OpenFile.open(tempFile.path);
-    } catch (e) {
-      print('Error opening PDF: $e');
-    }
-  }
-
-
   late AnimationController loadingController;
   bool _isPasswordVisible = false;
   List<File> _selectedFiles = [];
@@ -142,8 +127,6 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
   //additions
   var cityController = new TextEditingController();
   bool passwordsMatch = true;
-  bool policyBox = false; //default tickbox value
-
 
   //user registration function
   void registerUser() async{
@@ -295,7 +278,8 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
 
       // Send a POST request to the registration endpoint
       var response = await http.post(Uri.parse(registration),
-          headers: {"Content-Type":"application/json"},
+          headers: {"Content-Type":"application/json",
+            "x-api-key": 'pasigdtf', },
           body: jsonEncode(regBody)
       );
 
@@ -835,7 +819,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                 padding: EdgeInsets.fromLTRB(8.0, 10.0, 0.0, 0.0),
                                 child: SizedBox(
                                   child: Text(
-                                    'Barangay Certificate of Residency *',
+                                    'Proof of Residency *',
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                     textAlign: TextAlign.left,
                                   ),
@@ -875,7 +859,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                             ),
                                           ),
                                           Text(
-                                            'Barangay Certificate of Residency',
+                                            'Proof of Residency',
                                             style: TextStyle(
                                               color: Color(0xff666666),
                                               fontSize: 16.0,
@@ -1220,76 +1204,6 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                           )
                               : Container())
                               : Container(),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end, // Align content at the bottom
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        policyBox = !policyBox;
-                                      });
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Checkbox(
-                                          value: policyBox,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              policyBox = value ?? false;
-                                            });
-                                          },
-                                        ),
-                                        RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: "I agree to the ",
-                                                style: TextStyle(fontSize: 12.5, color: Colors.black),
-                                              ),
-                                              TextSpan(
-                                                text: "Privacy Policy",
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.blue,
-                                                  decoration: TextDecoration.underline,
-                                                ),
-                                                recognizer: TapGestureRecognizer()
-                                                  ..onTap = () {
-                                                    openPrivacyPolicyPDF();
-                                                  },
-                                              ),
-                                              TextSpan(
-                                                text: " and ",
-                                                style: TextStyle(fontSize: 12.5, color: Colors.black),
-                                              ),
-                                              TextSpan(
-                                                text: "Terms of Service",
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.blue,
-                                                  decoration: TextDecoration.underline,
-                                                ),
-                                                recognizer: TapGestureRecognizer()
-                                                  ..onTap = () {
-                                                    openPrivacyPolicyPDF();
-                                                  },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                              ),
-                            ],
-                          ),
 
                           SizedBox(height: 5,),
 
@@ -1310,28 +1224,7 @@ class _RegisterPage2State extends State<RegisterPage2> with SingleTickerProvider
                                       child: ElevatedButton(
                                         onPressed: () {
                                           if (formKey.currentState!.validate()) {
-                                            if (!policyBox) {
-                                              // Show a dialog if the checkbox is unchecked
-                                              showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: Text("Privacy Policy Agreement"),
-                                                    content: Text("You must agree to the Privacy Policy and Terms of Service."),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(context); // Close the dialog
-                                                        },
-                                                        child: Text("OK"),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            } else {
-                                              registerUser();
-                                            }
+                                            registerUser();
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(

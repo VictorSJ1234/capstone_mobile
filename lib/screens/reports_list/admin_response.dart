@@ -70,7 +70,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -97,7 +100,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -135,7 +141,10 @@ fetchUnreadNotificationsList();
     try {
       var response = await http.post(
         Uri.parse(getAdminResponse), // api endpoint
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"reportId": reportId}),
       );
 

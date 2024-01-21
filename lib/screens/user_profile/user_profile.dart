@@ -55,7 +55,10 @@ class _UserProfile extends State<UserProfile> {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -82,7 +85,10 @@ class _UserProfile extends State<UserProfile> {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -236,7 +242,10 @@ class _UserProfile extends State<UserProfile> {
     try {
       var response = await http.post(
         Uri.parse(getUserData),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"_id": _id}),
       );
 
@@ -577,7 +586,7 @@ fetchUnreadNotificationsList();
                                           padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
                                           child: SizedBox(
                                             child: Text(
-                                              'Gender *',
+                                              'Sex *',
                                               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xff28376D), fontFamily: 'Outfit'),
                                               textAlign: TextAlign.left,
                                             ),
@@ -941,7 +950,7 @@ fetchUnreadNotificationsList();
                                         },
                                         style: ElevatedButton.styleFrom(
                                           elevation: 5,
-                                          primary: Colors.redAccent,
+                                          primary: Colors.red,
                                           padding: EdgeInsets.symmetric(
                                               vertical: 20.0, horizontal: 50),
                                           shape: RoundedRectangleBorder(

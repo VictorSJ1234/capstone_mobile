@@ -87,7 +87,8 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
       var response = await http.put(
         Uri.parse(editUserData + '/$_id'),
         // api end point
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode(updatedData),
       );
 
@@ -241,7 +242,8 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -270,7 +272,8 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -423,7 +426,8 @@ class _UserProfilePage2 extends State<UserProfilePage2> {
     try {
       var response = await http.post(
         Uri.parse(getUserData),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json",
+          "x-api-key": 'pasigdtf', },
         body: jsonEncode({"_id": _id}),
       );
 
@@ -1021,7 +1025,7 @@ fetchUnreadNotificationsList();
                                         },
                                         style: ElevatedButton.styleFrom(
                                           elevation: 5,
-                                          primary: Colors.redAccent,
+                                          primary: Colors.red,
                                           padding: EdgeInsets.symmetric(
                                               vertical: 20.0, horizontal: 50),
                                           shape: RoundedRectangleBorder(

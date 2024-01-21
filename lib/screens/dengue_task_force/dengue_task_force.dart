@@ -36,7 +36,10 @@ class _DengueTaskForce extends State<DengueTaskForce> {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -64,7 +67,10 @@ class _DengueTaskForce extends State<DengueTaskForce> {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -171,7 +177,7 @@ class _DengueTaskForce extends State<DengueTaskForce> {
 
                     //contact information
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
+                      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 10.0),
                       child: SizedBox(
                         child: Text(
                           'Contact Information',
@@ -180,289 +186,109 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Button 1
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                    // Button 1
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 1, 20, 9),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/task_force_images/email.png',
+                              width: 65,
+                              height: 60,
+                            ),
+                            Expanded(
+                              child: Text(
+                                'pasigdenguetaskforce@gmail.com',
+                                style: TextStyle(color: Colors.black),
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    elevation: 4,
-                                    shadowColor: Colors.black,
-                                    content: SingleChildScrollView(
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.8,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            Text(
-                                              'pasigdenguetaskforce@gmail.com',
-                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              "If you have any concerns or questions, please don't hesitate to reach out to us. We're here to assist you. Feel free to contact us at pasigdenguetaskforce@gmail.com. Your feedback is important, and we're ready to help.",
-                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      Center(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.center,
-                                          spacing: 10,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                              child: Text(
-                                                'Back',
-                                                style: TextStyle(color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              // email
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/email.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Email',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    // Button 2
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 9, 20, 9),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/task_force_images/phone.png',
+                              width: 65,
+                              height: 60,
+                            ),
+                            Expanded(
+                              child: Text(
+                                '(02) 8643 8047',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    // Button 3
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 9, 20, 9),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/task_force_images/location.png',
+                              width: 65,
+                              height: 60,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                                child: Text(
+                                  "Room 12, 5th floor, City Government of Pasig, 1600 Caruncho Ave, Pasig, Metro Manila.",
                                   style: TextStyle(color: Colors.black),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        // Button 2
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    elevation: 4,
-                                    shadowColor: Colors.black,
-                                    content: SingleChildScrollView(
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.8,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            Text(
-                                              '(02) 8643 8047',
-                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              "If you have any concerns or questions, please don't hesitate to reach out to us. We're here to assist you. Feel free to contact us at  (02) 8643 8047. Your feedback is important, and we're ready to help.",
-                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      Center(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.center,
-                                          spacing: 10,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                              child: Text(
-                                                'Back',
-                                                style: TextStyle(color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/phone.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Tel. No.',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
                             ),
-                          ),
+                          ],
                         ),
-                        SizedBox(width: 10),
-                        // Button 3
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    elevation: 4,
-                                    shadowColor: Colors.black,
-                                    content: SingleChildScrollView(
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.8,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            Text(
-                                              'Address',
-                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              "Room 12, 5th floor, City Government of Pasig, 1600 Caruncho Ave, Pasig, Metro Manila.",
-                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      Center(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.center,
-                                          spacing: 10,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                              child: Text(
-                                                'Back',
-                                                style: TextStyle(color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/location.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Location',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
 
                     //services
@@ -476,288 +302,106 @@ class _DengueTaskForce extends State<DengueTaskForce> {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Button 1
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    elevation: 4,
-                                    shadowColor: Colors.black,
-                                    content: SingleChildScrollView(
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.8,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            Text(
-                                              'Services',
-                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              "Community Teaching: Larvae Control of Infestation",
-                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      Center(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.center,
-                                          spacing: 10,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                              child: Text(
-                                                'Back',
-                                                style: TextStyle(color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/service.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Service 1',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
+                    // Button 1
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 1, 20, 9),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
                             ),
-                          ),
+                          ],
                         ),
-                        SizedBox(width: 10),
-                        // Button 2
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    elevation: 4,
-                                    shadowColor: Colors.black,
-                                    content: SingleChildScrollView(
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.8,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            Text(
-                                              'Services',
-                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              "Clean-Up Drive",
-                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      Center(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.center,
-                                          spacing: 10,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                              child: Text(
-                                                'Back',
-                                                style: TextStyle(color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/service.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Service 2',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/task_force_images/service.png',
+                              width: 65,
+                              height: 60,
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        // Button 3
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                            Expanded(
+                              child: Text(
+                                'Community Teaching: Larvae Control of Infestation',
+                                style: TextStyle(color: Colors.black),
                               ),
-                            ],
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    elevation: 4,
-                                    shadowColor: Colors.black,
-                                    content: SingleChildScrollView(
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.8,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(height: 20),
-                                            Text(
-                                              'Services',
-                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              "Fumigation",
-                                              style: TextStyle(fontSize: 16, color: Color(0xFF338B93)),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      Center(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.center,
-                                          spacing: 10,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                ),
-                                                backgroundColor: Colors.red,
-                                              ),
-                                              child: Text(
-                                                'Back',
-                                                style: TextStyle(color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/task_force_images/service.png',
-                                  width: 65,
-                                  height: 60,
-                                ),
-                                Text(
-                                  'Service 3',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    // Button 2
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 9, 20, 9),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/task_force_images/service.png',
+                              width: 65,
+                              height: 60,
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Clean-Up Drive',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    // Button 3
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 9, 20, 9),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/task_force_images/service.png',
+                              width: 65,
+                              height: 60,
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Fumigation',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
 
                   ],

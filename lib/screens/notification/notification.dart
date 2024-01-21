@@ -55,7 +55,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -89,7 +92,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -126,7 +132,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getAdminResponse), // api endpoint
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"reportId": reportId}),
       );
 
@@ -213,7 +222,10 @@ Future<void> fetchUnreadNotificationsList() async {
 
                           var response = await http.put(
                             Uri.parse(updateNotificationStatus),
-                            headers: {"Content-Type": "application/json"},
+                            headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
                             body: jsonEncode(regBody),
                           );
 
@@ -268,7 +280,10 @@ Future<void> fetchUnreadNotificationsList() async {
 
         var response = await http.put(
           Uri.parse(updateNotificationStatus),
-          headers: {"Content-Type": "application/json"},
+          headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
           body: jsonEncode(regBody),
         );
 
@@ -302,7 +317,10 @@ Future<void> fetchUnreadNotificationsList() async {
 
       var response = await http.put(
         Uri.parse(updateReportNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode(regBody),
       );
 
@@ -329,7 +347,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getReportById),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"_id": _id}),
       );
 

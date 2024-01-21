@@ -83,7 +83,10 @@ class _ForgotPassword extends State<ForgotPassword> {
       var response = await http.post(
         Uri.parse(resetPassword),
         // api end point
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode(updatedData),
       );
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:capstone_mobile/screens/community_projects/community_projects.dart';
 import 'package:capstone_mobile/screens/main_menu.dart';
@@ -6,10 +7,13 @@ import 'package:capstone_mobile/screens/mosquitopedia/mosquitopedia_menu.dart';
 import 'package:capstone_mobile/screens/register/forgot_password.dart';
 import 'package:capstone_mobile/screens/register/register.dart';
 import 'package:capstone_mobile/screens/reports_list/reports_list.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:capstone_mobile/config.dart';
@@ -23,6 +27,20 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  Future<void> openPrivacyPolicyPDF() async {
+    final String pdfAssetPath = 'assets/TERMS AND CONDITIONS_Mosquinator 2.pdf';
+
+    try {
+      final ByteData data = await rootBundle.load(pdfAssetPath);
+      final List<int> bytes = data.buffer.asUint8List();
+      final tempFile = File('${(await getTemporaryDirectory()).path}/TERMS AND CONDITIONS.pdf');
+      await tempFile.writeAsBytes(bytes, flush: true);
+      await OpenFile.open(tempFile.path);
+    } catch (e) {
+      print('Error opening PDF: $e');
+    }
+  }
 
   bool rememberMe = false; //default tickbox value
 
@@ -89,7 +107,10 @@ class _LoginState extends State<Login> {
 
     var response = await http.post(
       Uri.parse(login),
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
       body: jsonEncode(reqBody),
     );
 
@@ -283,20 +304,136 @@ class _LoginState extends State<Login> {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.3),
+                                                spreadRadius: 2,
+                                                blurRadius: 5,
+                                                offset: Offset(0, 3),
+                                              ),
+                                            ],
                                           ),
                                           child: TextButton(
                                             onPressed: () {
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => Register(),
-                                                ),
-                                                    (route) => true,
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return AlertDialog(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(30.0),
+                                                    ),
+                                                    elevation: 4,
+                                                    shadowColor: Colors.black,
+                                                    content: SingleChildScrollView(
+                                                      child: Container(
+                                                        width: MediaQuery.of(context).size.width * 0.8,
+                                                        child: Column(
+                                                          children: [
+                                                            Image.asset(
+                                                              'assets/exit_images/caution.png',
+                                                              width: 100,
+                                                              height: 100,
+                                                            ),
+                                                            SizedBox(height: 20),
+                                                            Text(
+                                                              "Please read our privacy policy and terms of use carefully. By accepting, you agree to our terms and policies.",
+                                                              style: TextStyle(fontSize: 16),
+                                                              textAlign: TextAlign.justify,
+                                                            ),
+                                                            SizedBox(height: 40),
+                                                            RichText(
+                                                              textAlign: TextAlign.justify,
+                                                              text: TextSpan(
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text: "Privacy Policy",
+                                                                    style: TextStyle(
+                                                                      fontSize: 16,
+                                                                      color: Colors.blue,
+                                                                      decoration: TextDecoration.underline,
+                                                                    ),
+                                                                    recognizer: TapGestureRecognizer()
+                                                                      ..onTap = () {
+                                                                        openPrivacyPolicyPDF();
+                                                                      },
+                                                                  ),
+                                                                  TextSpan(
+                                                                    text: " and ",
+                                                                    style: TextStyle(fontSize: 16, color: Colors.black),
+                                                                  ),
+                                                                  TextSpan(
+                                                                    text: "Terms of Service",
+                                                                    style: TextStyle(
+                                                                      fontSize: 16,
+                                                                      color: Colors.blue,
+                                                                      decoration: TextDecoration.underline,
+                                                                    ),
+                                                                    recognizer: TapGestureRecognizer()
+                                                                      ..onTap = () {
+                                                                        openPrivacyPolicyPDF();
+                                                                      },
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            style: TextButton.styleFrom(
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(
+                                                                    30.0),
+                                                              ),
+                                                              backgroundColor: Colors.red,
+                                                            ),
+                                                            child: Text(
+                                                              'Decline',
+                                                              style: TextStyle(color: Colors.white),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 10),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(context).pop();
+
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => Register(),
+                                                                ),
+                                                              );
+                                                            },
+                                                            style: TextButton.styleFrom(
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(
+                                                                    30.0),
+                                                              ),
+                                                              backgroundColor: Colors.blueAccent,
+                                                            ),
+                                                            child: Text(
+                                                              'Agree',
+                                                              style: TextStyle(color: Colors.white),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
                                             child: Text(
                                               'Register',
-                                              style: TextStyle(fontSize: 16.0, color: Colors.grey),
+                                              style: TextStyle(fontSize: 16.0, color: Colors.black),
                                             ),
                                           ),
                                         ),
@@ -308,7 +445,7 @@ class _LoginState extends State<Login> {
                                       Expanded(
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: Colors.white,
+                                            color: Color(0xff28376D),
                                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                             boxShadow: [
                                               BoxShadow(
@@ -324,8 +461,8 @@ class _LoginState extends State<Login> {
                                               //already in login
                                             },
                                             child: Text(
-                                              '   Login   ',
-                                              style: TextStyle(fontSize: 16.0, color: Colors.black),
+                                              '   Sign in   ',
+                                              style: TextStyle(fontSize: 16.0, color: Colors.white),
                                             ),
                                           ),
                                         ),

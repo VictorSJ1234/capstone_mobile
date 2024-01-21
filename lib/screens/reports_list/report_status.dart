@@ -79,7 +79,10 @@ void updateUnreadCardCount(int count) {
     try {
       final response = await http.post(
         Uri.parse(getAdminResponse),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"reportId": reportId}),
       );
 
@@ -115,7 +118,10 @@ void updateUnreadCardCount(int count) {
     try {
       final response = await http.post(
         Uri.parse(getReportById),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"_id": reportId}),
       );
 
@@ -151,7 +157,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -179,7 +188,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 

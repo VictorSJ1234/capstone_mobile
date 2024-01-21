@@ -33,7 +33,8 @@ Future<void> fetchUnreadNotifications(String userId) async {
   try {
     var response = await http.post(
       Uri.parse(getNotificationStatus),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json",
+        "x-api-key": 'pasigdtf', },
       body: jsonEncode({"userId": userId, "notificationStatus": "Unread"}),
     );
 

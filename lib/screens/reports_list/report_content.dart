@@ -68,12 +68,16 @@ void updateUnreadCardCount(int count) {
   late String _id;
 List? readItems;
 List? unreadItems;
+bool _isLoading = false;
 Future<void> fetchUnreadNotificationsList() async {
 
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Unread".toString()}),
       );
 
@@ -100,7 +104,10 @@ Future<void> fetchUnreadNotificationsList() async {
     try {
       var response = await http.post(
         Uri.parse(getNotificationStatus),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"userId": userId, "notificationStatus": "Read".toString()}),
       );
 
@@ -135,10 +142,16 @@ fetchUnreadNotificationsList();
   }
 
   Future<void> fetchReportStatus(String reportId) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       var response = await http.post(
         Uri.parse(getAdminResponse), // api endpoint
-        headers: {"Content-Type": "application/json"},
+        headers: {
+        "Content-Type": "application/json",
+        "x-api-key": 'pasigdtf',
+      },
         body: jsonEncode({"reportId": reportId}),
       );
 
@@ -156,11 +169,18 @@ fetchUnreadNotificationsList();
 
             final latestResponse = adminResponseData[0];
             _reportStatus = latestResponse['report_status'];
+            _isLoading = false;
           }
         }
       });
+      setState(() {
+        _isLoading = false;
+      });
     } catch (error) {
       print(error);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -402,6 +422,134 @@ fetchUnreadNotificationsList();
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(8.0, 20.0, 0.0, 0.0),
+                          child: SizedBox(
+                            child: Text(
+                              'Current Status',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Outfit'),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    ListView(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  images[0],
+                                                  width: 60,
+                                                  scale: 0.7,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 8), // spacing between the image and text
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Visibility(
+                                                  visible: !_isLoading,
+                                                  replacement: Text('...'),
+                                                  child: Text(
+                                                    _reportStatus!=''?_reportStatus:'Report Recieved', // Use the first status
+                                                    style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Visibility(
+                                            visible: !_isLoading, // Show the ElevatedButton if not loading
+                                            replacement: Center(
+                                              child: CircularProgressIndicator(), // Show a loading indicator if loading
+                                            ),
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) => ReportStatus(token: widget.token, reportStatus: _reportStatus, reportId: widget.PassReportIdObject, reportNumber: widget.PassReportNumber, notificationCount: widget.notificationCount,),
+                                                        ),
+                                                      );
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                      primary: Color(0xff28376D),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(15),
+                                                      ),
+                                                    ),
+                                                    icon: Icon(
+                                                      Icons.content_paste_search,
+                                                      color: Colors.white,
+                                                    ),
+                                                    label: Text(
+                                                      'View Status',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
@@ -432,7 +580,7 @@ fetchUnreadNotificationsList();
                                 child: Text(
                                     'No uploaded file',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.orange,
                                       fontSize: 16.0,
                                     ),
                                 ),
@@ -526,7 +674,7 @@ fetchUnreadNotificationsList();
                                             color: Colors.white,
                                           ),
                                           label: Text(
-                                            ' View File ',
+                                            '   View File   ',
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
@@ -583,45 +731,6 @@ fetchUnreadNotificationsList();
                           ),
                         ),
                       ],
-                    ),
-
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ReportStatus(token: widget.token, reportStatus: _reportStatus, reportId: widget.PassReportIdObject, reportNumber: widget.PassReportNumber, notificationCount: widget.notificationCount,), // Pass _reportStatus here
-                                ),
-                              );
-                            },
-
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xff28376D),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                            icon: Icon(
-                              Icons.content_paste_search,
-                              color: Colors.white,
-                            ),
-                            label: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                              child: Text(
-                                ' View Status ',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),
