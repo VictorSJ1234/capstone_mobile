@@ -103,8 +103,9 @@ List? unreadItems;
   String _time = '';
   String _details = '';
   String _location = '';
-  String _uploaded_file= '';
+
   String _attachementDescription = '';
+static String _uploaded_file = '';
 
   // Store the image bytes
   late Uint8List projectImageBytes;
@@ -114,22 +115,74 @@ List? unreadItems;
     super.initState();
     projectId = widget.PassProjectId;
     fetchProject(projectId);
-    loadProjectImage();
+
     Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
     _id = jwtDecodedToken['_id'];
     fetchUnreadNotificationsList();
     fetchReadNotifications();
     fetchUnreadNotifications(_id);
+    loadProjectImage();
+    loadImage();
   }
   Future<void> loadProjectImage() async {
     try {
+      // Load image only if _uploaded_file is empty
+      if (_uploaded_file.isEmpty) {
+        var response = await http.post(
+          Uri.parse(getCommunityProjectsById),
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": 'pasigdtf',
+          },
+          body: jsonEncode({"_id": projectId}),
+        );
+
+        var jsonResponse = jsonDecode(response.body);
+        setState(() {
+          if (jsonResponse != null &&
+              jsonResponse['communityProjectsData'] != null) {
+            final adminResponseData = jsonResponse['communityProjectsData'];
+            if (adminResponseData.isNotEmpty) {
+              // Populate the empty strings with fetched data
+              _uploaded_file =
+                  adminResponseData[0]['uploaded_file'].toString();
+            }
+          }
+        });
+      }
+
+      // Decode and set the image bytes or use default image if _uploaded_file is empty
+      if (_uploaded_file.isNotEmpty) {
+        final bytes = base64.decode(_uploaded_file);
+        setState(() {
+          projectImageBytes = Uint8List.fromList(bytes);
+        });
+      } else {
+        // Set default image bytes if _uploaded_file is empty
+        final defaultImageBytes = await loadImageFromAssets('assets/community_projects_images/community_project.png');
+        setState(() {
+          projectImageBytes = defaultImageBytes!;
+        });
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<Uint8List?> loadImageFromAssets(String assetPath) async {
+    final ByteData data = await rootBundle.load(assetPath);
+    return data.buffer.asUint8List();
+  }
+
+  Future<Uint8List?> loadImage() async {
+    if (_uploaded_file.isNotEmpty) {
       final bytes = base64.decode(_uploaded_file);
       setState(() {
         projectImageBytes = Uint8List.fromList(bytes);
       });
-    } catch (error) {
-      print(error);
+      return Uint8List.fromList(bytes);
     }
+    return null;
   }
 
   // Function to format time with AM/PM
@@ -355,15 +408,10 @@ List? unreadItems;
                                 width: 5.0,
                               ),
                             ),
-                            child: ClipRRect(
+                            child:  ClipRRect(
                               borderRadius: BorderRadius.circular(30.0),
-                              child: projectImageBytes.isNotEmpty
-                                  ? Image.memory(
+                              child: Image.memory(
                                 projectImageBytes,
-                                width: 250,
-                              )
-                                  : Image.asset(
-                                'assets/community_projects_images/community_project.png', // Replace with the path to your default image
                                 width: 250,
                               ),
                             ),
